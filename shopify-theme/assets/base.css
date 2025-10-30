@@ -1,0 +1,202 @@
+/* Base styles */
+:root {
+  --font-body-scale: 1;
+  --color-base-text: 18, 18, 18;
+  --color-base-background: 255, 255, 255;
+  --color-base-accent-1: 18, 18, 18;
+  --color-base-accent-2: 51, 79, 180;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 62.5%;
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-body-family);
+  font-size: 1.6rem;
+  line-height: 1.6;
+  color: rgb(var(--color-base-text));
+  background-color: rgb(var(--color-base-background));
+}
+
+/* Layout */
+.page-width {
+  max-width: var(--page-width, 120rem);
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.section {
+  padding: 4rem 0;
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading-family);
+  font-weight: var(--font-heading-weight);
+  line-height: 1.2;
+  margin: 0 0 1.5rem;
+}
+
+h1 { font-size: 4rem; }
+h2 { font-size: 3.2rem; }
+h3 { font-size: 2.4rem; }
+h4 { font-size: 2rem; }
+h5 { font-size: 1.8rem; }
+h6 { font-size: 1.6rem; }
+
+/* Links */
+a {
+  color: rgb(var(--color-base-accent-2));
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+a:hover {
+  opacity: 0.8;
+}
+
+/* Buttons */
+.button {
+  display: inline-block;
+  padding: 1.2rem 3rem;
+  background-color: rgb(var(--color-base-accent-1));
+  color: rgb(var(--color-base-background));
+  border: none;
+  cursor: pointer;
+  font-size: 1.6rem;
+  font-weight: 600;
+  text-align: center;
+  transition: background-color 0.2s ease;
+  text-decoration: none;
+}
+
+.button:hover {
+  opacity: 0.9;
+}
+
+.button--secondary {
+  background-color: rgb(var(--color-base-accent-2));
+}
+
+/* Forms */
+input[type="text"],
+input[type="email"],
+input[type="number"],
+input[type="tel"],
+input[type="password"],
+select,
+textarea {
+  width: 100%;
+  padding: 1.2rem;
+  border: 0.1rem solid rgba(var(--color-base-text), 0.2);
+  font-size: 1.6rem;
+  font-family: inherit;
+  background-color: rgb(var(--color-base-background));
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: 0.2rem solid rgb(var(--color-base-accent-2));
+  outline-offset: 0.1rem;
+}
+
+/* Grid */
+.grid {
+  display: grid;
+  gap: 2rem;
+}
+
+.grid--2-col {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.grid--3-col {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.grid--4-col {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+/* Product card */
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.card__media {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 1 / 1;
+}
+
+.card__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.card__content {
+  padding: 1.5rem 0;
+}
+
+.card__title {
+  font-size: 1.8rem;
+  margin: 0 0 0.5rem;
+}
+
+.card__price {
+  font-size: 1.6rem;
+  font-weight: 600;
+}
+
+/* Utilities */
+.visually-hidden {
+  position: absolute !important;
+  overflow: hidden;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  clip: rect(0 0 0 0);
+  word-wrap: normal !important;
+}
+
+.skip-to-content-link:focus {
+  clip: auto;
+  width: auto;
+  height: auto;
+  z-index: 10000;
+}
+
+/* Responsive */
+@media screen and (max-width: 749px) {
+  .grid--2-col,
+  .grid--3-col,
+  .grid--4-col {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  h1 { font-size: 3rem; }
+  h2 { font-size: 2.4rem; }
+  h3 { font-size: 2rem; }
+}
+
+@media screen and (min-width: 750px) and (max-width: 989px) {
+  .grid--4-col {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}

@@ -1,0 +1,110 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "Custom Shopify Theme",
+    "theme_version": "1.0.0",
+    "theme_author": "Your Name",
+    "theme_documentation_url": "https://your-docs-url.com",
+    "theme_support_url": "https://your-support-url.com"
+  },
+  {
+    "name": "t:settings_schema.colors.name",
+    "settings": [
+      {
+        "type": "color",
+        "id": "colors_text",
+        "default": "#121212",
+        "label": "t:settings_schema.colors.settings.colors_text.label",
+        "info": "t:settings_schema.colors.settings.colors_text.info"
+      },
+      {
+        "type": "color",
+        "id": "colors_background",
+        "default": "#FFFFFF",
+        "label": "t:settings_schema.colors.settings.colors_background.label",
+        "info": "t:settings_schema.colors.settings.colors_background.info"
+      },
+      {
+        "type": "color",
+        "id": "colors_accent_1",
+        "default": "#121212",
+        "label": "t:settings_schema.colors.settings.colors_accent_1.label",
+        "info": "t:settings_schema.colors.settings.colors_accent_1.info"
+      },
+      {
+        "type": "color",
+        "id": "colors_accent_2",
+        "default": "#334FB4",
+        "label": "t:settings_schema.colors.settings.colors_accent_2.label"
+      }
+    ]
+  },
+  {
+    "name": "t:settings_schema.typography.name",
+    "settings": [
+      {
+        "type": "header",
+        "content": "t:settings_schema.typography.settings.header__1.content"
+      },
+      {
+        "type": "font_picker",
+        "id": "type_header_font",
+        "default": "assistant_n4",
+        "label": "t:settings_schema.typography.settings.type_header_font.label",
+        "info": "t:settings_schema.typography.settings.type_header_font.info"
+      },
+      {
+        "type": "header",
+        "content": "t:settings_schema.typography.settings.header__2.content"
+      },
+      {
+        "type": "font_picker",
+        "id": "type_body_font",
+        "default": "assistant_n4",
+        "label": "t:settings_schema.typography.settings.type_body_font.label",
+        "info": "t:settings_schema.typography.settings.type_body_font.info"
+      }
+    ]
+  },
+  {
+    "name": "Layout",
+    "settings": [
+      {
+        "type": "range",
+        "id": "page_width",
+        "min": 1000,
+        "max": 1600,
+        "step": 100,
+        "default": 1200,
+        "unit": "px",
+        "label": "Page width"
+      }
+    ]
+  },
+  {
+    "name": "Logo",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "logo",
+        "label": "Logo image"
+      },
+      {
+        "type": "range",
+        "id": "logo_width",
+        "min": 50,
+        "max": 250,
+        "step": 10,
+        "default": 100,
+        "unit": "px",
+        "label": "Desktop logo width"
+      },
+      {
+        "type": "image_picker",
+        "id": "favicon",
+        "label": "Favicon image",
+        "info": "Will be scaled down to 32 x 32px"
+      }
+    ]
+  }
+]

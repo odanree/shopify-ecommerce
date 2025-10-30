@@ -1,0 +1,84 @@
+{
+  "general": {
+    "404": {
+      "title": "Page not found",
+      "subtext": "The page you requested does not exist."
+    },
+    "accessibility": {
+      "skip_to_text": "Skip to content",
+      "refresh_page": "choosing a selection results in a full page refresh"
+    },
+    "meta": {
+      "tags": "Tagged \"{{ tags }}\"",
+      "page": "Page {{ page }}"
+    },
+    "search": {
+      "search": "Search"
+    },
+    "newsletter": {
+      "label": "Email",
+      "button_label": "Subscribe"
+    },
+    "social": {
+      "alt_text": {
+        "share_on_facebook": "Share on Facebook",
+        "share_on_twitter": "Tweet on Twitter",
+        "share_on_pinterest": "Pin on Pinterest"
+      }
+    }
+  },
+  "products": {
+    "product": {
+      "add_to_cart": "Add to cart",
+      "sold_out": "Sold out",
+      "unavailable": "Unavailable",
+      "quantity": "Quantity",
+      "price": {
+        "from_price_html": "From {{ price }}",
+        "regular_price": "Regular price",
+        "sale_price": "Sale price"
+      },
+      "vendor": "Vendor",
+      "description": "Description",
+      "on_sale": "Sale",
+      "product_variants": "Product variants",
+      "share": "Share this product"
+    }
+  },
+  "sections": {
+    "cart": {
+      "title": "Your cart",
+      "caption": "Cart items",
+      "remove_title": "Remove {{ title }}",
+      "subtotal": "Subtotal",
+      "checkout": "Check out",
+      "empty": "Your cart is empty",
+      "cart_error": "There was an error while updating your cart. Please try again.",
+      "cart_quantity_error_html": "You can only add {{ quantity }} of this item to your cart.",
+      "taxes_and_shipping_policy_at_checkout_html": "Taxes and <a href=\"{{ link }}\">shipping</a> calculated at checkout",
+      "taxes_included_but_shipping_at_checkout": "Tax included and shipping calculated at checkout",
+      "taxes_included_and_shipping_policy_html": "Tax included. <a href=\"{{ link }}\">Shipping</a> calculated at checkout.",
+      "taxes_and_shipping_at_checkout": "Taxes and shipping calculated at checkout",
+      "update": "Update",
+      "continue_shopping": "Continue shopping"
+    },
+    "header": {
+      "announcement": "Announcement",
+      "menu": "Menu"
+    },
+    "footer": {
+      "newsletter": "Newsletter"
+    }
+  },
+  "templates": {
+    "search": {
+      "no_results": "No results found for \"{{ terms }}\". Check the spelling or use a different word or phrase.",
+      "results_with_count": {
+        "one": "{{ count }} result for \"{{ terms }}\"",
+        "other": "{{ count }} results for \"{{ terms }}\""
+      },
+      "title": "Search results",
+      "page": "Page"
+    }
+  }
+}
