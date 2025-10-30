@@ -1,0 +1,28 @@
+# Conventional Commit Message Template
+# Format: <type>(<scope>): <subject>
+#
+# Types:
+#   feat:     A new feature
+#   fix:      A bug fix
+#   docs:     Documentation only changes
+#   style:    Changes that don't affect code meaning (white-space, formatting)
+#   refactor: Code change that neither fixes a bug nor adds a feature
+#   perf:     Code change that improves performance
+#   test:     Adding missing tests or correcting existing tests
+#   build:    Changes to build system or external dependencies
+#   ci:       Changes to CI configuration files and scripts
+#   chore:    Other changes that don't modify src or test files
+#
+# Scope (optional):
+#   theme, headless, api, docs, config, deps
+#
+# Example:
+#   feat(headless): add product search functionality
+#   fix(theme): resolve cart quantity update bug
+#   docs: update README with deployment instructions
+#
+# Breaking Changes:
+#   Add "BREAKING CHANGE:" in the body for breaking changes
+#
+# Reference Issues:
+#   Closes #123, Fixes #456, Refs #789
