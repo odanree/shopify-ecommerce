@@ -1,0 +1,214 @@
+{% comment %}
+  Featured Products Section
+  Uses the product-card-enhanced snippet
+{% endcomment %}
+
+<div class="featured-products-section section-{{ section.id }}">
+  <div class="container">
+    {% if section.settings.heading != blank %}
+      <div class="section-header">
+        <h2 class="section-heading">{{ section.settings.heading }}</h2>
+        {% if section.settings.subheading != blank %}
+          <p class="section-subheading">{{ section.settings.subheading }}</p>
+        {% endif %}
+        {% if section.settings.button_text != blank and section.settings.collection != blank %}
+          <a href="{{ section.settings.collection.url }}" class="section-link">
+            {{ section.settings.button_text }} →
+          </a>
+        {% endif %}
+      </div>
+    {% endif %}
+    
+    <div class="product-grid product-grid--{{ section.settings.products_per_row }}">
+      {% if section.settings.collection != blank %}
+        {% for product in section.settings.collection.products limit: section.settings.products_to_show %}
+          <div class="product-grid__item">
+            {% render 'product-card-enhanced',
+              product: product,
+              show_badges: section.settings.show_badges,
+              show_quick_view: section.settings.show_quick_view,
+              image_ratio: section.settings.image_ratio
+            %}
+          </div>
+        {% endfor %}
+      {% else %}
+        {% comment %} Show placeholder products if no collection selected {% endcomment %}
+        {% for i in (1..section.settings.products_to_show) %}
+          <div class="product-grid__item">
+            <div class="product-card product-card--placeholder">
+              {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+              <div class="product-card__details">
+                <h3 class="product-card__title">Product Title</h3>
+                <div class="product-card__price">$29.99</div>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<style>
+  .featured-products-section {
+    padding: 60px 20px;
+  }
+  
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .section-header {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  
+  .section-heading {
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: #333;
+  }
+  
+  .section-subheading {
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 16px;
+  }
+  
+  .section-link {
+    color: #7eb77f;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  
+  .section-link:hover {
+    text-decoration: underline;
+  }
+  
+  .product-grid {
+    display: grid;
+    gap: 24px;
+    margin-top: 32px;
+  }
+  
+  .product-grid--2 {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  }
+  
+  .product-grid--3 {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  }
+  
+  .product-grid--4 {
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  }
+  
+  @media (max-width: 768px) {
+    .product-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+    
+    .section-heading {
+      font-size: 24px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .product-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Featured Products",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Featured Products"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Check out our best sellers"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "label": "Products to show",
+      "min": 2,
+      "max": 12,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "products_per_row",
+      "label": "Products per row (desktop)",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "label": "Image ratio",
+      "options": [
+        {
+          "value": "square",
+          "label": "Square (1:1)"
+        },
+        {
+          "value": "portrait",
+          "label": "Portrait (2:3)"
+        },
+        {
+          "value": "landscape",
+          "label": "Landscape (3:2)"
+        }
+      ],
+      "default": "portrait"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_badges",
+      "label": "Show product badges",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_quick_view",
+      "label": "Show quick view button",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button text",
+      "default": "View All"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Featured Products",
+      "category": "Product"
+    }
+  ]
+}
+{% endschema %}
