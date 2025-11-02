@@ -9,7 +9,6 @@ cypress.config.ts
 coverage/
 
 # Next.js
-.next/
 out/
 
 # Production
