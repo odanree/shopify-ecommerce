@@ -12,7 +12,14 @@ import './commands'
 
 // Hide fetch/XHR requests in Cypress UI for cleaner test output
 Cypress.on('uncaught:exception', (err, runnable) => {
-  // returning false here prevents Cypress from failing the test
-  // useful for Next.js hydration errors that don't affect functionality
-  return false
+  // Only suppress known harmless Next.js hydration errors
+  // e.g., "Hydration failed" or "Minified React error #418"
+  if (
+    err.message?.includes('Hydration failed') ||
+    err.message?.includes('Minified React error #418')
+  ) {
+    return false; // prevent Cypress from failing the test
+  }
+  // Let all other errors fail the test
+  // Returning undefined allows Cypress to handle the error normally
 })
