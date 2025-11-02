@@ -6,7 +6,7 @@ describe('Family Plan Builder', () => {
   it('should load the family plan builder page', () => {
     cy.get('[data-cy="family-plan-builder"]', { timeout: 10000 }).should('be.visible')
     cy.get('[data-cy="builder-title"]').should('contain', 'Build Your Family Plan')
-    cy.get('[data-cy="builder-subtitle"]').should('contain', 'Select the number of lines')
+    cy.get('[data-cy="builder-subtitle"]').should('contain', 'Select the number of lines and SIM type for each line.')
   })
 
   it('should display line controls', () => {
