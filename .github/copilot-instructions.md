@@ -11,8 +11,19 @@
 ## Project Type
 Shopify Ecommerce Development Workspace with:
 1. Custom Shopify Theme (Liquid templates)
-2. Headless Shopify with Next.js + TypeScript + TailwindCSS
+2. Headless Shopify with Next.js + TypeScript + CSS Modules
 
 ## Project Structure
 - shopify-theme/ - Traditional Shopify theme with Liquid templating
 - shopify-headless/ - Modern headless commerce with Next.js and Shopify Storefront API
+
+## Important: Read PROJECT_CONTEXT.md
+For complete project setup, configurations, and AI assistance context, see: `PROJECT_CONTEXT.md`
+
+Key points:
+- **Styling**: CSS Modules (NOT TailwindCSS)
+- **Git Workflow**: feature/* → dev → main
+- **Deployment**: Vercel auto-deploy on main branch
+- **Environment**: Variables in .env.local (not committed)
+- **Root Directory**: shopify-headless (for Vercel)
+- **Commits**: Use conventional commit format
