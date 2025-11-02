@@ -158,4 +158,4 @@ Only merge `dev → main` when:
 - ✅ Documentation is updated
 - ✅ All tests pass
 
-Typical frequency: Weekly, bi-weekly, or per sprint
+Typical frequency: Weekly, biweekly, or per sprint
