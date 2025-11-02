@@ -1,0 +1,62 @@
+.card {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+.cardInner {
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  transition: box-shadow 0.3s ease-in-out;
+}
+
+.card:hover .cardInner {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.imageWrapper {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+}
+
+.image {
+  object-fit: cover;
+  transition: transform 0.3s ease-in-out;
+}
+
+.card:hover .image {
+  transform: scale(1.05);
+}
+
+.content {
+  padding: 1rem;
+}
+
+.vendor {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin-bottom: 0.25rem;
+}
+
+.title {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  transition: color 0.2s ease-in-out;
+}
+
+.card:hover .title {
+  color: #4f46e5;
+}
+
+.price {
+  font-size: 1.125rem;
+  font-weight: 700;
+}
+
+.outOfStock {
+  color: #ef4444;
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+}
