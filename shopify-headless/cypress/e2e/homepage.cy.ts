@@ -23,7 +23,7 @@ describe('Homepage', () => {
   it('should display featured products', () => {
     cy.contains('Featured Products').should('be.visible')
     // Wait for products to load
-    cy.get('[class*="productsGrid"]', { timeout: 10000 }).should('exist')
+    cy.get('[data-testid="products-grid"]', { timeout: 10000 }).should('exist')
   })
 
   it('should navigate to family plan page when clicking CTA', () => {
