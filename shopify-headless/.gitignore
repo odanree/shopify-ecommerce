@@ -5,6 +5,9 @@ node_modules/
 
 # Testing
 /coverage
+cypress/videos/
+cypress/screenshots/
+cypress/downloads/
 
 # Next.js
 /.next/
