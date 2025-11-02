@@ -14,11 +14,11 @@ describe('Family Plan Builder', () => {
 
   it('should allow adding lines', () => {
     // Get initial line count
-    cy.get('[class*="lineItem"]').its('length').then((initialCount) => {
+    cy.get('[data-testid="line-item"]').its('length').then((initialCount) => {
       // Click add button
       cy.contains('button', 'Add').first().click()
       // Should have one more line
-      cy.get('[class*="lineItem"]').should('have.length', initialCount + 1)
+      cy.get('[data-testid="line-item"]').should('have.length', initialCount + 1)
     })
   })
 
