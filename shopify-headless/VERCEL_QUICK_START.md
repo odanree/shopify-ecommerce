@@ -15,7 +15,7 @@
 ### 3. Add Environment Variables
 ```
 SHOPIFY_STORE_DOMAIN=odanree.myshopify.com
-SHOPIFY_STOREFRONT_ACCESS_TOKEN=a9657ef8b2c6699c5fc6f7230c3ffdc1
+SHOPIFY_STOREFRONT_ACCESS_TOKEN=your_storefront_access_token_here
 ```
 
 ### 4. Click Deploy 🎉
