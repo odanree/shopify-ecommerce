@@ -4,6 +4,9 @@ import { ProductCard } from '@/components/ProductCard';
 import { FamilyPlanPromo } from '@/components/FamilyPlanPromo';
 import styles from './page.module.css';
 
+// Force dynamic rendering - don't prerender at build time
+export const dynamic = 'force-dynamic';
+
 export default async function Home() {
   const products = await getProducts();
 
