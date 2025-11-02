@@ -14,6 +14,7 @@
 - ✅ **Issue Templates** - Bug reports and feature requests
 - ✅ **Contributing Guide** - Development workflow documented
 - ✅ **Development Roadmap** - 5 phases planned with 8 initial issues
+- ✅ **Vercel Auto-Deploy** - Configured for continuous deployment
 
 ### Latest Addition: Family Plan Builder 🆕
 - ✅ **Shopify Liquid Version** - 565 lines of production-ready code
@@ -32,17 +33,28 @@
 
 ## 📋 Next Steps
 
-### 1. Create GitHub Repository
-Go to: https://github.com/new
-- Repository name: `shopify-ecommerce`
-- Description: `Dual Shopify ecommerce setup: Custom theme + Headless Next.js storefront`
-- Visibility: Your choice
-- **Don't initialize** with README/gitignore
+### 1. Deploy to Vercel 🚀
+The project is ready for automatic deployment!
 
-### 2. Push to GitHub
-```powershell
-git push -u origin main
-```
+**Quick Deploy:**
+1. Go to [vercel.com/new](https://vercel.com/new)
+2. Import `odanree/shopify-ecommerce`
+3. Set Root Directory to `shopify-headless`
+4. Add environment variables
+5. Click Deploy!
+
+📖 See `shopify-headless/VERCEL_DEPLOYMENT.md` for detailed instructions
+⚡ See `shopify-headless/VERCEL_QUICK_START.md` for quick reference
+
+**Auto-Deploy is enabled:**
+- Every push to `main` → Production deployment
+- Every PR → Preview deployment
+
+### 2. Verify GitHub Repository
+Repository: https://github.com/odanree/shopify-ecommerce
+- ✅ Repository exists and connected
+- ✅ Remote configured
+- Ready for Vercel integration
 
 ### 3. Create GitHub Issues
 Copy content from `.github/issues/` files to create 8 issues on GitHub:
