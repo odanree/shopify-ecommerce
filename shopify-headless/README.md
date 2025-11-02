@@ -151,12 +151,32 @@ This project uses TailwindCSS. Customize colors and design in:
 
 ## Deployment
 
-### Vercel (Recommended)
+### Vercel (Recommended) - Auto Deploy Enabled ✅
 
-1. Push your code to GitHub
-2. Import project in [Vercel](https://vercel.com)
-3. Add environment variables in Vercel dashboard
-4. Deploy!
+This project is configured for automatic deployment to Vercel with GitHub integration.
+
+**Quick Deploy:**
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/odanree/shopify-ecommerce&root-directory=shopify-headless&env=SHOPIFY_STORE_DOMAIN,SHOPIFY_STOREFRONT_ACCESS_TOKEN&envDescription=Shopify%20API%20credentials%20required&project-name=shopify-headless-store)
+
+**Manual Setup with Auto-Deploy:**
+
+📖 **See [VERCEL_DEPLOYMENT.md](./VERCEL_DEPLOYMENT.md) for complete step-by-step instructions**
+
+**Quick Overview:**
+1. Push your code to GitHub (already done ✅)
+2. Import project in [Vercel](https://vercel.com/new)
+3. Set Root Directory to `shopify-headless`
+4. Add environment variables:
+   - `SHOPIFY_STORE_DOMAIN`
+   - `SHOPIFY_STOREFRONT_ACCESS_TOKEN`
+5. Deploy!
+
+**Auto-Deploy Features:**
+- ✅ Every push to `main` branch deploys to production
+- ✅ Pull requests get automatic preview deployments
+- ✅ Instant rollback to previous versions
+- ✅ Built-in CI/CD pipeline
 
 ### Other Platforms
 
