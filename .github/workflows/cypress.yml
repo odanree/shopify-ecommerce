@@ -42,7 +42,6 @@ jobs:
           browser: chrome
         env:
           CYPRESS_BASE_URL: 'http://localhost:3000'
-          headless: true
           SHOPIFY_STORE_DOMAIN: ${{ secrets.SHOPIFY_STORE_DOMAIN }}
           SHOPIFY_STOREFRONT_ACCESS_TOKEN: ${{ secrets.SHOPIFY_STOREFRONT_ACCESS_TOKEN }}
 
