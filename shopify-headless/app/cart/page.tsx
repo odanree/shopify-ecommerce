@@ -28,20 +28,21 @@ export default function CartPage() {
 
   if (cartItems.length === 0) {
     return (
-      <div className="min-h-screen bg-gray-50 py-16">
+      <div className="min-h-screen bg-gray-50 py-16" data-cy="empty-cart-page">
         <div className="container mx-auto px-4 max-w-4xl">
           <div className="bg-white rounded-2xl shadow-lg p-12 text-center">
             <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
               <ShoppingCart className="w-12 h-12 text-gray-400" />
             </div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-4">Your Cart is Empty</h1>
-            <p className="text-gray-600 mb-8 text-lg">
+            <h1 className="text-3xl font-bold text-gray-900 mb-4" data-cy="empty-cart-title">Your Cart is Empty</h1>
+            <p className="text-gray-600 mb-8 text-lg" data-cy="empty-cart-message">
               Looks like you haven&apos;t added any items to your cart yet.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center" data-cy="empty-cart-actions">
               <Link
                 href="/family-plan"
                 className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-primary-600 text-white rounded-lg font-semibold hover:bg-primary-700 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
+                data-cy="build-family-plan-link"
               >
                 <ShoppingCart className="w-5 h-5" />
                 Build Your Family Plan
@@ -49,6 +50,7 @@ export default function CartPage() {
               <Link
                 href="/products"
                 className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white text-primary-600 border-2 border-primary-600 rounded-lg font-semibold hover:bg-primary-50 transition-all duration-300"
+                data-cy="browse-products-link"
               >
                 Browse Products
               </Link>
@@ -60,30 +62,32 @@ export default function CartPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-16">
+    <div className="min-h-screen bg-gray-50 py-16" data-cy="cart-page">
       <div className="container mx-auto px-4 max-w-6xl">
         {/* Header */}
         <div className="mb-8">
           <Link
             href="/products"
             className="inline-flex items-center gap-2 text-primary-600 hover:text-primary-700 font-semibold mb-4"
+            data-cy="continue-shopping-link"
           >
             <ArrowLeft className="w-5 h-5" />
             Continue Shopping
           </Link>
-          <h1 className="text-4xl font-bold text-gray-900">Shopping Cart</h1>
-          <p className="text-gray-600 mt-2">
+          <h1 className="text-4xl font-bold text-gray-900" data-cy="cart-title">Shopping Cart</h1>
+          <p className="text-gray-600 mt-2" data-cy="cart-item-count">
             {cartItems.length} {cartItems.length === 1 ? 'item' : 'items'} in your cart
           </p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Cart Items */}
-          <div className="lg:col-span-2 space-y-4">
+          <div className="lg:col-span-2 space-y-4" data-cy="cart-items-list">
             {cartItems.map((item) => (
               <div
                 key={item.id}
                 className="bg-white rounded-xl shadow-md p-6 flex gap-6 items-center hover:shadow-lg transition-shadow"
+                data-cy="cart-item"
               >
                 {/* Product Image */}
                 <div className="w-24 h-24 bg-gray-100 rounded-lg flex items-center justify-center flex-shrink-0">
