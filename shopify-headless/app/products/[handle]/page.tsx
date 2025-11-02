@@ -54,6 +54,10 @@ export default async function ProductPage({ params }: ProductPageProps) {
           <AddToCart 
             variantId={defaultVariant.id}
             availableForSale={product.availableForSale}
+            productTitle={product.title}
+            productImage={product.featuredImage?.url}
+            price={defaultVariant.price.amount}
+            variant={defaultVariant.title}
           />
 
           {/* Product Details */}
