@@ -1,7 +1,8 @@
 # Vercel Deployment - Quick Reference
 
 ## 🚀 One-Click Deploy
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/odanree/shopify-ecommerce&root-directory=shopify-headless&env=SHOPIFY_STORE_DOMAIN,SHOPIFY_STOREFRONT_ACCESS_TOKEN&envDescription=Shopify%20API%20credentials%20required&project-name=shopify-headless-store)
+<!-- Replace <YOUR_GITHUB_REPO_URL> with your own forked repository URL below -->
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=<YOUR_GITHUB_REPO_URL>&root-directory=shopify-headless&env=SHOPIFY_STORE_DOMAIN,SHOPIFY_STOREFRONT_ACCESS_TOKEN&envDescription=Shopify%20API%20credentials%20required&project-name=shopify-headless-store)
 
 ## ⚡ Quick Setup (5 minutes)
 
