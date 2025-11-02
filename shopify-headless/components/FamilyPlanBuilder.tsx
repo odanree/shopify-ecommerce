@@ -2,6 +2,7 @@
 
 import React, { useState, useCallback, useMemo } from 'react';
 import { ShoppingCart, Plus, X, Smartphone, Shield, Check } from 'lucide-react';
+import styles from './FamilyPlanBuilder.module.css';
 
 export interface FamilyPlanLine {
   id: number;
@@ -184,26 +185,23 @@ export default function FamilyPlanBuilder({
   };
 
   return (
-    <div className="family-plan-builder bg-gradient-to-b from-gray-50 to-white py-16">
-      <div className="container mx-auto px-4 max-w-7xl">
+    <div className={styles.familyPlanBuilder}>
+      <div className={styles.container}>
         
         {/* Hero Section */}
         {showHero && (
-          <div className="family-plan-hero bg-gradient-to-br from-primary-500 to-primary-700 text-white rounded-2xl p-12 mb-16 text-center">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">
+          <div className={styles.hero}>
+            <h1 className={styles.heroTitle}>
               Save More with a Family Plan
             </h1>
-            <p className="text-xl md:text-2xl mb-8 opacity-95 max-w-3xl mx-auto">
+            <p className={styles.heroSubtitle}>
               Get up to {config.maxLines} lines of unlimited data for as low as $
               {config.addonLinePrice}/mo when you add-a-line
             </p>
-            <a
-              href="#builder"
-              className="inline-flex items-center gap-2 bg-white text-primary-600 px-8 py-4 rounded-lg font-semibold hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
-            >
+            <a href="#builder" className={styles.heroCta}>
               Build My Family Plan
               <svg
-                className="w-5 h-5 animate-bounce-x"
+                className={styles.ctaIcon}
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -221,23 +219,20 @@ export default function FamilyPlanBuilder({
 
         {/* How It Works Section */}
         {showSteps && (
-          <div className="family-plan-steps mb-20">
-            <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-gray-900">
+          <div className={styles.steps}>
+            <h2 className={styles.stepsTitle}>
               How Family Plan Works
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div className={styles.stepsGrid}>
               {steps.map((step) => (
-                <div
-                  key={step.number}
-                  className="bg-white p-8 rounded-xl shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-2"
-                >
-                  <div className="text-6xl font-bold text-primary-500 opacity-20 mb-4">
+                <div key={step.number} className={styles.stepCard}>
+                  <div className={styles.stepNumber}>
                     {step.number}
                   </div>
-                  <h3 className="text-xl font-semibold mb-3 text-gray-900">
+                  <h3 className={styles.stepTitle}>
                     {step.title}
                   </h3>
-                  <p className="text-gray-600 leading-relaxed">{step.description}</p>
+                  <p className={styles.stepDescription}>{step.description}</p>
                 </div>
               ))}
             </div>
@@ -245,46 +240,41 @@ export default function FamilyPlanBuilder({
         )}
 
         {/* Main Builder */}
-        <div id="builder" className="family-plan-builder-main mb-20">
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-4 text-gray-900">
+        <div id="builder" className={styles.builderMain}>
+          <h2 className={styles.builderTitle}>
             Build Your Family Plan
           </h2>
-          <p className="text-center text-gray-600 mb-12 text-lg">
+          <p className={styles.builderSubtitle}>
             Select the number of lines and SIM type for each line.
           </p>
 
-          <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-xl p-8 md:p-10">
+          <div className={styles.builderCard}>
             {/* Lines */}
-            <div className="space-y-5 mb-8">
+            <div className={styles.linesList}>
               {lines.map((line) => (
-                <div
-                  key={line.id}
-                  className="relative bg-gray-50 border-2 border-gray-200 rounded-xl p-6 hover:border-primary-500 transition-all duration-300 hover:shadow-md"
-                >
+                <div key={line.id} className={styles.lineItem}>
                   {/* Line Header */}
-                  <div className="flex justify-between items-center mb-5">
-                    <span className="text-lg font-semibold text-gray-900">
+                  <div className={styles.lineHeader}>
+                    <span className={styles.lineName}>
                       Line {line.id}:{' '}
                       {line.isPrimary ? config.primaryPlanName : config.addonPlanName}
                     </span>
                     {line.isPrimary ? (
-                      <span className="px-3 py-1 bg-primary-600 text-white text-xs font-bold rounded-full uppercase tracking-wide">
+                      <span className={`${styles.badge} ${styles.primaryBadge}`}>
                         Primary
                       </span>
                     ) : line.id === 2 ? (
-                      <span className="px-3 py-1 bg-success-500 text-white text-xs font-bold rounded-full uppercase tracking-wide">
+                      <span className={`${styles.badge} ${styles.savingsBadge}`}>
                         Save ${config.addonSavings}
                       </span>
                     ) : null}
                   </div>
 
                   {/* Variant Options */}
-                  <div className="grid grid-cols-2 gap-4 mb-5">
+                  <div className={styles.variantGrid}>
                     <label
-                      className={`cursor-pointer flex flex-col items-center justify-center p-4 border-2 rounded-lg transition-all duration-200 min-h-[120px] ${
-                        line.variant === 'sim'
-                          ? 'border-primary-500 bg-primary-50'
-                          : 'border-gray-200 bg-white hover:border-primary-300'
+                      className={`${styles.variantOption} ${
+                        line.variant === 'sim' ? styles.variantOptionSelected : ''
                       }`}
                     >
                       <input
@@ -293,24 +283,18 @@ export default function FamilyPlanBuilder({
                         value="sim"
                         checked={line.variant === 'sim'}
                         onChange={() => updateLineVariant(line.id, 'sim')}
-                        className="sr-only"
+                        className={styles.variantRadio}
                       />
-                      <Smartphone
-                        className={`w-8 h-8 mb-2 ${
-                          line.variant === 'sim' ? 'text-primary-600' : 'text-gray-500'
-                        }`}
-                      />
-                      <span className="font-medium text-center">SIM Card</span>
-                      <span className="text-xs text-gray-500 mt-1">
+                      <Smartphone className={styles.variantIcon} />
+                      <span className={styles.variantLabel}>SIM Card</span>
+                      <span className={styles.variantSubtext}>
                         (Free Shipping)
                       </span>
                     </label>
 
                     <label
-                      className={`cursor-pointer flex flex-col items-center justify-center p-4 border-2 rounded-lg transition-all duration-200 min-h-[120px] ${
-                        line.variant === 'esim'
-                          ? 'border-primary-500 bg-primary-50'
-                          : 'border-gray-200 bg-white hover:border-primary-300'
+                      className={`${styles.variantOption} ${
+                        line.variant === 'esim' ? styles.variantOptionSelected : ''
                       }`}
                     >
                       <input
@@ -319,28 +303,24 @@ export default function FamilyPlanBuilder({
                         value="esim"
                         checked={line.variant === 'esim'}
                         onChange={() => updateLineVariant(line.id, 'esim')}
-                        className="sr-only"
+                        className={styles.variantRadio}
                       />
-                      <Shield
-                        className={`w-8 h-8 mb-2 ${
-                          line.variant === 'esim' ? 'text-primary-600' : 'text-gray-500'
-                        }`}
-                      />
-                      <span className="font-medium text-center">eSIM</span>
-                      <span className="text-xs text-gray-500 mt-1">
+                      <Shield className={styles.variantIcon} />
+                      <span className={styles.variantLabel}>eSIM</span>
+                      <span className={styles.variantSubtext}>
                         (Free Digital)
                       </span>
                     </label>
                   </div>
 
                   {/* Price */}
-                  <div className="flex items-baseline gap-1">
-                    <span className="text-3xl font-bold text-primary-600">
+                  <div className={styles.linePrice}>
+                    <span className={styles.priceAmount}>
                       ${line.isPrimary ? config.primaryLinePrice : config.addonLinePrice}
                     </span>
-                    <span className="text-gray-500">/mo</span>
+                    <span className={styles.priceUnit}>/mo</span>
                     {line.id === 2 && (
-                      <span className="ml-auto text-sm text-success-600 font-semibold">
+                      <span className={styles.addonPriceNote}>
                         Add-a-Line for ${config.addonLinePrice}/mo
                       </span>
                     )}
@@ -350,10 +330,10 @@ export default function FamilyPlanBuilder({
                   {!line.isPrimary && (
                     <button
                       onClick={() => removeLine(line.id)}
-                      className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center bg-red-100 text-red-600 rounded-full hover:bg-red-600 hover:text-white transition-all duration-200 hover:scale-110"
+                      className={styles.removeButton}
                       aria-label={`Remove line ${line.id}`}
                     >
-                      <X className="w-5 h-5" />
+                      <X className={styles.removeIcon} />
                     </button>
                   )}
                 </div>
@@ -361,43 +341,43 @@ export default function FamilyPlanBuilder({
             </div>
 
             {/* Add Line Button */}
-            <div className="text-center py-6 border-b-2 border-gray-200 mb-8">
+            <div className={styles.addLineSection}>
               <button
                 onClick={addLine}
                 disabled={lines.length >= config.maxLines}
-                className="inline-flex items-center gap-2 px-6 py-3 bg-white text-primary-600 border-2 border-primary-600 rounded-lg font-semibold hover:bg-primary-50 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                className={styles.addLineButton}
               >
-                <Plus className="w-5 h-5" />
+                <Plus className={styles.addLineIcon} />
                 Add-a-Line for ${config.addonLinePrice}/mo
               </button>
-              <p className="text-sm text-gray-500 mt-3">
+              <p className={styles.addLineNote}>
                 Minimum of {config.minLines} lines | Maximum of {config.maxLines} lines
               </p>
             </div>
 
             {/* Summary */}
-            <div className="bg-gray-50 rounded-xl p-6">
-              <div className="flex justify-between items-center py-3 text-lg">
-                <span className="font-medium text-gray-700">Subtotal:</span>
-                <span className="text-2xl font-bold text-gray-900">${subtotal}</span>
+            <div className={styles.summary}>
+              <div className={styles.summaryRow}>
+                <span className={styles.summaryLabel}>Subtotal:</span>
+                <span className={styles.summaryAmount}>${subtotal}</span>
               </div>
-              <div className="flex justify-between items-center py-3 text-lg text-success-600 font-semibold border-b-2 border-gray-200 pb-4 mb-4">
+              <div className={`${styles.summaryRow} ${styles.savingsRow}`}>
                 <span>Total savings:</span>
-                <span className="text-2xl font-bold">${savings}</span>
+                <span className={styles.savingsAmount}>${savings}</span>
               </div>
               <button
                 onClick={handleAddToCart}
                 disabled={!canAddToCart || isAddingToCart}
-                className="w-full py-4 bg-primary-600 text-white rounded-lg font-bold text-lg hover:bg-primary-700 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-2"
+                className={styles.addToCartButton}
               >
                 {isAddingToCart ? (
                   <>
-                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                    <div className={styles.spinner}></div>
                     Adding to Cart...
                   </>
                 ) : canAddToCart ? (
                   <>
-                    <ShoppingCart className="w-5 h-5" />
+                    <ShoppingCart className={styles.cartIcon} />
                     Add to Cart
                   </>
                 ) : (
@@ -410,44 +390,26 @@ export default function FamilyPlanBuilder({
 
         {/* Features Section */}
         {showFeatures && (
-          <div className="family-plan-features bg-white rounded-2xl shadow-lg p-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-center mb-4 text-gray-900">
+          <div className={styles.features}>
+            <h2 className={styles.featuresTitle}>
               Family Plan Features
             </h2>
-            <p className="text-center text-gray-600 mb-12 text-lg">
+            <p className={styles.featuresSubtitle}>
               Each line has access to all these features. No need to share!
             </p>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className={styles.featuresGrid}>
               {defaultFeatures.map((feature, index) => (
-                <div
-                  key={index}
-                  className="flex items-center gap-3 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-all duration-200 hover:translate-x-1"
-                >
-                  <div className="flex-shrink-0 w-6 h-6 bg-success-500 rounded-full flex items-center justify-center">
-                    <Check className="w-4 h-4 text-white" strokeWidth={3} />
+                <div key={index} className={styles.featureItem}>
+                  <div className={styles.featureIconWrapper}>
+                    <Check className={styles.featureIcon} strokeWidth={3} />
                   </div>
-                  <span className="text-gray-800 font-medium">{feature}</span>
+                  <span className={styles.featureText}>{feature}</span>
                 </div>
               ))}
             </div>
           </div>
         )}
       </div>
-
-      <style jsx>{`
-        @keyframes bounce-x {
-          0%,
-          100% {
-            transform: translateX(0);
-          }
-          50% {
-            transform: translateX(4px);
-          }
-        }
-        .animate-bounce-x {
-          animation: bounce-x 1s infinite;
-        }
-      `}</style>
     </div>
   );
 }
