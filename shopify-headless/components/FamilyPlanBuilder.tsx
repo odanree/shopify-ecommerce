@@ -240,19 +240,19 @@ export default function FamilyPlanBuilder({
         )}
 
         {/* Main Builder */}
-        <div id="builder" className={styles.builderMain}>
-          <h2 className={styles.builderTitle}>
+        <div id="builder" className={styles.builderMain} data-cy="family-plan-builder">
+          <h2 className={styles.builderTitle} data-cy="builder-title">
             Build Your Family Plan
           </h2>
-          <p className={styles.builderSubtitle}>
+          <p className={styles.builderSubtitle} data-cy="builder-subtitle">
             Select the number of lines and SIM type for each line.
           </p>
 
           <div className={styles.builderCard}>
             {/* Lines */}
-            <div className={styles.linesList}>
+            <div className={styles.linesList} data-cy="lines-list">
               {lines.map((line) => (
-                <div key={line.id} className={styles.lineItem}>
+                <div key={line.id} className={styles.lineItem} data-cy={`line-item-${line.id}`}>
                   {/* Line Header */}
                   <div className={styles.lineHeader}>
                     <span className={styles.lineName}>
@@ -332,6 +332,7 @@ export default function FamilyPlanBuilder({
                       onClick={() => removeLine(line.id)}
                       className={styles.removeButton}
                       aria-label={`Remove line ${line.id}`}
+                      data-cy={`remove-line-${line.id}`}
                     >
                       <X className={styles.removeIcon} />
                     </button>
@@ -346,6 +347,7 @@ export default function FamilyPlanBuilder({
                 onClick={addLine}
                 disabled={lines.length >= config.maxLines}
                 className={styles.addLineButton}
+                data-cy="add-line-button"
               >
                 <Plus className={styles.addLineIcon} />
                 Add-a-Line for ${config.addonLinePrice}/mo
@@ -356,19 +358,20 @@ export default function FamilyPlanBuilder({
             </div>
 
             {/* Summary */}
-            <div className={styles.summary}>
+            <div className={styles.summary} data-cy="pricing-summary">
               <div className={styles.summaryRow}>
                 <span className={styles.summaryLabel}>Subtotal:</span>
-                <span className={styles.summaryAmount}>${subtotal}</span>
+                <span className={styles.summaryAmount} data-cy="subtotal-amount">${subtotal}</span>
               </div>
               <div className={`${styles.summaryRow} ${styles.savingsRow}`}>
                 <span>Total savings:</span>
-                <span className={styles.savingsAmount}>${savings}</span>
+                <span className={styles.savingsAmount} data-cy="savings-amount">${savings}</span>
               </div>
               <button
                 onClick={handleAddToCart}
                 disabled={!canAddToCart || isAddingToCart}
                 className={styles.addToCartButton}
+                data-cy="add-to-cart-button"
               >
                 {isAddingToCart ? (
                   <>
