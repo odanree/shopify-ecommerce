@@ -1,0 +1,626 @@
+{% comment %}
+  Family Plan Builder Section
+  Inspired by Ultra Mobile's family plan builder
+  
+  Settings:
+  - Main plan product
+  - Add-on line product
+  - Maximum lines
+  - Pricing configuration
+{% endcomment %}
+
+<div class="family-plan-builder" data-section-id="{{ section.id }}" data-section-type="family-plan-builder">
+  <div class="page-width">
+    
+    {%- if section.settings.show_hero -%}
+    <div class="family-plan-hero">
+      <h1 class="family-plan-hero__title">{{ section.settings.hero_title }}</h1>
+      <p class="family-plan-hero__subtitle">{{ section.settings.hero_subtitle }}</p>
+      {%- if section.settings.hero_cta_text != blank -%}
+        <a href="#builder" class="btn family-plan-hero__cta">
+          {{ section.settings.hero_cta_text }}
+          <svg class="icon icon-arrow-right" width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+            <path d="M10.5 5l5 5-5 5M4.5 10h10" stroke="currentColor" stroke-width="2" fill="none"/>
+          </svg>
+        </a>
+      {%- endif -%}
+    </div>
+    {%- endif -%}
+
+    {%- if section.settings.show_how_it_works -%}
+    <div class="family-plan-steps">
+      <h2 class="family-plan-steps__title">{{ section.settings.steps_title | default: "How Family Plan Works" }}</h2>
+      <div class="family-plan-steps__grid">
+        {%- for i in (1..4) -%}
+          {%- assign step_title = 'step_' | append: i | append: '_title' -%}
+          {%- assign step_desc = 'step_' | append: i | append: '_description' -%}
+          {%- if section.settings[step_title] != blank -%}
+          <div class="family-plan-step">
+            <span class="family-plan-step__number">0{{ i }}</span>
+            <h3 class="family-plan-step__title">{{ section.settings[step_title] }}</h3>
+            <p class="family-plan-step__description">{{ section.settings[step_desc] }}</p>
+          </div>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </div>
+    {%- endif -%}
+
+    <div id="builder" class="family-plan-builder__main">
+      <h2 class="family-plan-builder__title">{{ section.settings.builder_title | default: "Build Your Family Plan" }}</h2>
+      <p class="family-plan-builder__description">{{ section.settings.builder_description }}</p>
+
+      <div class="family-plan-calculator">
+        <div class="family-plan-lines" id="familyPlanLines">
+          {%- comment %} Line 1 - Primary Line (Always Visible) {%- endcomment -%}
+          <div class="family-plan-line" data-line-number="1">
+            <div class="family-plan-line__header">
+              <span class="family-plan-line__label">Line 1: {{ section.settings.primary_plan_name }}</span>
+              <span class="family-plan-line__badge">Primary</span>
+            </div>
+            
+            <div class="family-plan-line__options">
+              <label class="family-plan-option">
+                <input type="radio" name="line-1-variant" value="sim" data-line="1" checked>
+                <span class="family-plan-option__label">
+                  <svg class="icon" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <rect x="6" y="4" width="12" height="16" rx="2" stroke="currentColor" stroke-width="2"/>
+                    <path d="M10 8h4v8h-4z" fill="currentColor"/>
+                  </svg>
+                  SIM Card<br><small>(Free Shipping)</small>
+                </span>
+              </label>
+              <label class="family-plan-option">
+                <input type="radio" name="line-1-variant" value="esim" data-line="1">
+                <span class="family-plan-option__label">
+                  <svg class="icon" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5z" stroke="currentColor" stroke-width="2"/>
+                  </svg>
+                  eSIM<br><small>(Free Digital)</small>
+                </span>
+              </label>
+            </div>
+
+            <div class="family-plan-line__price">
+              <span class="family-plan-line__amount">${{ section.settings.primary_line_price }}</span>
+              <span class="family-plan-line__period">/mo</span>
+            </div>
+          </div>
+
+          {%- comment %} Additional Lines (2-5) {%- endcomment -%}
+          {%- for i in (2..5) -%}
+          <div class="family-plan-line" data-line-number="{{ i }}" style="display: none;">
+            <div class="family-plan-line__header">
+              <span class="family-plan-line__label">Line {{ i }}: {{ section.settings.addon_plan_name }}</span>
+              {%- if i == 2 -%}
+              <span class="family-plan-line__badge family-plan-line__badge--savings">Save ${{ section.settings.addon_savings }}</span>
+              {%- endif -%}
+            </div>
+            
+            <div class="family-plan-line__options">
+              <label class="family-plan-option">
+                <input type="radio" name="line-{{ i }}-variant" value="sim" data-line="{{ i }}" checked>
+                <span class="family-plan-option__label">
+                  <svg class="icon" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <rect x="6" y="4" width="12" height="16" rx="2" stroke="currentColor" stroke-width="2"/>
+                    <path d="M10 8h4v8h-4z" fill="currentColor"/>
+                  </svg>
+                  SIM Card<br><small>(Free Shipping)</small>
+                </span>
+              </label>
+              <label class="family-plan-option">
+                <input type="radio" name="line-{{ i }}-variant" value="esim" data-line="{{ i }}">
+                <span class="family-plan-option__label">
+                  <svg class="icon" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5z" stroke="currentColor" stroke-width="2"/>
+                  </svg>
+                  eSIM<br><small>(Free Digital)</small>
+                </span>
+              </label>
+            </div>
+
+            <div class="family-plan-line__price">
+              <span class="family-plan-line__amount">${{ section.settings.addon_line_price }}</span>
+              <span class="family-plan-line__period">/mo</span>
+              {%- if i == 2 -%}
+              <span class="family-plan-line__note">Add-a-Line for ${{ section.settings.addon_line_price }}/mo</span>
+              {%- endif -%}
+            </div>
+
+            <button type="button" class="family-plan-line__remove" data-remove-line="{{ i }}" aria-label="Remove line {{ i }}">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                <path d="M15 5L5 15M5 5l10 10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </button>
+          </div>
+          {%- endfor -%}
+        </div>
+
+        <div class="family-plan-controls">
+          <button type="button" id="addLineButton" class="btn btn--secondary family-plan-controls__add">
+            <svg class="icon" width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+              <path d="M10 5v10M5 10h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            Add-a-Line for ${{ section.settings.addon_line_price }}/mo
+          </button>
+          <p class="family-plan-controls__note">Minimum of 2 lines | Maximum of 5 lines</p>
+        </div>
+
+        <div class="family-plan-summary">
+          <div class="family-plan-summary__row">
+            <span class="family-plan-summary__label">Subtotal:</span>
+            <span class="family-plan-summary__value">
+              $<span id="familyPlanSubtotal">{{ section.settings.primary_line_price }}</span>
+            </span>
+          </div>
+          <div class="family-plan-summary__row family-plan-summary__row--savings">
+            <span class="family-plan-summary__label">Total savings:</span>
+            <span class="family-plan-summary__value">
+              $<span id="familyPlanSavings">0</span>
+            </span>
+          </div>
+          <button type="button" id="addToCartButton" class="btn btn--primary family-plan-summary__cta">
+            Add to Cart
+          </button>
+        </div>
+      </div>
+    </div>
+
+    {%- if section.settings.show_features -%}
+    <div class="family-plan-features">
+      <h2 class="family-plan-features__title">{{ section.settings.features_title | default: "Family Plan Features" }}</h2>
+      <p class="family-plan-features__subtitle">{{ section.settings.features_subtitle }}</p>
+      
+      <div class="family-plan-features__grid">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'feature' -%}
+          <div class="family-plan-feature" {{ block.shopify_attributes }}>
+            <svg class="family-plan-feature__check" width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <circle cx="12" cy="12" r="10" fill="currentColor"/>
+              <path d="M8 12l2 2 4-4" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span class="family-plan-feature__text">{{ block.settings.feature_text }}</span>
+          </div>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </div>
+    {%- endif -%}
+
+  </div>
+</div>
+
+<script>
+(function() {
+  const FamilyPlanBuilder = {
+    config: {
+      primaryLinePrice: {{ section.settings.primary_line_price | default: 49 }},
+      addonLinePrice: {{ section.settings.addon_line_price | default: 24 }},
+      addonSavings: {{ section.settings.addon_savings | default: 25 }},
+      maxLines: {{ section.settings.max_lines | default: 5 }},
+      minLines: 2
+    },
+    
+    currentLines: 1,
+    lineVariants: {
+      1: 'sim'
+    },
+
+    init() {
+      this.addLineButton = document.getElementById('addLineButton');
+      this.linesContainer = document.getElementById('familyPlanLines');
+      this.subtotalElement = document.getElementById('familyPlanSubtotal');
+      this.savingsElement = document.getElementById('familyPlanSavings');
+      this.addToCartButton = document.getElementById('addToCartButton');
+
+      this.bindEvents();
+      this.updateCalculator();
+    },
+
+    bindEvents() {
+      if (this.addLineButton) {
+        this.addLineButton.addEventListener('click', () => this.addLine());
+      }
+
+      if (this.addToCartButton) {
+        this.addToCartButton.addEventListener('click', () => this.addToCart());
+      }
+
+      // Delegate events for dynamic line removal
+      this.linesContainer.addEventListener('click', (e) => {
+        const removeButton = e.target.closest('[data-remove-line]');
+        if (removeButton) {
+          const lineNumber = parseInt(removeButton.dataset.removeLine);
+          this.removeLine(lineNumber);
+        }
+      });
+
+      // Track variant selection
+      this.linesContainer.addEventListener('change', (e) => {
+        if (e.target.type === 'radio' && e.target.name.startsWith('line-')) {
+          const lineNumber = parseInt(e.target.dataset.line);
+          this.lineVariants[lineNumber] = e.target.value;
+        }
+      });
+    },
+
+    addLine() {
+      if (this.currentLines >= this.config.maxLines) {
+        alert(`Maximum ${this.config.maxLines} lines allowed`);
+        return;
+      }
+
+      this.currentLines++;
+      const lineElement = this.linesContainer.querySelector(`[data-line-number="${this.currentLines}"]`);
+      
+      if (lineElement) {
+        lineElement.style.display = 'block';
+        this.lineVariants[this.currentLines] = 'sim'; // Default variant
+        this.updateCalculator();
+        
+        // Disable add button if max reached
+        if (this.currentLines >= this.config.maxLines) {
+          this.addLineButton.disabled = true;
+          this.addLineButton.style.opacity = '0.5';
+          this.addLineButton.style.cursor = 'not-allowed';
+        }
+      }
+    },
+
+    removeLine(lineNumber) {
+      if (lineNumber <= 1) return; // Can't remove primary line
+      if (lineNumber > this.currentLines) return;
+
+      const lineElement = this.linesContainer.querySelector(`[data-line-number="${lineNumber}"]`);
+      
+      if (lineElement) {
+        lineElement.style.display = 'none';
+        delete this.lineVariants[lineNumber];
+        
+        // Shift down higher numbered lines
+        for (let i = lineNumber + 1; i <= this.config.maxLines; i++) {
+          const higherLine = this.linesContainer.querySelector(`[data-line-number="${i}"]`);
+          if (higherLine && higherLine.style.display !== 'none') {
+            const newNumber = i - 1;
+            const currentVariant = this.lineVariants[i];
+            
+            higherLine.dataset.lineNumber = newNumber;
+            higherLine.querySelector('.family-plan-line__label').textContent = 
+              `Line ${newNumber}: {{ section.settings.addon_plan_name }}`;
+            
+            delete this.lineVariants[i];
+            this.lineVariants[newNumber] = currentVariant;
+          }
+        }
+        
+        this.currentLines--;
+        this.updateCalculator();
+        
+        // Re-enable add button
+        this.addLineButton.disabled = false;
+        this.addLineButton.style.opacity = '1';
+        this.addLineButton.style.cursor = 'pointer';
+      }
+    },
+
+    updateCalculator() {
+      const addonLines = Math.max(0, this.currentLines - 1);
+      const subtotal = this.config.primaryLinePrice + (addonLines * this.config.addonLinePrice);
+      const savings = addonLines * this.config.addonSavings;
+
+      this.subtotalElement.textContent = subtotal.toFixed(0);
+      this.savingsElement.textContent = savings.toFixed(0);
+
+      // Update add button visibility based on min lines
+      if (this.currentLines < this.config.minLines) {
+        this.addToCartButton.disabled = true;
+        this.addToCartButton.style.opacity = '0.5';
+        this.addToCartButton.innerHTML = `Add at least ${this.config.minLines} lines to continue`;
+      } else {
+        this.addToCartButton.disabled = false;
+        this.addToCartButton.style.opacity = '1';
+        this.addToCartButton.innerHTML = 'Add to Cart';
+      }
+    },
+
+    addToCart() {
+      if (this.currentLines < this.config.minLines) {
+        alert(`Please add at least ${this.config.minLines} lines`);
+        return;
+      }
+
+      // Build cart items array
+      const items = [];
+      
+      // Add primary line
+      const primaryVariantId = '{{ section.settings.primary_sim_variant_id }}'; // You'll need to set this
+      if (primaryVariantId) {
+        items.push({
+          id: primaryVariantId,
+          quantity: 1,
+          properties: {
+            'Line': '1 (Primary)',
+            'Type': this.lineVariants[1] === 'esim' ? 'eSIM' : 'SIM Card'
+          }
+        });
+      }
+
+      // Add addon lines
+      for (let i = 2; i <= this.currentLines; i++) {
+        const addonVariantId = '{{ section.settings.addon_sim_variant_id }}'; // You'll need to set this
+        if (addonVariantId) {
+          items.push({
+            id: addonVariantId,
+            quantity: 1,
+            properties: {
+              'Line': `${i}`,
+              'Type': this.lineVariants[i] === 'esim' ? 'eSIM' : 'SIM Card'
+            }
+          });
+        }
+      }
+
+      // Add to cart via Shopify Ajax API
+      fetch('/cart/add.js', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ items })
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log('Added to cart:', data);
+        // Trigger cart drawer or redirect
+        window.location.href = '/cart';
+      })
+      .catch(error => {
+        console.error('Error adding to cart:', error);
+        alert('Error adding to cart. Please try again.');
+      });
+    }
+  };
+
+  // Initialize when DOM is ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => FamilyPlanBuilder.init());
+  } else {
+    FamilyPlanBuilder.init();
+  }
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Family Plan Builder",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Hero Section"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_hero",
+      "label": "Show hero section",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "hero_title",
+      "label": "Hero title",
+      "default": "Save More with a Family Plan"
+    },
+    {
+      "type": "textarea",
+      "id": "hero_subtitle",
+      "label": "Hero subtitle",
+      "default": "Get up to 5 lines of unlimited data for as low as $24/mo when you add-a-line"
+    },
+    {
+      "type": "text",
+      "id": "hero_cta_text",
+      "label": "Hero CTA text",
+      "default": "Build My Family Plan"
+    },
+    {
+      "type": "header",
+      "content": "How It Works Section"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_how_it_works",
+      "label": "Show how it works section",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "steps_title",
+      "label": "Steps section title",
+      "default": "How Family Plan Works"
+    },
+    {
+      "type": "text",
+      "id": "step_1_title",
+      "label": "Step 1 title",
+      "default": "Get the first line"
+    },
+    {
+      "type": "textarea",
+      "id": "step_1_description",
+      "label": "Step 1 description",
+      "default": "Start with one primary unlimited plan"
+    },
+    {
+      "type": "text",
+      "id": "step_2_title",
+      "label": "Step 2 title",
+      "default": "Add more lines"
+    },
+    {
+      "type": "textarea",
+      "id": "step_2_description",
+      "label": "Step 2 description",
+      "default": "Add up to 4 additional lines for only $24/mo per line"
+    },
+    {
+      "type": "text",
+      "id": "step_3_title",
+      "label": "Step 3 title",
+      "default": "Activate your lines"
+    },
+    {
+      "type": "textarea",
+      "id": "step_3_description",
+      "label": "Step 3 description",
+      "default": "Activate your primary line first, then add the remaining lines"
+    },
+    {
+      "type": "text",
+      "id": "step_4_title",
+      "label": "Step 4 title",
+      "default": "Manage everything"
+    },
+    {
+      "type": "textarea",
+      "id": "step_4_description",
+      "label": "Step 4 description",
+      "default": "Easily manage all lines under one account"
+    },
+    {
+      "type": "header",
+      "content": "Builder Configuration"
+    },
+    {
+      "type": "text",
+      "id": "builder_title",
+      "label": "Builder title",
+      "default": "Build Your Family Plan"
+    },
+    {
+      "type": "textarea",
+      "id": "builder_description",
+      "label": "Builder description",
+      "default": "Select the number of lines and SIM type for each line."
+    },
+    {
+      "type": "text",
+      "id": "primary_plan_name",
+      "label": "Primary plan name",
+      "default": "Unlimited Plan"
+    },
+    {
+      "type": "number",
+      "id": "primary_line_price",
+      "label": "Primary line price (monthly)",
+      "default": 49
+    },
+    {
+      "type": "text",
+      "id": "primary_sim_variant_id",
+      "label": "Primary line SIM variant ID",
+      "info": "Shopify product variant ID for primary line SIM"
+    },
+    {
+      "type": "text",
+      "id": "addon_plan_name",
+      "label": "Add-on plan name",
+      "default": "Unlimited Add-on Line"
+    },
+    {
+      "type": "number",
+      "id": "addon_line_price",
+      "label": "Add-on line price (monthly)",
+      "default": 24
+    },
+    {
+      "type": "number",
+      "id": "addon_savings",
+      "label": "Add-on line savings",
+      "default": 25,
+      "info": "Amount saved per add-on line vs primary price"
+    },
+    {
+      "type": "text",
+      "id": "addon_sim_variant_id",
+      "label": "Add-on line SIM variant ID",
+      "info": "Shopify product variant ID for add-on line SIM"
+    },
+    {
+      "type": "range",
+      "id": "max_lines",
+      "label": "Maximum lines",
+      "min": 2,
+      "max": 10,
+      "step": 1,
+      "default": 5
+    },
+    {
+      "type": "header",
+      "content": "Features Section"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_features",
+      "label": "Show features section",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "features_title",
+      "label": "Features title",
+      "default": "Family Plan Features"
+    },
+    {
+      "type": "textarea",
+      "id": "features_subtitle",
+      "label": "Features subtitle",
+      "default": "Each line has access to all these features. No need to share!"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "feature",
+      "name": "Feature",
+      "settings": [
+        {
+          "type": "text",
+          "id": "feature_text",
+          "label": "Feature text",
+          "default": "Unlimited data"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Family Plan Builder",
+      "blocks": [
+        {
+          "type": "feature",
+          "settings": {
+            "feature_text": "Unlimited 5G • 4G LTE Data per month"
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "feature_text": "Unlimited Talk & Text"
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "feature_text": "Up to 10GB Mobile Hotspot"
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "feature_text": "Free SIM Card or eSIM"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
