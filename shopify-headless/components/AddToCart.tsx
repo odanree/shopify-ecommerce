@@ -1,17 +1,30 @@
 'use client';
 
 import { useState } from 'react';
+import { useCart } from '@/contexts/CartContext';
 import styles from './AddToCart.module.css';
 
 interface AddToCartProps {
   variantId: string;
   availableForSale: boolean;
+  productTitle?: string;
+  productImage?: string;
+  price?: string;
+  variant?: string;
 }
 
-export function AddToCart({ variantId, availableForSale }: AddToCartProps) {
+export function AddToCart({ 
+  variantId, 
+  availableForSale,
+  productTitle = 'Product',
+  productImage,
+  price = '0.00',
+  variant = 'Default'
+}: AddToCartProps) {
   const [quantity, setQuantity] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState('');
+  const { addItem } = useCart();
 
   const handleAddToCart = async () => {
     if (!availableForSale) return;
@@ -20,9 +33,17 @@ export function AddToCart({ variantId, availableForSale }: AddToCartProps) {
     setMessage('');
 
     try {
-      // You'll implement the actual cart logic later
-      // For now, this is a placeholder
-      await new Promise(resolve => setTimeout(resolve, 500));
+      // Add to cart using CartContext
+      addItem({
+        id: variantId,
+        variantId: variantId,
+        title: productTitle,
+        variant: variant,
+        price: parseFloat(price),
+        quantity: quantity,
+        image: productImage
+      });
+      
       setMessage('Added to cart!');
       
       setTimeout(() => setMessage(''), 3000);
