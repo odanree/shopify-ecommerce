@@ -4,16 +4,17 @@ describe('Shopping Cart', () => {
   })
 
   it('should display cart link in header', () => {
-    cy.contains('Cart').should('be.visible')
+    cy.get('[data-cy="cart-link"]').should('be.visible').and('contain', 'Cart')
   })
 
   it('should navigate to cart page', () => {
-    cy.contains('a', 'Cart').click()
+    cy.get('[data-cy="cart-link"]').click()
     cy.url().should('include', '/cart')
   })
 
   it('should display empty cart message initially', () => {
     cy.visit('/cart')
-    cy.contains('Your Cart is Empty', { timeout: 10000 }).should('be.visible')
+    cy.get('[data-cy="empty-cart-page"]', { timeout: 10000 }).should('be.visible')
+    cy.get('[data-cy="empty-cart-title"]').should('contain', 'Your Cart is Empty')
   })
 })
