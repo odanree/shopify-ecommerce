@@ -92,7 +92,7 @@ export default function FamilyPlanBuilder({
   showSteps = true,
   showFeatures = true,
 }: FamilyPlanBuilderProps) {
-  const config = { ...defaultConfig, ...customConfig };
+  const config = useMemo(() => ({ ...defaultConfig, ...customConfig }), [customConfig]);
 
   const [lines, setLines] = useState<FamilyPlanLine[]>([
     { 
