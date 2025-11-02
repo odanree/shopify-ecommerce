@@ -2,6 +2,22 @@
 
 A complete Shopify ecommerce development environment with two approaches: a traditional custom Shopify theme and a modern headless commerce solution.
 
+## 🆕 Latest Addition: Family Plan Builder
+
+**Inspired by Ultra Mobile** - A production-ready family plan builder component available in both Shopify Liquid and Next.js React!
+
+📖 **[View Family Plan Builder Documentation](./FAMILY_PLAN_README.md)**  
+🚀 **[Quick Start Guide](./FAMILY_PLAN_QUICK_START.md)**  
+📊 **[Complete Implementation Summary](./FAMILY_PLAN_IMPLEMENTATION_SUMMARY.md)**
+
+**Features:**
+- ✅ Dynamic line management (add up to 5 lines)
+- ✅ SIM/eSIM variant selection per line
+- ✅ Real-time price calculations with savings display
+- ✅ Fully responsive and accessible (WCAG 2.1 AA)
+- ✅ Production-ready with complete documentation
+- ✅ Available in both Liquid and React/TypeScript
+
 ## 📁 Project Structure
 
 This workspace contains two complete Shopify ecommerce implementations:
