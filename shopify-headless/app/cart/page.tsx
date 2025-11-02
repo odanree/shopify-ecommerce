@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { ShoppingCart, Trash2, Plus, Minus, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useCart } from '@/contexts/CartContext';
 
 export default function CartPage() {
@@ -35,7 +36,7 @@ export default function CartPage() {
             </div>
             <h1 className="text-3xl font-bold text-gray-900 mb-4">Your Cart is Empty</h1>
             <p className="text-gray-600 mb-8 text-lg">
-              Looks like you haven't added any items to your cart yet.
+              Looks like you haven&apos;t added any items to your cart yet.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
@@ -87,9 +88,11 @@ export default function CartPage() {
                 {/* Product Image */}
                 <div className="w-24 h-24 bg-gray-100 rounded-lg flex items-center justify-center flex-shrink-0">
                   {item.image ? (
-                    <img
+                    <Image
                       src={item.image}
                       alt={item.title}
+                      width={96}
+                      height={96}
                       className="w-full h-full object-cover rounded-lg"
                     />
                   ) : (
