@@ -10,7 +10,7 @@ export default async function Home() {
       {/* Hero Section */}
       <section className="mb-12 text-center">
         <h1 className="text-5xl font-bold mb-4">
-          Welcome to Our Store Test
+          Welcome to Our Store
         </h1>
         <p className="text-xl text-gray-600 mb-8">
           Discover amazing products powered by Shopify
