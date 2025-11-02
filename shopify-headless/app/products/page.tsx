@@ -1,6 +1,9 @@
 import { getProducts } from '@/lib/shopify';
 import { ProductCard } from '@/components/ProductCard';
 
+// Force dynamic rendering - don't prerender at build time
+export const dynamic = 'force-dynamic';
+
 export default async function ProductsPage() {
   const products = await getProducts();
 

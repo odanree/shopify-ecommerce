@@ -3,6 +3,9 @@ import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import { AddToCart } from '@/components/AddToCart';
 
+// Force dynamic rendering - don't prerender at build time
+export const dynamic = 'force-dynamic';
+
 interface ProductPageProps {
   params: {
     handle: string;
