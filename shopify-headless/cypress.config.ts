@@ -8,6 +8,7 @@ export default defineConfig({
     viewportWidth: 1280,
     viewportHeight: 720,
     video: false,
+    // Force cache clear for data-cy attributes
     screenshotOnRunFailure: true,
   },
   component: {
