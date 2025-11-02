@@ -1,19 +1,20 @@
 import Link from 'next/link';
+import styles from './Header.module.css';
 
 export function Header() {
   return (
-    <header className="border-b">
-      <div className="container mx-auto px-4 py-4">
-        <nav className="flex items-center justify-between">
-          <Link href="/" className="text-2xl font-bold">
+    <header className={styles.header}>
+      <div className={styles.container}>
+        <nav className={styles.nav}>
+          <Link href="/" className={styles.logo}>
             Shopify Store
           </Link>
           
-          <div className="flex items-center space-x-6">
-            <Link href="/products" className="hover:text-primary-600 transition-colors">
+          <div className={styles.navLinks}>
+            <Link href="/products" className={styles.navLink}>
               Products
             </Link>
-            <Link href="/cart" className="hover:text-primary-600 transition-colors">
+            <Link href="/cart" className={styles.navLink}>
               Cart
             </Link>
           </div>
