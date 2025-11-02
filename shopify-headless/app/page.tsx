@@ -15,10 +15,10 @@ export default async function Home() {
       {/* Hero Section */}
       <section className={styles.hero} data-cy="hero-section">
         <h1 className={styles.heroTitle} data-cy="hero-title">
-          Welcome to Our Store - Auto-Deploy Test ✅
+          Welcome to Our Store
         </h1>
         <p className={styles.heroSubtitle} data-cy="hero-subtitle">
-          Discover amazing products powered by Shopify (Vercel Auto-Deploy Active!)
+          Discover amazing products powered by Shopify
         </p>
         <div className={styles.heroButtons} data-cy="hero-buttons">
           <Link 
