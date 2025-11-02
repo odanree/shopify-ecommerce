@@ -1,0 +1,27 @@
+#!/bin/sh
+# Pre-commit hook to prevent direct commits to main branch
+
+branch="$(git rev-parse --abbrev-ref HEAD)"
+
+if [ "$branch" = "main" ]; then
+  echo ""
+  echo "🚫 ERROR: Direct commits to 'main' branch are not allowed!"
+  echo ""
+  echo "💡 Please use the following workflow instead:"
+  echo ""
+  echo "   1. Switch to dev branch:"
+  echo "      git checkout dev"
+  echo ""
+  echo "   2. Or create a feature branch:"
+  echo "      git checkout -b feature/your-feature-name"
+  echo ""
+  echo "   3. Make your changes and commit to that branch"
+  echo ""
+  echo "   4. Push and create a PR to merge into dev"
+  echo ""
+  echo "📖 See .github/BRANCHING_STRATEGY.md for more details"
+  echo ""
+  exit 1
+fi
+
+exit 0
