@@ -14,7 +14,8 @@
     "react-dom": "^18.3.0",
     "@shopify/hydrogen-react": "^2024.1.0",
     "graphql": "^16.8.1",
-    "graphql-request": "^6.1.0"
+    "graphql-request": "^6.1.0",
+    "lucide-react": "^0.344.0"
   },
   "devDependencies": {
     "@types/node": "^20",
