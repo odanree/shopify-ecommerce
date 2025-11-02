@@ -14,6 +14,6 @@ describe('Shopping Cart', () => {
 
   it('should display empty cart message initially', () => {
     cy.visit('/cart')
-    cy.contains('Your cart is empty', { timeout: 10000 }).should('be.visible')
+    cy.contains('Your Cart is Empty', { timeout: 10000 }).should('be.visible')
   })
 })
