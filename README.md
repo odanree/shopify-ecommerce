@@ -2,21 +2,19 @@
 
 A complete Shopify ecommerce development environment with two approaches: a traditional custom Shopify theme and a modern headless commerce solution.
 
-## 🆕 Latest Addition: Family Plan Builder
+## 🚀 Production Site
 
-**Inspired by Ultra Mobile** - A production-ready family plan builder component available in both Shopify Liquid and Next.js React!
+**Live Demo**: https://shopify-headless-8746.vercel.app/
 
-📖 **[View Family Plan Builder Documentation](./FAMILY_PLAN_README.md)**  
-🚀 **[Quick Start Guide](./FAMILY_PLAN_QUICK_START.md)**  
-📊 **[Complete Implementation Summary](./FAMILY_PLAN_IMPLEMENTATION_SUMMARY.md)**
+Features:
+- ✅ Family Plan Builder with real-time pricing
+- ✅ Shopping cart with Context API state management
+- ✅ Product pages with Shopify integration
+- ✅ Cypress E2E testing (13+ tests)
+- ✅ CI/CD with GitHub Actions + Vercel auto-deploy
+- ✅ TypeScript type safety throughout
 
-**Features:**
-- ✅ Dynamic line management (add up to 5 lines)
-- ✅ SIM/eSIM variant selection per line
-- ✅ Real-time price calculations with savings display
-- ✅ Fully responsive and accessible (WCAG 2.1 AA)
-- ✅ Production-ready with complete documentation
-- ✅ Available in both Liquid and React/TypeScript
+📖 **[Family Plan Documentation](./docs/FAMILY_PLAN_README.md)**
 
 ## 📁 Project Structure
 
@@ -40,8 +38,12 @@ Modern headless commerce solution using Next.js, TypeScript, and Shopify Storefr
 **Features:**
 - Next.js 14 with App Router
 - TypeScript for type safety
-- TailwindCSS for styling
+- CSS Modules for component-scoped styling
 - Shopify Storefront API integration
+- Shopping cart with Context API
+- Cypress E2E testing
+- CI/CD with GitHub Actions
+- Vercel auto-deploy
 - Optimized performance and SEO
 - Full control over frontend
 
@@ -111,24 +113,46 @@ npm run dev
 ### Recommended VS Code Extensions:
 - **Shopify Liquid** - Syntax highlighting and snippets for Liquid
 - **ES7+ React/Redux/React-Native snippets** - For Next.js components
-- **Tailwind CSS IntelliSense** - For TailwindCSS autocomplete
+- **TypeScript** - TypeScript language support
 - **ESLint** - Code linting
 - **Prettier** - Code formatting
+- **Cypress** - E2E testing support
 
 ## 📚 Documentation
 
 - [Shopify Theme Development](https://shopify.dev/themes)
 - [Shopify Storefront API](https://shopify.dev/api/storefront)
 - [Next.js Documentation](https://nextjs.org/docs)
-- [TailwindCSS Documentation](https://tailwindcss.com/docs)
+- [TypeScript Documentation](https://www.typescriptlang.org/docs)
+- [Cypress Documentation](https://docs.cypress.io)
+- [Project Context](./PROJECT_CONTEXT.md) - Complete project reference
+- [Deployment Guide](./shopify-headless/VERCEL_DEPLOYMENT.md)
+
+## 🎯 Project Status
+
+### Completed ✅
+- Shopping cart functionality (Context API + cart page + E2E tests)
+- Family Plan Builder (Liquid + React versions)
+- Vercel auto-deploy configuration
+- CI/CD with GitHub Actions + Cypress
+- TypeScript type safety
+- Production deployment: https://shopify-headless-8746.vercel.app/
+
+### In Progress 🚧
+- Jest/React Testing Library unit tests
+- Storybook component library
+- Product search functionality
+- Collection pages
+
+See [ROADMAP.md](./ROADMAP.md) for complete development plan
 
 ## 🎯 Next Steps
 
-1. **Set up Shopify Store**: Create a development store at [partners.shopify.com](https://partners.shopify.com)
-2. **Choose Your Approach**: Pick traditional theme or headless
-3. **Configure Environment**: Follow the README in your chosen directory
-4. **Start Building**: Customize the templates and components
-5. **Deploy**: Push to production when ready
+1. **View Live Site**: Visit https://shopify-headless-8746.vercel.app/
+2. **Run Locally**: `cd shopify-headless && npm install && npm run dev`
+3. **Run Tests**: `npm run test:e2e` (Cypress E2E tests)
+4. **Read Documentation**: Check [PROJECT_CONTEXT.md](./PROJECT_CONTEXT.md) for setup details
+5. **Start Development**: Follow [CONTRIBUTING.md](./CONTRIBUTING.md) for workflow
 
 ## 🆘 Getting Help
 

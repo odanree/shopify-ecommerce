@@ -10,10 +10,12 @@ npm install
 ```
 
 This will install:
-- Next.js
-- React
-- Tailwind CSS
+- Next.js 14
+- React 18
+- TypeScript
+- CSS Modules (for styling)
 - lucide-react (icons)
+- Cypress (E2E testing)
 - All other dependencies
 
 ### Step 2: Start Development Server
@@ -29,15 +31,39 @@ Navigate to: **http://localhost:3000/family-plan**
 ✅ **You should see the family plan builder working!**
 
 ### What You Can Test:
-- ✅ Add/remove lines
+- ✅ Family plan builder (add/remove lines)
 - ✅ Switch between SIM/eSIM
-- ✅ See real-time pricing
+- ✅ See real-time pricing with bulk discounts
+- ✅ Shopping cart functionality (add/remove items)
+- ✅ Product pages
 - ✅ Responsive design (resize browser)
 - ✅ All animations and interactions
+- ✅ TypeScript type safety
 
 ---
 
-## 🛍️ Option 2: Push to Shopify Theme (For Live Preview)
+## 🌐 Option 2: View Live Production Site (Instant)
+
+**Production URL**: https://shopify-headless-8746.vercel.app/
+
+✅ **Already deployed and live!**
+
+### What's Available:
+- ✅ Homepage with featured products
+- ✅ Family Plan Builder: https://shopify-headless-8746.vercel.app/family-plan
+- ✅ Shopping Cart: https://shopify-headless-8746.vercel.app/cart
+- ✅ Product pages
+- ✅ Full responsive design
+- ✅ Vercel CDN (fast global performance)
+
+### Auto-Deploy Status:
+- Every merge to `main` → Production deployment
+- Every PR → Preview deployment
+- CI/CD with GitHub Actions + Cypress E2E tests
+
+---
+
+## 🛍️ Option 3: Push to Shopify Theme (For Live Preview)
 
 ### Prerequisites:
 - Active Shopify store
@@ -79,7 +105,7 @@ In the Shopify theme editor:
 
 ---
 
-## 📱 Option 3: Push to Development Theme (Recommended for Shopify)
+## 📱 Option 4: Push to Development Theme (Recommended for Shopify)
 
 ### Step 1: Create Development Theme
 
@@ -104,7 +130,7 @@ https://your-store.myshopify.com?preview_theme_id=123456
 
 ---
 
-## 🌐 Option 4: Push to Production Theme (When Ready)
+## 🌐 Option 5: Push to Production Theme (When Ready)
 
 ⚠️ **Warning**: This will update your live theme!
 
@@ -121,17 +147,31 @@ Select your theme when prompted.
 
 ### For Testing (Start Here):
 
-1. **Test Next.js Locally First**
+1. **Check Live Production Site** (Fastest)
+   - Visit: https://shopify-headless-8746.vercel.app/
+   - Test family plan: https://shopify-headless-8746.vercel.app/family-plan
+   - Test cart: https://shopify-headless-8746.vercel.app/cart
+   - Already deployed with auto-deploy enabled!
+
+2. **Test Next.js Locally** (For Development)
    ```powershell
    cd shopify-headless
    npm install
    npm run dev
    ```
-   - Visit: http://localhost:3000/family-plan
+   - Visit: http://localhost:3000/
    - Test all functionality
+   - Run E2E tests: `npm run cypress`
    - Check mobile responsive (browser DevTools)
 
-2. **Then Push to Shopify Development Theme**
+3. **Run Automated Tests**
+   ```powershell
+   npm run test:e2e
+   ```
+   - Cypress E2E tests for homepage, family-plan, cart
+   - Tests run automatically on PRs via GitHub Actions
+
+4. **Push to Shopify Development Theme** (Optional)
    ```powershell
    cd ..\shopify-theme
    shopify theme dev --store your-store.myshopify.com
@@ -140,9 +180,16 @@ Select your theme when prompted.
    - Check theme editor integration
    - Configure all settings
 
-3. **Finally Push to Production** (when satisfied)
+5. **Deploy Changes** (Automated)
    ```powershell
-   shopify theme push
+   # Make changes on a feature branch
+   git checkout -b feat/my-feature
+   git add .
+   git commit -m "feat: description"
+   git push origin feat/my-feature
+   
+   # Create PR to dev, then merge to main
+   # Vercel auto-deploys on merge to main!
    ```
 
 ---
@@ -246,10 +293,22 @@ npm install -g @shopify/cli @shopify/theme
 
 ## 🎉 Success Checklist
 
-- [ ] Next.js version running on localhost:3000
-- [ ] Can add/remove lines
-- [ ] Pricing calculates correctly
-- [ ] Responsive on mobile (test with DevTools)
+### Headless Next.js (shopify-headless)
+- [x] Production site live at https://shopify-headless-8746.vercel.app/
+- [x] Next.js version running on localhost:3000
+- [x] Family Plan Builder working
+- [x] Shopping cart functionality complete
+- [x] Can add/remove cart items
+- [x] Pricing calculates correctly
+- [x] Responsive on mobile
+- [x] TypeScript type safety
+- [x] Cypress E2E tests (13+ tests)
+- [x] CI/CD with GitHub Actions
+- [x] Vercel auto-deploy configured
+- [ ] Product search (planned)
+- [ ] Collection pages (planned)
+
+### Shopify Theme (shopify-theme)
 - [ ] Shopify CLI connected to store
 - [ ] Section appears in theme editor
 - [ ] CSS is applied correctly
@@ -263,13 +322,27 @@ npm install -g @shopify/cli @shopify/theme
 
 Once you've previewed and tested:
 
-1. **Customize Colors** - Match your brand
-2. **Update Copy** - Adjust text and messaging
-3. **Add Products** - Create actual Shopify products
-4. **Configure Settings** - Set prices and features
-5. **Test Checkout** - Full end-to-end test
-6. **Launch** - Push to production theme
+### Completed Features ✅
+1. ✅ **Shopping Cart** - Full implementation with Context API
+2. ✅ **Family Plan Builder** - Both Liquid and React versions
+3. ✅ **Production Deployment** - Live on Vercel with auto-deploy
+4. ✅ **CI/CD Pipeline** - GitHub Actions + Cypress E2E tests
+5. ✅ **TypeScript** - Complete type safety
+
+### Planned Features 📋
+1. **Add Jest/React Testing Library** - Unit tests for components
+2. **Setup Storybook** - Component documentation
+3. **Product Search** - Search functionality
+4. **Collection Pages** - Browse products by collection
+5. **Customize Colors** - Match your brand
+6. **Add More Products** - Expand product catalog
+
+### Development Workflow
+See `VERCEL_DEPLOYMENT.md` for complete deployment guide
+See `ROADMAP.md` for full feature roadmap
 
 ---
 
-**Ready to start?** Run the Quick Start commands above! 🚀
+**Production Site**: https://shopify-headless-8746.vercel.app/ 🚀
+
+**Ready to develop?** Run the Quick Start commands above!
