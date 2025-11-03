@@ -29,9 +29,13 @@ Key points:
 - **Deployment**: Vercel auto-deploy on main branch
 - **Environment**: Variables in .env.local (not committed)
   - ✅ SHOPIFY_ADMIN_API_TOKEN - Already configured for Admin API access
-  - ✅ NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN - Already configured
+  - ✅ SHOPIFY_STOREFRONT_ACCESS_TOKEN - For frontend product queries
+  - ✅ SHOPIFY_LOCATION_ID - 80318955565 (470 S Alpine Rd)
+  - ✅ SHOPIFY_STORE_DOMAIN - odanree.myshopify.com
 - **Root Directory**: shopify-headless (for Vercel)
 - **Commits**: Use conventional commit format
+- **Products**: 10 tech-themed t-shirts live on production (420 variants, 100 units each)
+- **Sales Channel**: Products must be published to "headless storefront" channel to appear in Storefront API
 
 ## Git Workflow (CRITICAL)
 Read `.github/BRANCHING_STRATEGY.md` for complete details.
@@ -48,7 +52,53 @@ When merging PRs to main:
 
 ### Workflow Steps
 1. Make changes on dev or feature branch
-2. Create PR from dev → main
-3. Wait for CI/CD (Cypress E2E tests) to pass
-4. Use "Squash and merge" when merging
-5. After merge, sync dev: `git pull origin main`
+2. Create PR from dev → main: `gh pr create --base main --head dev`
+3. **⚠️ WAIT for CI/CD to complete** (CRITICAL - DO NOT skip):
+   - Check status: `gh pr checks <PR_NUMBER>`
+   - Cypress E2E tests must pass ✓
+   - Vercel preview deployment must succeed ✓
+   - All checks must show ✓ before merging
+   - Typical wait time: 2-5 minutes
+4. **After ALL checks pass ✓**, merge with squash: `gh pr merge <PR_NUMBER> --squash --delete-branch=false`
+5. After merge, sync dev: `git checkout dev && git pull origin main && git push origin dev`
+
+### CI/CD Pipeline (CRITICAL)
+**NEVER merge a PR before CI/CD completes!**
+
+Every PR triggers:
+- ✅ Cypress E2E tests (cart, products, homepage)
+- ✅ Vercel preview deployment
+- ✅ TypeScript compilation check
+- ✅ Build verification
+
+**To check CI/CD status:**
+```bash
+gh pr checks <PR_NUMBER>
+```
+
+**Wait until you see:**
+```
+All checks have passed
+✓ E2E Tests/cypress-run (pull_request)
+✓ Vercel
+✓ Vercel Preview Comments
+```
+
+**Common CI/CD wait times:**
+- Vercel deployment: ~1-2 minutes
+- Cypress E2E tests: ~2-4 minutes
+- Total: ~3-5 minutes
+
+### Product Management Scripts (shopify-headless/scripts/)
+- `create-products.ts` - Mass create 10 tech-themed t-shirts with variants
+- `publish-to-channel.ts` - Publish products to "headless storefront" sales channel
+- `verify-products.ts` - Verify products are visible in Storefront API
+- `test-storefront-api.ts` - Comprehensive API diagnostics
+- `delete-products.ts` - Bulk delete all products (use with caution)
+- See scripts/README.md for detailed documentation
+
+### Critical: TypeScript in Scripts
+- All scripts must have explicit type annotations
+- Example: `const url: string = ...` not `const url = ...`
+- Next.js build runs TypeScript checks on ALL .ts files including scripts/
+- Build will fail if implicit types are detected
