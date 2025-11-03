@@ -4,7 +4,28 @@ This directory contains scripts for managing products in your Shopify store via 
 
 ## 📋 Available Scripts
 
-### 1. **create-products.ts** - Mass Product Creator
+### 1. **add-product-images.ts** - Add Product Images 🆕
+Adds placeholder images to all products using the Shopify Admin API.
+
+**What it does:**
+- Adds 2 images per product (front and back views)
+- Uses placeholder images with product-specific colors
+- Updates existing products without duplicating
+- Rate-limited to avoid API throttling
+
+**Usage:**
+```bash
+npx tsx scripts/add-product-images.ts
+```
+
+**Note:** Currently uses placeholder.com images. For production:
+1. Replace URLs in the script with actual image URLs
+2. Or upload images via Shopify Admin UI
+3. Or use a CDN (Cloudinary, Imgix)
+
+---
+
+### 2. **create-products.ts** - Mass Product Creator
 Creates 10 tech-themed t-shirt products (customized to the tech stack used in this repo).
 
 **What it creates:**
@@ -27,7 +48,7 @@ npx tsx scripts/create-products.ts
 
 ---
 
-### 2. **publish-to-channel.ts** - Publish Products to Sales Channel
+### 3. **publish-to-channel.ts** - Publish Products to Sales Channel
 Publishes all products to the "headless storefront" sales channel so they appear in the Storefront API.
 
 **Usage:**
@@ -39,7 +60,7 @@ npx tsx scripts/publish-to-channel.ts
 
 ---
 
-### 3. **verify-products.ts** - Verify Storefront API Access
+### 4. **verify-products.ts** - Verify Storefront API Access
 Checks if products are accessible via the Storefront API (what your Next.js app uses).
 
 **Usage:**
@@ -55,7 +76,7 @@ npx tsx scripts/verify-products.ts
 
 ---
 
-### 4. **test-storefront-api.ts** - Diagnostic Tool
+### 5. **test-storefront-api.ts** - Diagnostic Tool
 Comprehensive test of Storefront API access with multiple query types.
 
 **Usage:**
@@ -70,7 +91,7 @@ npx tsx scripts/test-storefront-api.ts
 
 ---
 
-### 5. **delete-products.ts** - Bulk Delete Products
+### 6. **delete-products.ts** - Bulk Product Deletion
 Deletes all products from your store (use with caution!).
 
 **Usage:**
@@ -128,12 +149,20 @@ npx tsx scripts/delete-products.ts
    Or manually in Shopify Admin:
    - Products → Select all → Bulk Actions → Make available → "headless storefront"
 
-3. **Verify they're visible:**
+3. **Add product images:**
+   ```bash
+   npx tsx scripts/add-product-images.ts
+   ```
+   
+   Or manually in Shopify Admin:
+   - Products → Select product → Media → Add from URL or upload
+
+4. **Verify they're visible:**
    ```bash
    npx tsx scripts/verify-products.ts
    ```
 
-4. **Check your live site:**
+5. **Check your live site:**
    - Local: http://localhost:3000/products
    - Production: https://your-site.vercel.app/products
 
