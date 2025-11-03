@@ -17,14 +17,16 @@
 - ✅ **Vercel Auto-Deploy** - Configured for continuous deployment
 
 ### Latest Addition: Collections Pages 🆕
-- ✅ **Collections Listing** - Browse all collections at `/collections`
-- ✅ **Collection Detail** - View products by collection at `/collections/[handle]`
-- ✅ **CollectionCard Component** - Reusable card with image, title, description
-- ✅ **Navigation Integration** - Collections link added to header
-- ✅ **Breadcrumb Navigation** - Home → Collections → Collection Name
-- ✅ **Empty States** - Graceful handling for no collections/products
-- ✅ **Cypress E2E Tests** - 10 comprehensive tests for collections
-- ✅ **Production Deployment** - Live on https://shopify-headless-8746.vercel.app/collections
+✅ **Collections Listing** - Browse all collections at `/collections`
+✅ **Collection Detail** - View products by collection at `/collections/[handle]`
+✅ **CollectionCard Component** - Reusable card with image, title, description
+✅ **Navigation Integration** - Collections link added to header
+✅ **Breadcrumb Navigation** - Home → Collections → Collection Name
+✅ **Empty States** - Graceful handling for no collections/products
+✅ **Cypress E2E Tests** - 10 comprehensive tests for collections
+✅ **Accurate Product Counts** - Product counts now correct on all collection cards
+✅ **Collection Management Scripts** - Automated scripts for create, publish, delete, and test collections
+✅ **Production Deployment** - Live on https://shopify-headless-8746.vercel.app/collections
 
 ### Product Images
 - ✅ **Product Images** - All 11 products now have images on production
@@ -35,13 +37,14 @@
 
 ### Product Management System
 - ✅ **Live Products** - 11 tech-themed t-shirts on production (420+ variants, 100 units each)
-- ✅ **Product Scripts** - 6 production-ready management scripts
+✅ **Product & Collection Scripts** - 7+ production-ready management scripts
   - `create-products.ts` - Mass create products with variants and inventory
   - `publish-to-channel.ts` - Publish to headless storefront channel
   - `verify-products.ts` - Verify Storefront API visibility
   - `test-storefront-api.ts` - Comprehensive API diagnostics
   - `delete-products.ts` - Bulk delete (with caution)
   - `add-product-images.ts` - Automated image upload via Admin API
+  - `create-collections.ts`, `publish-collections.ts`, `delete-collections.ts`, `test-collections-data.ts` - Automated collection management
 - ✅ **Complete Documentation** - scripts/README.md with setup, workflow, troubleshooting
 - ✅ **Sales Channel Setup** - Products published to "headless storefront" channel
 - ✅ **Verified Deployment** - All products live with images
@@ -72,6 +75,7 @@
 
 ### Recent Commits
 ```
+* 7c1e2a1 feat(collections): fix product count logic, add management scripts, update documentation (#25)
 * b12de0f feat: add collections pages feature (#24)
 * e6bc59a feat: implement collections pages (#23)
 * bc4bb61 feat: add product images via Admin API (#22)
@@ -296,7 +300,7 @@ shopify theme dev --store odanree.myshopify.com
 2. ~~**Merge PR #22**~~ ✅ Product images merged and deployed
 3. ~~**Merge PR #23**~~ ✅ Collections to dev merged
 4. ~~**Merge PR #24**~~ ✅ Collections to main deployed
-5. **Start Next Feature** - Product Search (Issue #2) or Reviews (Issue #6)
+5. **Start Next Feature** - Product Search (Issue #2)
 
 ---
 
