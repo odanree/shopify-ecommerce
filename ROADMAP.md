@@ -31,7 +31,11 @@
 - [ ] #7 Newsletter signup form
 
 ### Headless Storefront
-- [ ] #3 Shopping cart functionality (HIGH PRIORITY)
+- [x] #3 Shopping cart functionality ✅ COMPLETE
+  - [x] CartContext with add/remove/update/clear
+  - [x] Cart page with full UI
+  - [x] localStorage persistence
+  - [x] Cypress E2E tests
 - [ ] #2 Product search implementation
 - [ ] #4 Collection pages implementation
 
@@ -39,6 +43,28 @@
 **Priority:** Medium  
 **Timeline:** Week 3-4
 
+### Testing & Quality Assurance
+- [ ] Add Jest configuration for unit testing
+- [ ] Implement React Testing Library tests for components
+  - [ ] ProductCard component tests
+  - [ ] FamilyPlanBuilder component tests
+  - [ ] AddToCart component tests
+  - [ ] CartContext tests
+- [ ] Add test coverage reporting
+- [ ] Update README with testing documentation
+
+### Component Library & Documentation
+- [ ] Setup Storybook for component development
+- [ ] Create stories for existing components
+  - [ ] ProductCard story with variants
+  - [ ] Header/Footer stories
+  - [ ] AddToCart button states
+  - [ ] FamilyPlanBuilder interactive story
+- [ ] Add component prop documentation
+- [ ] Document design tokens and CSS Modules usage
+- [ ] Create component usage guidelines
+
+### Features
 - [ ] #6 Product reviews and ratings
 - [ ] #7 Newsletter integration (both projects)
 - [ ] #8 SEO optimization (both projects)
