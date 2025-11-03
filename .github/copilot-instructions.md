@@ -28,6 +28,8 @@ Key points:
   - Protected main branch requires PRs
 - **Deployment**: Vercel auto-deploy on main branch
 - **Environment**: Variables in .env.local (not committed)
+  - ✅ SHOPIFY_ADMIN_API_TOKEN - Already configured for Admin API access
+  - ✅ NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN - Already configured
 - **Root Directory**: shopify-headless (for Vercel)
 - **Commits**: Use conventional commit format
 
