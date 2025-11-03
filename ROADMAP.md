@@ -39,18 +39,17 @@
 - [x] Deployed to production - All working! ✅
 
 ### Custom Theme
-- [ ] #1 Complete header and footer sections
-- [ ] #4 Collection pages implementation
-- [ ] #7 Newsletter signup form
+ [ ] #1 Complete header and footer sections
+ [ ] #4 Collection pages implementation
+ [ ] #7 Newsletter signup form
 
 ### Headless Storefront
-- [x] #3 Shopping cart functionality ✅ COMPLETE
   - [x] CartContext with add/remove/update/clear
   - [x] Cart page with full UI
   - [x] localStorage persistence
   - [x] Cypress E2E tests
-- [ ] #4 Collection pages implementation 🚧 IN PROGRESS
-- [ ] #2 Product search implementation
+ [x] #4 Collection pages implementation ✅ COMPLETE
+ [ ] #2 Product search implementation (in progress)
 
 ## Phase 3: Enhanced Features 📋
 **Priority:** Medium  
