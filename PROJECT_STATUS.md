@@ -16,17 +16,26 @@
 - ✅ **Development Roadmap** - 5 phases planned with 8 initial issues
 - ✅ **Vercel Auto-Deploy** - Configured for continuous deployment
 
-### Latest Addition: Product Management System 🆕
-- ✅ **Live Products** - 10 tech-themed t-shirts on production (420 variants, 100 units each)
-- ✅ **Product Scripts** - 5 production-ready management scripts
+### Latest Addition: Product Images 🆕
+- ✅ **Product Images** - All 11 products now have images on production
+- ✅ **Image Management Script** - `add-product-images.ts` for automated image upload
+- ✅ **Unsplash Integration** - Using stable image URLs that Shopify can process
+- ✅ **Manual Upload Guide** - Comprehensive fallback documentation
+- ✅ **CI/CD Documentation** - Added workflow reminders to copilot instructions
+- ✅ **Production Deployment** - Images live on https://shopify-headless-8746.vercel.app/products
+
+### Product Management System
+- ✅ **Live Products** - 11 tech-themed t-shirts on production (420+ variants, 100 units each)
+- ✅ **Product Scripts** - 6 production-ready management scripts
   - `create-products.ts` - Mass create products with variants and inventory
   - `publish-to-channel.ts` - Publish to headless storefront channel
   - `verify-products.ts` - Verify Storefront API visibility
   - `test-storefront-api.ts` - Comprehensive API diagnostics
   - `delete-products.ts` - Bulk delete (with caution)
+  - `add-product-images.ts` - Automated image upload via Admin API
 - ✅ **Complete Documentation** - scripts/README.md with setup, workflow, troubleshooting
 - ✅ **Sales Channel Setup** - Products published to "headless storefront" channel
-- ✅ **Verified Deployment** - All products live on https://shopify-headless-8746.vercel.app/products
+- ✅ **Verified Deployment** - All products live with images
 - ✅ **TypeScript Best Practices** - Explicit type annotations throughout
 
 ### Previous Additions
@@ -54,11 +63,11 @@
 
 ### Recent Commits
 ```
+* bc4bb61 feat: add product images via Admin API (#22)
+* 2f8ee3c docs: add CI/CD workflow reminder to copilot instructions
+* 8fa8c32 feat(scripts): add product images via Admin API
 * 4f601fd feat: add product management scripts and documentation (#21)
 * 8d2bd6c ci: configure Vercel auto-deploy for headless storefront
-* 295c8a2 docs: add development roadmap and GitHub issue templates
-* b394d3f chore: add conventional commit templates and contribution guidelines
-* 2440471 feat: initialize shopify ecommerce workspace with dual approach
 ```
 
 ### Current Branch
@@ -101,12 +110,11 @@ Copy content from `.github/issues/` files to create issues on GitHub:
 - Issue #7: Newsletter Signup
 - Issue #8: SEO Optimization
 
-### 3. Add Product Images
-Products are live but need images:
-```powershell
-# Add images in Shopify Admin or via script
-# Products → Select product → Add media
-```
+### 3. ~~Add Product Images~~ ✅ COMPLETE
+All 11 products now have images via Unsplash:
+- ✅ Automated via `add-product-images.ts` script
+- ✅ Deployed to production
+- ✅ Visible on https://shopify-headless-8746.vercel.app/products
 
 ### 4. Start Next Feature
 Pick an issue and create a branch:
@@ -201,8 +209,8 @@ shopify theme dev --store odanree.myshopify.com
 - ✅ Auto-deploy enabled and tested
 - ✅ Environment variables documented
 - ✅ Cart functionality complete (CartContext + cart page + E2E tests)
-- ✅ Product management scripts (create, publish, verify, test, delete)
-- ⏳ Product images needed
+- ✅ Product management scripts (create, publish, verify, test, delete, add-images)
+- ✅ Product images added (all 11 products with Unsplash images)
 - ⏳ Search needed
 - ⏳ Collections needed
 
@@ -273,11 +281,11 @@ shopify theme dev --store odanree.myshopify.com
 
 ## 🎯 Immediate Next Steps
 
-1. ~~**Merge PR**~~ ✅ PR #21 merged to main with squash and merge
-2. ~~**Deploy to Vercel**~~ ✅ Production site live and verified
+1. ~~**Merge PR #21**~~ ✅ Product management scripts merged
+2. ~~**Merge PR #22**~~ ✅ Product images merged and deployed
 3. ~~**Verify Deployment**~~ ✅ All features tested and working
-4. **Add Product Images** - Upload images to 10 products in Shopify Admin
-5. **Start Next Feature** - Pick issue #2 (Product Search) or #4 (Collections)
+4. ~~**Add Product Images**~~ ✅ All 11 products have images
+5. **Start Next Feature** - Collections page (Issue #4) - IN PROGRESS
 
 ---
 
@@ -285,8 +293,9 @@ shopify theme dev --store odanree.myshopify.com
 
 View at: https://shopify-headless-8746.vercel.app/
 
-- ✅ 10 products with 420 variants
+- ✅ 11 products with 420+ variants
+- ✅ Product images live
 - ✅ Shopping cart working
 - ✅ Family plan builder working
-- ✅ Auto-deploy configured
-- ⏳ Product images needed
+- ✅ Auto-deploy configured with CI/CD
+- 🚧 Collections page - Starting now!
