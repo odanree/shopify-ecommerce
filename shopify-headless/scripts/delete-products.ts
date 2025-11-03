@@ -34,7 +34,7 @@ async function fetchAllProducts(): Promise<Product[]> {
   console.log('📥 Fetching all products...\n');
 
   while (hasNextPage) {
-    const url = pageInfo
+    const url: string = pageInfo
       ? `https://${SHOPIFY_STORE_DOMAIN}/admin/api/${API_VERSION}/products.json?limit=250&page_info=${pageInfo}`
       : `https://${SHOPIFY_STORE_DOMAIN}/admin/api/${API_VERSION}/products.json?limit=250`;
 
