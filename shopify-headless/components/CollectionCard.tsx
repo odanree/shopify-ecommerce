@@ -8,7 +8,7 @@ interface CollectionCardProps {
 }
 
 export default function CollectionCard({ collection }: CollectionCardProps) {
-  const { title, handle, description, image, productsCount } = collection;
+  const { title, handle, description, image, productsCount, products } = collection;
 
   return (
     <Link href={`/collections/${handle}`} className={styles.card}>
