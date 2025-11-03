@@ -4,7 +4,38 @@ This directory contains scripts for managing products in your Shopify store via 
 
 ## 📋 Available Scripts
 
-### 1. **add-product-images.ts** - Add Product Images 🆕
+### 1. **create-collections.ts** - Create Collections 🆕
+Creates themed collections and assigns products to them automatically.
+
+**Collections Created:**
+- **All Products** (11 products) - Complete catalog
+- **Frontend Frameworks** (5 products) - Next.js, React, TypeScript, Hydrogen
+- **Backend & APIs** (3 products) - Shopify, GraphQL, Headless Commerce
+- **Development Tools** (3 products) - VS Code, Cypress, CSS Modules
+- **Headless Commerce** (6 products) - Modern commerce stack
+
+**What it does:**
+- Creates 5 themed collections with descriptions and hero images
+- Assigns products to collections using smart rules
+- Publishes collections to "headless storefront" sales channel
+- Uses Unsplash images for collection headers
+- Rate-limited to avoid API throttling
+
+**Usage:**
+```bash
+npx tsx scripts/create-collections.ts
+```
+
+**Output:**
+- Collections visible at `/collections` on your storefront
+- Each collection has SEO-friendly descriptions
+- Professional hero images from Unsplash
+
+**Note:** Safe to run multiple times, but will create duplicate collections if they already exist. Check Shopify Admin first.
+
+---
+
+### 2. **add-product-images.ts** - Add Product Images
 Adds placeholder images to all products using the Shopify Admin API.
 
 **What it does:**
@@ -25,7 +56,31 @@ npx tsx scripts/add-product-images.ts
 
 ---
 
-### 2. **create-products.ts** - Mass Product Creator
+### 4. **test-collections-data.ts** - Debug Collections Data 🆕
+Tests the collections data returned by `getCollections()` to debug product count issues.
+
+**What it does:**
+- Fetches all collections from Storefront API
+- Displays detailed information about each collection
+- Shows productsCount vs products array length
+- Helps debug why collection cards show incorrect counts
+
+**Usage:**
+```bash
+npx tsx scripts/test-collections-data.ts
+```
+
+**Output:**
+- Collection title, handle, and ID
+- Products count from API
+- Products array length (if populated)
+- Helps identify data mapping issues
+
+**Note:** Use this when collection product counts appear incorrect on the frontend.
+
+---
+
+### 5. **create-products.ts** - Mass Product Creator
 Creates 10 tech-themed t-shirt products (customized to the tech stack used in this repo).
 
 **What it creates:**
