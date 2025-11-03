@@ -70,3 +70,17 @@ export interface ShopifyCartLine {
     };
   };
 }
+
+export interface ShopifyCollection {
+  id: string;
+  title: string;
+  handle: string;
+  description?: string;
+  descriptionHtml?: string;
+  image?: {
+    url: string;
+    altText?: string;
+  };
+  products?: ShopifyProduct[];
+  productsCount?: number;
+}
