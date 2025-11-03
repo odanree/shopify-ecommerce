@@ -1,4 +1,4 @@
-import { ShopifyProduct, ShopifyCart } from '@/types/shopify';
+import { ShopifyProduct, ShopifyCart, ShopifyCollection } from '@/types/shopify';
 
 const domain = process.env.SHOPIFY_STORE_DOMAIN!;
 const storefrontAccessToken = process.env.SHOPIFY_STOREFRONT_ACCESS_TOKEN!;
@@ -387,5 +387,114 @@ export async function removeFromCart(cartId: string, lineId: string): Promise<Sh
   return {
     ...response.cartLinesRemove.cart,
     lines: response.cartLinesRemove.cart.lines.edges.map(({ node }: any) => node),
+  };
+}
+
+// Get all collections
+export async function getCollections(): Promise<ShopifyCollection[]> {
+  const query = `
+    query GetCollections {
+      collections(first: 24) {
+        edges {
+          node {
+            id
+            title
+            handle
+            description
+            image {
+              url
+              altText
+            }
+            products(first: 1) {
+              edges {
+                node {
+                  id
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  `;
+
+  const response = await shopifyFetch<{ collections: { edges: { node: any }[] } }>({ query });
+  
+  return response.collections.edges.map(({ node }) => ({
+    ...node,
+    productsCount: node.products.edges.length,
+  }));
+}
+
+// Get single collection by handle with products
+export async function getCollection(handle: string): Promise<ShopifyCollection | null> {
+  const query = `
+    query GetCollection($handle: String!) {
+      collection(handle: $handle) {
+        id
+        title
+        handle
+        description
+        descriptionHtml
+        image {
+          url
+          altText
+        }
+        products(first: 24) {
+          edges {
+            node {
+              id
+              title
+              handle
+              description
+              availableForSale
+              vendor
+              productType
+              featuredImage {
+                url
+                altText
+              }
+              priceRange {
+                minVariantPrice {
+                  amount
+                  currencyCode
+                }
+              }
+              variants(first: 1) {
+                edges {
+                  node {
+                    id
+                    title
+                    availableForSale
+                    price {
+                      amount
+                      currencyCode
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  `;
+
+  const response = await shopifyFetch<{ collection: any }>({ 
+    query, 
+    variables: { handle } 
+  });
+
+  if (!response.collection) {
+    return null;
+  }
+
+  return {
+    ...response.collection,
+    products: response.collection.products.edges.map(({ node }: any) => ({
+      ...node,
+      variants: node.variants.edges.map(({ node: variant }: any) => variant),
+    })),
+    productsCount: response.collection.products.edges.length,
   };
 }
