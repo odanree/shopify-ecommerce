@@ -1,11 +1,11 @@
 # Shopify Headless Commerce with Next.js
 
-A modern headless ecommerce storefront built with Next.js 14, TypeScript, TailwindCSS, and Shopify Storefront API.
+A modern headless ecommerce storefront built with Next.js 14, TypeScript, CSS Modules, and Shopify Storefront API.
 
 ## Features
 
 - ⚡ **Next.js 14 App Router** - Latest React features with Server Components
-- 🎨 **TailwindCSS** - Utility-first CSS framework
+- 🎨 **CSS Modules** - Component-scoped styling
 - 📱 **Fully Responsive** - Mobile-first design
 - 🛍️ **Shopify Storefront API** - Direct integration with Shopify
 - 🔍 **TypeScript** - Type-safe development
@@ -91,9 +91,13 @@ shopify-headless/
 ├── types/                  # TypeScript type definitions
 │   └── shopify.ts
 ├── public/                 # Static assets
-├── tailwind.config.js     # Tailwind configuration
+├── contexts/               # React Context for state management
+│   └── CartContext.tsx    # Shopping cart state
+├── cypress/                # E2E tests
+│   └── e2e/               # Test files
 ├── next.config.js         # Next.js configuration
-└── tsconfig.json          # TypeScript configuration
+├── tsconfig.json          # TypeScript configuration
+└── cypress.config.ts      # Cypress configuration
 ```
 
 ## Available Scripts
@@ -102,6 +106,9 @@ shopify-headless/
 - `npm run build` - Build for production
 - `npm start` - Start production server
 - `npm run lint` - Run ESLint
+- `npm run cypress` - Open Cypress test runner
+- `npm run test:e2e` - Run E2E tests (requires dev server running)
+- `npm run test:e2e:ci` - Run E2E tests in CI mode
 
 ## Shopify API Integration
 
@@ -137,9 +144,10 @@ const updatedCart = await addToCart(cart.id, variantId, quantity);
 
 ### Styling
 
-This project uses TailwindCSS. Customize colors and design in:
-- `tailwind.config.js` - Theme configuration
-- `app/globals.css` - Global styles
+This project uses CSS Modules for component-scoped styling:
+- `components/*.module.css` - Component-specific styles
+- `app/globals.css` - Global styles and CSS variables
+- Create new `.module.css` files for new components
 
 ### Adding Features
 
@@ -223,8 +231,11 @@ The project is fully typed with TypeScript. Main types are in `types/shopify.ts`
 
 - [Next.js Documentation](https://nextjs.org/docs)
 - [Shopify Storefront API](https://shopify.dev/api/storefront)
-- [TailwindCSS Documentation](https://tailwindcss.com/docs)
 - [TypeScript Documentation](https://www.typescriptlang.org/docs)
+- [Cypress Documentation](https://docs.cypress.io)
+- [CSS Modules Documentation](https://github.com/css-modules/css-modules)
+- [Vercel Deployment Guide](./VERCEL_DEPLOYMENT.md)
+- [Project Context](../PROJECT_CONTEXT.md)
 
 ## Support
 
