@@ -14,6 +14,9 @@ export function Header() {
             <Link href="/products" className={styles.navLink} data-cy="products-link">
               Products
             </Link>
+            <Link href="/collections" className={styles.navLink} data-cy="collections-link">
+              Collections
+            </Link>
             <Link href="/cart" className={styles.navLink} data-cy="cart-link">
               Cart
             </Link>
