@@ -59,9 +59,32 @@ cp .env.local.example .env.local
 ```env
 SHOPIFY_STORE_DOMAIN=your-store.myshopify.com
 SHOPIFY_STOREFRONT_ACCESS_TOKEN=your_storefront_access_token_here
+SHOPIFY_ADMIN_API_TOKEN=your_admin_api_token_here
+SHOPIFY_LOCATION_ID=your_location_id_here
 ```
 
-### 3. Run Development Server
+> **Note:** `SHOPIFY_ADMIN_API_TOKEN` and `SHOPIFY_LOCATION_ID` are only needed if you want to use the product management scripts.
+
+### 3. Create Demo Products (Optional)
+
+If your store is empty, you can create demo products using our automated scripts:
+
+```bash
+# Create 10 tech-themed t-shirt products
+npx tsx scripts/create-products.ts
+
+# Publish them to the headless storefront channel
+npx tsx scripts/publish-to-channel.ts
+
+# Verify they're visible
+npx tsx scripts/verify-products.ts
+```
+
+Or manually create products in your Shopify Admin and make sure to publish them to the **"headless storefront"** sales channel.
+
+See [scripts/README.md](./scripts/README.md) for more details.
+
+### 4. Run Development Server
 
 ```bash
 npm run dev
@@ -102,13 +125,24 @@ shopify-headless/
 
 ## Available Scripts
 
+### Development
 - `npm run dev` - Start development server
 - `npm run build` - Build for production
 - `npm start` - Start production server
 - `npm run lint` - Run ESLint
+
+### Testing
 - `npm run cypress` - Open Cypress test runner
 - `npm run test:e2e` - Run E2E tests (requires dev server running)
 - `npm run test:e2e:ci` - Run E2E tests in CI mode
+
+### Product Management
+- `npx tsx scripts/create-products.ts` - Create 10 tech-themed t-shirt products
+- `npx tsx scripts/publish-to-channel.ts` - Publish products to headless storefront
+- `npx tsx scripts/verify-products.ts` - Verify products are visible in Storefront API
+- `npx tsx scripts/delete-products.ts` - Delete all products (use with caution!)
+
+See [scripts/README.md](./scripts/README.md) for detailed script documentation.
 
 ## Shopify API Integration
 
