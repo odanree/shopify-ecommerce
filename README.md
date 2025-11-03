@@ -133,6 +133,8 @@ npm run dev
 ### Completed ✅
 - Shopping cart functionality (Context API + cart page + E2E tests)
 - Family Plan Builder (Liquid + React versions)
+- Collections pages (listing + detail with breadcrumbs)
+- Product images (11 products with Unsplash images)
 - Vercel auto-deploy configuration
 - CI/CD with GitHub Actions + Cypress
 - TypeScript type safety
@@ -142,7 +144,6 @@ npm run dev
 - Jest/React Testing Library unit tests
 - Storybook component library
 - Product search functionality
-- Collection pages
 
 See [ROADMAP.md](./ROADMAP.md) for complete development plan
 

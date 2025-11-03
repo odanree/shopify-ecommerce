@@ -16,13 +16,22 @@
 - ✅ **Development Roadmap** - 5 phases planned with 8 initial issues
 - ✅ **Vercel Auto-Deploy** - Configured for continuous deployment
 
-### Latest Addition: Product Images 🆕
+### Latest Addition: Collections Pages 🆕
+- ✅ **Collections Listing** - Browse all collections at `/collections`
+- ✅ **Collection Detail** - View products by collection at `/collections/[handle]`
+- ✅ **CollectionCard Component** - Reusable card with image, title, description
+- ✅ **Navigation Integration** - Collections link added to header
+- ✅ **Breadcrumb Navigation** - Home → Collections → Collection Name
+- ✅ **Empty States** - Graceful handling for no collections/products
+- ✅ **Cypress E2E Tests** - 10 comprehensive tests for collections
+- ✅ **Production Deployment** - Live on https://shopify-headless-8746.vercel.app/collections
+
+### Product Images
 - ✅ **Product Images** - All 11 products now have images on production
 - ✅ **Image Management Script** - `add-product-images.ts` for automated image upload
 - ✅ **Unsplash Integration** - Using stable image URLs that Shopify can process
 - ✅ **Manual Upload Guide** - Comprehensive fallback documentation
 - ✅ **CI/CD Documentation** - Added workflow reminders to copilot instructions
-- ✅ **Production Deployment** - Images live on https://shopify-headless-8746.vercel.app/products
 
 ### Product Management System
 - ✅ **Live Products** - 11 tech-themed t-shirts on production (420+ variants, 100 units each)
@@ -63,11 +72,11 @@
 
 ### Recent Commits
 ```
+* b12de0f feat: add collections pages feature (#24)
+* e6bc59a feat: implement collections pages (#23)
 * bc4bb61 feat: add product images via Admin API (#22)
 * 2f8ee3c docs: add CI/CD workflow reminder to copilot instructions
 * 8fa8c32 feat(scripts): add product images via Admin API
-* 4f601fd feat: add product management scripts and documentation (#21)
-* 8d2bd6c ci: configure Vercel auto-deploy for headless storefront
 ```
 
 ### Current Branch
@@ -86,9 +95,10 @@ dev (synced with main)
 - ✅ CI/CD with Cypress E2E tests
 - ✅ 10 products live and verified
 
-**Product Pages Working:**
+**Pages Working:**
 - ✅ Homepage: https://shopify-headless-8746.vercel.app/
 - ✅ Products: https://shopify-headless-8746.vercel.app/products
+- ✅ Collections: https://shopify-headless-8746.vercel.app/collections
 - ✅ Individual products (e.g., /products/next-js-developer-t-shirt)
 - ✅ Cart: https://shopify-headless-8746.vercel.app/cart
 - ✅ Family Plan: https://shopify-headless-8746.vercel.app/family-plan
@@ -104,7 +114,7 @@ Copy content from `.github/issues/` files to create issues on GitHub:
 - Issue #1: Theme Header/Footer
 - Issue #2: Product Search
 - ~~Issue #3: Shopping Cart~~ ✅ COMPLETE
-- Issue #4: Collection Pages
+- ~~Issue #4: Collection Pages~~ ✅ COMPLETE
 - Issue #5: Performance Optimization
 - Issue #6: Product Reviews
 - Issue #7: Newsletter Signup
@@ -181,7 +191,7 @@ shopify theme dev --store odanree.myshopify.com
 ## 🎯 Priority Tasks
 
 1. ~~**HIGH**: Shopping Cart (#3)~~ ✅ COMPLETE
-2. **HIGH**: Collections (#4) - Essential for browsing
+2. ~~**HIGH**: Collections (#4)~~ ✅ COMPLETE
 3. **MEDIUM**: Product Search (#2) - Improves UX
 4. **MEDIUM**: Theme Header/Footer (#1) - Complete theme
 5. **MEDIUM**: Newsletter (#7) - Marketing
@@ -211,8 +221,8 @@ shopify theme dev --store odanree.myshopify.com
 - ✅ Cart functionality complete (CartContext + cart page + E2E tests)
 - ✅ Product management scripts (create, publish, verify, test, delete, add-images)
 - ✅ Product images added (all 11 products with Unsplash images)
+- ✅ Collections pages (listing + detail + breadcrumbs + E2E tests)
 - ⏳ Search needed
-- ⏳ Collections needed
 
 ### API Integration
 - ✅ Storefront API token configured and tested
@@ -221,8 +231,8 @@ shopify theme dev --store odanree.myshopify.com
 - ✅ Cart implementation complete (Context API + localStorage)
 - ✅ Products published to "headless storefront" sales channel
 - ✅ Inventory management configured (Location ID: 80318955565)
+- ✅ Collections API integrated (getCollections, getCollection queries)
 - ⏳ Search API needed
-- ⏳ Collections API needed
 
 ### Deployment & CI/CD
 - ✅ Vercel configuration complete
@@ -252,10 +262,11 @@ shopify theme dev --store odanree.myshopify.com
 
 ### Code Files
 - **Theme Files**: 15+ Liquid templates, sections, and snippets
-- **Next.js Pages**: 5+ pages with App Router
-- **React Components**: 10+ reusable components
+- **Next.js Pages**: 7+ pages with App Router (home, products, cart, collections, etc.)
+- **React Components**: 12+ reusable components
 - **TypeScript Definitions**: Full type safety
 - **CSS/Styling**: CSS Modules + custom styles
+- **E2E Tests**: 20+ Cypress tests across all features
 
 ### Documentation
 - **Total Documentation**: 2,500+ lines
@@ -283,9 +294,9 @@ shopify theme dev --store odanree.myshopify.com
 
 1. ~~**Merge PR #21**~~ ✅ Product management scripts merged
 2. ~~**Merge PR #22**~~ ✅ Product images merged and deployed
-3. ~~**Verify Deployment**~~ ✅ All features tested and working
-4. ~~**Add Product Images**~~ ✅ All 11 products have images
-5. **Start Next Feature** - Collections page (Issue #4) - IN PROGRESS
+3. ~~**Merge PR #23**~~ ✅ Collections to dev merged
+4. ~~**Merge PR #24**~~ ✅ Collections to main deployed
+5. **Start Next Feature** - Product Search (Issue #2) or Reviews (Issue #6)
 
 ---
 
@@ -296,6 +307,7 @@ View at: https://shopify-headless-8746.vercel.app/
 - ✅ 11 products with 420+ variants
 - ✅ Product images live
 - ✅ Shopping cart working
+- ✅ Collections browsing working
 - ✅ Family plan builder working
 - ✅ Auto-deploy configured with CI/CD
-- 🚧 Collections page - Starting now!
+- � Next: Product Search or Reviews
