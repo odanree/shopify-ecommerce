@@ -22,8 +22,31 @@ For complete project setup, configurations, and AI assistance context, see: `PRO
 
 Key points:
 - **Styling**: CSS Modules (NOT TailwindCSS)
-- **Git Workflow**: feature/* → dev → main
+- **Git Workflow**: See `.github/BRANCHING_STRATEGY.md` for complete workflow
+  - feature/* → dev → main
+  - Use "Squash and merge" for PRs (NOT regular merge)
+  - Protected main branch requires PRs
 - **Deployment**: Vercel auto-deploy on main branch
 - **Environment**: Variables in .env.local (not committed)
 - **Root Directory**: shopify-headless (for Vercel)
 - **Commits**: Use conventional commit format
+
+## Git Workflow (CRITICAL)
+Read `.github/BRANCHING_STRATEGY.md` for complete details.
+
+### Branch Structure
+- `main` - Protected, production-ready code only
+- `dev` - Default development branch (always work here)
+- `feature/*`, `fix/*`, `refactor/*`, `chore/*` - Feature branches
+
+### PR Merge Strategy (IMPORTANT)
+When merging PRs to main:
+- ✅ Use "Squash and merge" (creates clean commit: `feat: description (#20)`)
+- ❌ DO NOT use "Merge pull request" (creates: `Merge pull request #20 from odanree/dev`)
+
+### Workflow Steps
+1. Make changes on dev or feature branch
+2. Create PR from dev → main
+3. Wait for CI/CD (Cypress E2E tests) to pass
+4. Use "Squash and merge" when merging
+5. After merge, sync dev: `git pull origin main`
