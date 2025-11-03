@@ -1,11 +1,16 @@
 import { ShopifyProduct, ShopifyCart, ShopifyCollection } from '@/types/shopify';
 
-const domain = process.env.SHOPIFY_STORE_DOMAIN!;
-const storefrontAccessToken = process.env.SHOPIFY_STOREFRONT_ACCESS_TOKEN!;
-
-const endpoint = `https://${domain}/api/2024-01/graphql.json`;
-
 async function shopifyFetch<T>({ query, variables }: { query: string; variables?: any }): Promise<T> {
+  // Load environment variables dynamically
+  const domain = process.env.SHOPIFY_STORE_DOMAIN;
+  const storefrontAccessToken = process.env.SHOPIFY_STOREFRONT_ACCESS_TOKEN;
+
+  if (!domain || !storefrontAccessToken) {
+    throw new Error('Missing required environment variables: SHOPIFY_STORE_DOMAIN or SHOPIFY_STOREFRONT_ACCESS_TOKEN');
+  }
+
+  const endpoint = `https://${domain}/api/2024-01/graphql.json`;
+
   try {
     const result = await fetch(endpoint, {
       method: 'POST',
@@ -405,7 +410,7 @@ export async function getCollections(): Promise<ShopifyCollection[]> {
               url
               altText
             }
-            products(first: 1) {
+            products(first: 100) {
               edges {
                 node {
                   id
@@ -419,7 +424,7 @@ export async function getCollections(): Promise<ShopifyCollection[]> {
   `;
 
   const response = await shopifyFetch<{ collections: { edges: { node: any }[] } }>({ query });
-  
+
   return response.collections.edges.map(({ node }) => ({
     ...node,
     productsCount: node.products.edges.length,
