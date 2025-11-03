@@ -27,6 +27,7 @@
 - [x] Test auto-deploy workflow - SUCCESS! ✅
 - [x] CI/CD pipeline with Cypress E2E tests
 - [x] Documented CI/CD workflow in copilot instructions
+- [ ] Docker containerization for local dev, CI/CD, and onboarding
 
 ### Product Management ✅ COMPLETE
 - [x] Create product management scripts (6 total)
@@ -114,6 +115,7 @@ These can be done anytime:
 
 - [x] Configure CI/CD pipeline
 - [x] Complete first production deployment
+- [ ] Add Dockerfile and docker-compose for reproducible dev and test environments
 - [ ] Add more products to store
 - [ ] Create product collections
 - [ ] Update branding and colors
