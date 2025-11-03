@@ -84,7 +84,7 @@ chore(deps): upgrade Next.js to v14.2.0
 - Add comments for complex logic
 
 ### CSS
-- Use TailwindCSS utilities for headless project
+- Use CSS Modules for component styling in headless project
 - Follow BEM naming for custom theme
 - Keep styles modular and reusable
 
