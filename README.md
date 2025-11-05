@@ -30,6 +30,11 @@ Traditional Shopify theme using Liquid templating, perfect for stores that want 
 - Product, collection, and cart pages
 - Responsive design
 
+**Current Status:**
+- Header and footer sections: not yet complete
+- Collection pages: in progress
+- Newsletter signup: not yet complete
+
 [→ View shopify-theme README](./shopify-theme/README.md)
 
 ### 2. **shopify-headless/** - Headless Next.js + Shopify
@@ -46,6 +51,11 @@ Modern headless commerce solution using Next.js, TypeScript, and Shopify Storefr
 - Vercel auto-deploy
 - Optimized performance and SEO
 - Full control over frontend
+- Docker containerization for reproducible dev, CI/CD, and onboarding
+
+**Current Status:**
+- Collections pages: complete
+- Product search: in progress
 
 [→ View shopify-headless README](./shopify-headless/README.md)
 
@@ -77,6 +87,16 @@ cp .env.local.example .env.local
 
 # Start development server
 npm run dev
+```
+
+### Option 3: Dockerized Development (Recommended for teams)
+
+```bash
+cd shopify-headless
+# Build and run the container
+# (Requires Docker Desktop)
+docker build -t shopify-headless .
+docker run -p 3000:3000 --env-file .env.local shopify-headless
 ```
 
 ## 🤔 Which Approach Should I Use?
@@ -117,6 +137,7 @@ npm run dev
 - **ESLint** - Code linting
 - **Prettier** - Code formatting
 - **Cypress** - E2E testing support
+- **Docker** - Containerized dev and test environments
 
 ## 📚 Documentation
 
@@ -133,8 +154,9 @@ npm run dev
 ### Completed ✅
 - Shopping cart functionality (Context API + cart page + E2E tests)
 - Family Plan Builder (Liquid + React versions)
-- Collections pages (listing + detail with breadcrumbs)
+- Collections pages (listing + detail + breadcrumbs) — complete for Headless Storefront, in progress for Custom Theme
 - Product images (11 products with Unsplash images)
+- Product and collection management scripts (create, publish, delete, test, images)
 - Vercel auto-deploy configuration
 - CI/CD with GitHub Actions + Cypress
 - TypeScript type safety
@@ -143,7 +165,8 @@ npm run dev
 ### In Progress 🚧
 - Jest/React Testing Library unit tests
 - Storybook component library
-- Product search functionality
+- Product search functionality (Headless Storefront, in progress)
+- Docker containerization for local dev, CI/CD, and onboarding (planned)
 
 See [ROADMAP.md](./ROADMAP.md) for complete development plan
 
