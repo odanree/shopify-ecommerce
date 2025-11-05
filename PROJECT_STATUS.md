@@ -15,6 +15,7 @@
 - ✅ **Contributing Guide** - Development workflow documented
 - ✅ **Development Roadmap** - 5 phases planned with 8 initial issues
 - ✅ **Vercel Auto-Deploy** - Configured for continuous deployment
+- ⏳ **Docker Containerization** - Planned for reproducible dev, CI/CD, and onboarding
 
 ### Latest Addition: Collections Pages 🆕
 ✅ **Collections Listing** - Browse all collections at `/collections`
@@ -150,6 +151,9 @@ Refs #2"
 # Push and create PR
 git push -u origin feat/product-search
 ```
+
+### 5. Add Docker Containerization
+Implement Dockerfile and docker-compose for local development, CI/CD, and onboarding consistency.
 
 ## 🚀 Running the Projects
 
