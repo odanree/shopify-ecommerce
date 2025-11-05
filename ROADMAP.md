@@ -101,14 +101,20 @@
 **Priority:** Low  
 **Timeline:** Future
 
-- [ ] Product recommendations
-- [ ] Recently viewed products
-- [ ] Size guides
-- [ ] Store locator
-- [ ] Multi-language support
-- [ ] Advanced filtering
-- [ ] Customer reviews moderation
-- [ ] Live chat integration
+ - [ ] AI Chatbot (customer support, product Q&A)
+   - Requirements:
+     - 24/7 automated customer support for product questions, order status, and FAQs
+     - Integration with Shopify product catalog and order data
+     - Natural language understanding (NLU) for conversational queries
+     - Escalation to human support if needed
+     - GDPR-compliant data handling
+   - Implementation Details:
+     - Use a cloud-based AI service (e.g., OpenAI, Google Dialogflow, Azure Bot Service)
+     - Frontend integration as a chat widget in Next.js (shopify-headless)
+     - Optionally, embed in Shopify theme via Liquid snippet
+     - Connect to backend via REST or GraphQL API for product/order info
+     - Customizable responses and branding
+     - Logging and analytics for chat interactions
 
 ## Quick Wins 🎯
 These can be done anytime:
