@@ -4,7 +4,7 @@ A complete Shopify ecommerce development environment with two approaches: a trad
 
 ## 🚀 Production Site
 
-**Live Demo**: https://shopify-headless-8746.vercel.app/
+**Live Demo**: https://shopify-headless-lemon.vercel.app/
 
 Features:
 - ✅ Family Plan Builder with real-time pricing
@@ -160,7 +160,7 @@ docker run -p 3000:3000 --env-file .env.local shopify-headless
 - Vercel auto-deploy configuration
 - CI/CD with GitHub Actions + Cypress
 - TypeScript type safety
-- Production deployment: https://shopify-headless-8746.vercel.app/
+- Production deployment: https://shopify-headless-lemon.vercel.app/
 
 ### In Progress 🚧
 - Jest/React Testing Library unit tests
@@ -172,7 +172,7 @@ See [ROADMAP.md](./ROADMAP.md) for complete development plan
 
 ## 🎯 Next Steps
 
-1. **View Live Site**: Visit https://shopify-headless-8746.vercel.app/
+1. **View Live Site**: Visit https://shopify-headless-lemon.vercel.app/
 2. **Run Locally**: `cd shopify-headless && npm install && npm run dev`
 3. **Run Tests**: `npm run test:e2e` (Cypress E2E tests)
 4. **Read Documentation**: Check [PROJECT_CONTEXT.md](./PROJECT_CONTEXT.md) for setup details

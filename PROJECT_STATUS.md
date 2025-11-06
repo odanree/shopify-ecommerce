@@ -17,6 +17,32 @@
 - ✅ **Vercel Auto-Deploy** - Configured for continuous deployment
 - ⏳ **Docker Containerization** - Planned for reproducible dev, CI/CD, and onboarding
 
+### Latest Updates (November 6, 2025) 🆕
+✅ **AI Chatbot Integration** - Live on production
+  - Product search with real Shopify data
+  - AI-powered customer support with GPT-4
+  - Real product URLs linking to headless storefront
+  - Integrated on https://shopify-headless-lemon.vercel.app
+
+✅ **Production-Only Deployments** - Optimized Vercel quota
+  - Added `ignoreCommand` to skip preview deployments
+  - Only main branch triggers production deploys
+  - Saves deployment quota and reduces build noise
+
+✅ **GitHub Actions Optimization** - Skips redundant CI/CD runs
+  - Conditional checks skip workflows on main→dev sync commits
+  - Applied to both ai-chatbot and shopify-ecommerce
+  - Faster workflow, reduced Actions minutes usage
+
+✅ **Repository Updates** - Enhanced discoverability
+  - Description: "Modern headless ecommerce with Next.js, Shopify Storefront API, and AI-powered chatbot"
+  - Topics: nextjs, shopify, ecommerce, typescript, ai-chatbot, headless-commerce
+  - Homepage: https://shopify-headless-lemon.vercel.app
+
+✅ **Documentation Updates** - Current production URLs
+  - Updated all references from shopify-headless-8746 to shopify-headless-lemon
+  - README, PROJECT_STATUS, and other docs now accurate
+
 ### Latest Addition: Collections Pages 🆕
 ✅ **Collections Listing** - Browse all collections at `/collections`
 ✅ **Collection Detail** - View products by collection at `/collections/[handle]`
@@ -27,7 +53,7 @@
 ✅ **Cypress E2E Tests** - 10 comprehensive tests for collections
 ✅ **Accurate Product Counts** - Product counts now correct on all collection cards
 ✅ **Collection Management Scripts** - Automated scripts for create, publish, delete, and test collections
-✅ **Production Deployment** - Live on https://shopify-headless-8746.vercel.app/collections
+✅ **Production Deployment** - Live on https://shopify-headless-lemon.vercel.app/collections
 
 ### Product Images
 - ✅ **Product Images** - All 11 products now have images on production
@@ -92,7 +118,7 @@ dev (synced with main)
 ## 📋 Next Steps
 
 ### 1. ~~Deploy to Vercel~~ ✅ COMPLETE
-**Production Site:** https://shopify-headless-8746.vercel.app/
+**Production Site:** https://shopify-headless-lemon.vercel.app/
 
 **Auto-Deploy is active:**
 - ✅ Every push to `main` → Production deployment
