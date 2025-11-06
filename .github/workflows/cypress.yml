@@ -9,6 +9,13 @@ on:
 jobs:
   cypress-run:
     runs-on: ubuntu-latest
+    # Skip if this is a merge commit from main to dev (sync operation)
+    if: |
+      !(
+        github.event_name == 'push' && 
+        github.ref == 'refs/heads/dev' && 
+        contains(github.event.head_commit.message, 'Merge branch ''main'' into dev')
+      )
     
     steps:
       - name: Checkout code
