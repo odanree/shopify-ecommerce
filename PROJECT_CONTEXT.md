@@ -10,7 +10,8 @@
 **Repository**: https://github.com/odanree/shopify-ecommerce  
 **Owner**: odanree  
 **Created**: October 2025  
-**Last Updated**: November 2, 2025  
+**Last Updated**: November 6, 2025  
+**Production URL**: https://shopify-headless-lemon.vercel.app
 
 ### Project Structure
 ```
@@ -112,11 +113,12 @@ Refs #3"
 ```
 
 **URLs**:
-- Production: [Configured in Vercel]
-- Preview: Auto-generated per PR
+- Production: https://shopify-headless-lemon.vercel.app
+- Preview: Disabled (production-only deployments)
 
 **Auto-Deploy**:
 - ✅ Push to `main` → Production deploy
+- ❌ Preview deployments disabled via `ignoreCommand`
 - ✅ Create PR → Preview deploy
 - ✅ GitHub integration active
 
