@@ -1,10 +1,10 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "buildCommand": "cd shopify-headless && npm run build",
-  "devCommand": "cd shopify-headless && npm run dev",
-  "installCommand": "cd shopify-headless && npm install",
+  "buildCommand": "npm run build",
+  "devCommand": "npm run dev",
+  "installCommand": "npm install",
   "framework": "nextjs",
-  "outputDirectory": "shopify-headless/.next",
+  "outputDirectory": ".next",
   "git": {
     "deploymentEnabled": {
       "main": true,
