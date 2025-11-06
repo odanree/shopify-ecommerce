@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { SearchBar } from './SearchBar';
 import styles from './Header.module.css';
 
 export function Header() {
@@ -9,6 +10,8 @@ export function Header() {
           <Link href="/" className={styles.logo} data-cy="logo-link">
             Shopify Store
           </Link>
+          
+          <SearchBar />
           
           <div className={styles.navLinks} data-cy="nav-links">
             <Link href="/products" className={styles.navLink} data-cy="products-link">
