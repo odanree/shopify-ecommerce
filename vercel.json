@@ -7,7 +7,8 @@
   "outputDirectory": "shopify-headless/.next",
   "git": {
     "deploymentEnabled": {
-      "main": true
+      "main": true,
+      "dev": false
     }
   }
 }

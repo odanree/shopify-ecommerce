@@ -10,6 +10,7 @@ Features:
 - ✅ Family Plan Builder with real-time pricing
 - ✅ Shopping cart with Context API state management
 - ✅ Product pages with Shopify integration
+- ✅ AI Chatbot with ecommerce strategy (product search, recommendations)
 - ✅ Cypress E2E testing (13+ tests)
 - ✅ CI/CD with GitHub Actions + Vercel auto-deploy
 - ✅ TypeScript type safety throughout
@@ -46,6 +47,7 @@ Modern headless commerce solution using Next.js, TypeScript, and Shopify Storefr
 - CSS Modules for component-scoped styling
 - Shopify Storefront API integration
 - Shopping cart with Context API
+- AI Chatbot widget (Ecommerce strategy with GPT-4)
 - Cypress E2E testing
 - CI/CD with GitHub Actions
 - Vercel auto-deploy
@@ -55,6 +57,7 @@ Modern headless commerce solution using Next.js, TypeScript, and Shopify Storefr
 
 **Current Status:**
 - Collections pages: complete
+- AI chatbot integration: complete ✅
 - Product search: in progress
 
 [→ View shopify-headless README](./shopify-headless/README.md)

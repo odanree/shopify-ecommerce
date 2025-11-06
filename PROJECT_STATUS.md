@@ -18,11 +18,15 @@
 - ⏳ **Docker Containerization** - Planned for reproducible dev, CI/CD, and onboarding
 
 ### Latest Updates (November 6, 2025) 🆕
-✅ **AI Chatbot Integration** - Live on production
+✅ **AI Chatbot Integration** - Live on production ✅ COMPLETE
   - Product search with real Shopify data
   - AI-powered customer support with GPT-4
   - Real product URLs linking to headless storefront
   - Integrated on https://shopify-headless-lemon.vercel.app
+  - Widget from https://ai-chatbot-lake-eight-99.vercel.app
+  - Ecommerce strategy enabled for shopping assistance
+  - Bottom-right position with light theme
+  - Component: `shopify-headless/components/ChatWidget.tsx`
 
 ✅ **Production-Only Deployments** - Optimized Vercel quota
   - Added `ignoreCommand` to skip preview deployments
