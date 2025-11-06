@@ -29,8 +29,10 @@
   - Component: `shopify-headless/components/ChatWidget.tsx`
 
 ✅ **Production-Only Deployments** - Optimized Vercel quota
-  - Added `ignoreCommand` to skip preview deployments
+  - Disabled preview deployments on dev branch (`"dev": false` in vercel.json)
   - Only main branch triggers production deploys
+  - Prevents build failures from missing environment variables
+  - Eliminates email notifications for preview build failures
   - Saves deployment quota and reduces build noise
 
 ✅ **GitHub Actions Optimization** - Skips redundant CI/CD runs
