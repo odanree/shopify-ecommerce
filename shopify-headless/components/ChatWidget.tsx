@@ -14,7 +14,7 @@ export function ChatWidget() {
           apiUrl: 'https://ai-chatbot-lake-eight-99.vercel.app',
           position: 'bottom-right',
           theme: 'light',
-          strategyType: 'default' // Using default strategy (ecommerce strategy not yet implemented)
+          strategyType: 'ecommerce' // Use ecommerce strategy for shopping assistance
         });
       }
     };
@@ -43,7 +43,7 @@ export function ChatWidget() {
               apiUrl: 'https://ai-chatbot-lake-eight-99.vercel.app',
               position: 'bottom-right',
               theme: 'light',
-              strategyType: 'default' // Using default strategy (ecommerce strategy not yet implemented)
+              strategyType: 'ecommerce' // Use ecommerce strategy for shopping assistance
             });
           }
         }}
