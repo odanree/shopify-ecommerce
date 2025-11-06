@@ -2,6 +2,7 @@
   display: flex;
   gap: 0.5rem;
   max-width: 400px;
+  width: 100%;
 }
 
 .input {
@@ -10,6 +11,7 @@
   border: 1px solid #ddd;
   border-radius: 4px;
   font-size: 1rem;
+  min-width: 0;
 }
 
 .input:focus {
@@ -26,8 +28,26 @@
   font-size: 1rem;
   cursor: pointer;
   transition: background 0.2s;
+  white-space: nowrap;
 }
 
 .button:hover {
   background: #000;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .form {
+    max-width: 100%;
+  }
+  
+  .input {
+    font-size: 0.875rem;
+    padding: 0.5rem 0.75rem;
+  }
+  
+  .button {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+  }
 }
