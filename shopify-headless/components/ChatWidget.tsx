@@ -13,7 +13,8 @@ export function ChatWidget() {
         window.AIChatbot.init({
           apiUrl: 'https://ai-chatbot-lake-eight-99.vercel.app',
           position: 'bottom-right',
-          theme: 'light'
+          theme: 'light',
+          strategyType: 'default' // Using default strategy (ecommerce strategy not yet implemented)
         });
       }
     };
@@ -41,7 +42,8 @@ export function ChatWidget() {
             window.AIChatbot.init({
               apiUrl: 'https://ai-chatbot-lake-eight-99.vercel.app',
               position: 'bottom-right',
-              theme: 'light'
+              theme: 'light',
+              strategyType: 'default' // Using default strategy (ecommerce strategy not yet implemented)
             });
           }
         }}
