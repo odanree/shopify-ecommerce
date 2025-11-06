@@ -14,8 +14,21 @@ Shopify Ecommerce Development Workspace with:
 2. Headless Shopify with Next.js + TypeScript + CSS Modules
 
 ## Project Structure
-- shopify-theme/ - Traditional Shopify theme with Liquid templating
-- shopify-headless/ - Modern headless commerce with Next.js and Shopify Storefront API
+```
+shopify-ecommerce-docs/          # Repository root
+├── shopify-theme/               # Traditional Shopify theme with Liquid templating
+└── shopify-headless/            # ⚠️ SUBDIRECTORY - Headless commerce with Next.js
+    ├── vercel.json              # ⚠️ Vercel config is in THIS subdirectory, not root
+    ├── package.json
+    ├── app/
+    ├── components/
+    └── ...
+```
+
+**⚠️ IMPORTANT: Vercel Configuration**
+- The `vercel.json` is located at `shopify-headless/vercel.json` (NOT in repository root)
+- When checking/updating Vercel settings, always use the subdirectory path
+- Vercel's root directory is set to `shopify-headless/` in project settings
 
 ## Important: Read PROJECT_CONTEXT.md
 For complete project setup, configurations, and AI assistance context, see: `PROJECT_CONTEXT.md`
