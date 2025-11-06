@@ -503,3 +503,57 @@ export async function getCollection(handle: string): Promise<ShopifyCollection |
     productsCount: response.collection.products.edges.length,
   };
 }
+
+// Search products
+export async function searchProducts(searchQuery: string): Promise<ShopifyProduct[]> {
+  const query = `
+    query SearchProducts($query: String!) {
+      products(first: 24, query: $query) {
+        edges {
+          node {
+            id
+            title
+            handle
+            description
+            availableForSale
+            vendor
+            productType
+            featuredImage {
+              url
+              altText
+            }
+            priceRange {
+              minVariantPrice {
+                amount
+                currencyCode
+              }
+            }
+            variants(first: 1) {
+              edges {
+                node {
+                  id
+                  title
+                  availableForSale
+                  price {
+                    amount
+                    currencyCode
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  `;
+
+  const response = await shopifyFetch<{ products: { edges: { node: any }[] } }>({ 
+    query,
+    variables: { query: searchQuery }
+  });
+  
+  return response.products.edges.map(({ node }) => ({
+    ...node,
+    variants: node.variants.edges.map(({ node: variant }: any) => variant),
+  }));
+}
