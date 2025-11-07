@@ -1,12 +1,6 @@
 import Link from 'next/link';
-import dynamic from 'next/dynamic';
+import { SearchBar } from './SearchBar';
 import styles from './Header.module.css';
-
-// Lazy load SearchBar - not critical for initial render
-const SearchBar = dynamic(() => import('./SearchBar').then(mod => ({ default: mod.SearchBar })), {
-  ssr: false,
-  loading: () => <div style={{ width: '200px', height: '40px' }} />,
-});
 
 export function Header() {
   return (
