@@ -1,12 +1,21 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import dynamic from "next/dynamic";
 import "./globals.css";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { CartProvider } from "@/contexts/CartContext";
-import { ChatWidget } from "@/components/ChatWidget";
 
-const inter = Inter({ subsets: ["latin"] });
+// Lazy load ChatWidget - not critical for initial render
+const ChatWidget = dynamic(() => import("@/components/ChatWidget").then(mod => ({ default: mod.ChatWidget })), {
+  ssr: false,
+});
+
+const inter = Inter({ 
+  subsets: ["latin"],
+  display: 'swap',
+  preload: true
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://shopify-headless-lemon.vercel.app'),
@@ -69,6 +78,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        {/* Preconnect to external domains to reduce latency */}
+        <link rel="preconnect" href="https://cdn.shopify.com" />
+        <link rel="dns-prefetch" href="https://cdn.shopify.com" />
+        <link rel="preconnect" href="https://ai-chatbot-lake-eight-99.vercel.app" />
+        <link rel="dns-prefetch" href="https://ai-chatbot-lake-eight-99.vercel.app" />
+      </head>
       <body className={inter.className}>
         <CartProvider>
           <Header />
