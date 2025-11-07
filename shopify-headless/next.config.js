@@ -34,50 +34,48 @@ const nextConfig = {
       }
     }
     
-    // Optimize bundle size
+    // Optimize bundle size - use built-in Next.js chunking
     if (!dev && !isServer) {
-      config.optimization.splitChunks = {
-        chunks: 'all',
-        cacheGroups: {
-          default: false,
-          vendors: false,
-          framework: {
-            name: 'framework',
-            chunks: 'all',
-            test: /(?<!node_modules.*)[\\/]node_modules[\\/](react|react-dom|scheduler|prop-types|use-subscription)[\\/]/,
-            priority: 40,
-            enforce: true,
-          },
-          lib: {
-            test(module) {
-              return module.size() > 160000 && /node_modules[/\\]/.test(module.identifier());
+      config.optimization = {
+        ...config.optimization,
+        moduleIds: 'deterministic',
+        runtimeChunk: 'single',
+        splitChunks: {
+          chunks: 'all',
+          cacheGroups: {
+            default: false,
+            vendors: false,
+            framework: {
+              name: 'framework',
+              chunks: 'all',
+              test: /[\\/]node_modules[\\/](react|react-dom|scheduler)[\\/]/,
+              priority: 40,
+              enforce: true,
             },
-            name(module) {
-              const hash = require('crypto').createHash('sha1');
-              hash.update(module.identifier());
-              return hash.digest('hex').substring(0, 8);
+            lib: {
+              test: /[\\/]node_modules[\\/]/,
+              name(module) {
+                // Generate a simple hash for the chunk name
+                const identifier = module.identifier();
+                const hash = identifier.split('').reduce((a, b) => {
+                  a = ((a << 5) - a) + b.charCodeAt(0);
+                  return a & a;
+                }, 0);
+                return `lib-${Math.abs(hash).toString(36)}`;
+              },
+              priority: 30,
+              minChunks: 1,
+              reuseExistingChunk: true,
             },
-            priority: 30,
-            minChunks: 1,
-            reuseExistingChunk: true,
-          },
-          commons: {
-            name: 'commons',
-            chunks: 'all',
-            minChunks: 2,
-            priority: 20,
-          },
-          shared: {
-            name(module, chunks) {
-              return `shared-${chunks.map((item) => item.name).join('-')}`;
+            commons: {
+              name: 'commons',
+              minChunks: 2,
+              priority: 20,
             },
-            priority: 10,
-            minChunks: 2,
-            reuseExistingChunk: true,
           },
+          maxInitialRequests: 25,
+          minSize: 20000,
         },
-        maxInitialRequests: 25,
-        minSize: 20000,
       };
     }
     
