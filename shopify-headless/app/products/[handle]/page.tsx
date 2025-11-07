@@ -93,7 +93,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
             <h1 className="text-4xl font-bold mb-4">{product.title}</h1>
             
             {product.vendor && (
-              <p className="text-gray-600 mb-2">by {product.vendor}</p>
+              <p className="text-gray-700 mb-2">by {product.vendor}</p>
             )}
 
             <div className="text-3xl font-bold mb-6">
@@ -117,7 +117,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
             {/* Product Details */}
             <div className="mt-8 border-t pt-6">
               <h3 className="font-semibold mb-2">Product Details</h3>
-              <ul className="space-y-2 text-gray-600">
+              <ul className="space-y-2 text-gray-700">
                 {product.availableForSale ? (
                   <li>✓ In Stock</li>
                 ) : (

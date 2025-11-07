@@ -20,7 +20,7 @@ export default function CartPage() {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading your cart...</p>
+          <p className="text-gray-700">Loading your cart...</p>
         </div>
       </div>
     );
@@ -35,7 +35,7 @@ export default function CartPage() {
               <ShoppingCart className="w-12 h-12 text-gray-400" />
             </div>
             <h1 className="text-3xl font-bold text-gray-900 mb-4" data-cy="empty-cart-title">Your Cart is Empty</h1>
-            <p className="text-gray-600 mb-8 text-lg" data-cy="empty-cart-message">
+            <p className="text-gray-700 mb-8 text-lg" data-cy="empty-cart-message">
               Looks like you haven&apos;t added any items to your cart yet.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center" data-cy="empty-cart-actions">
@@ -75,7 +75,7 @@ export default function CartPage() {
             Continue Shopping
           </Link>
           <h1 className="text-4xl font-bold text-gray-900" data-cy="cart-title">Shopping Cart</h1>
-          <p className="text-gray-600 mt-2" data-cy="cart-item-count">
+          <p className="text-gray-700 mt-2" data-cy="cart-item-count">
             {cartItems.length} {cartItems.length === 1 ? 'item' : 'items'} in your cart
           </p>
         </div>
@@ -109,7 +109,7 @@ export default function CartPage() {
                   <h3 className="text-lg font-semibold text-gray-900 mb-1">
                     {item.title}
                   </h3>
-                  <p className="text-sm text-gray-600 mb-2">{item.variant}</p>
+                  <p className="text-sm text-gray-700 mb-2">{item.variant}</p>
                   <p className="text-primary-600 font-bold text-lg">
                     ${item.price.toFixed(2)}
                   </p>
@@ -122,7 +122,7 @@ export default function CartPage() {
                     className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 transition-colors"
                     aria-label="Decrease quantity"
                   >
-                    <Minus className="w-4 h-4 text-gray-600" />
+                    <Minus className="w-4 h-4 text-gray-700" />
                   </button>
                   <span className="text-lg font-semibold text-gray-900 w-8 text-center">
                     {item.quantity}
@@ -132,7 +132,7 @@ export default function CartPage() {
                     className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 transition-colors"
                     aria-label="Increase quantity"
                   >
-                    <Plus className="w-4 h-4 text-gray-600" />
+                    <Plus className="w-4 h-4 text-gray-700" />
                   </button>
                 </div>
 
@@ -154,19 +154,19 @@ export default function CartPage() {
               <h2 className="text-2xl font-bold text-gray-900 mb-6">Order Summary</h2>
 
               <div className="space-y-4 mb-6">
-                <div className="flex justify-between text-gray-600">
+                <div className="flex justify-between text-gray-700">
                   <span>Subtotal</span>
                   <span className="font-semibold text-gray-900">
                     ${subtotal.toFixed(2)}
                   </span>
                 </div>
-                <div className="flex justify-between text-gray-600">
+                <div className="flex justify-between text-gray-700">
                   <span>Shipping</span>
                   <span className="font-semibold text-success-600">
                     {shipping === 0 ? 'FREE' : `$${shipping.toFixed(2)}`}
                   </span>
                 </div>
-                <div className="flex justify-between text-gray-600">
+                <div className="flex justify-between text-gray-700">
                   <span>Estimated Tax</span>
                   <span className="font-semibold text-gray-900">
                     ${tax.toFixed(2)}
@@ -195,7 +195,7 @@ export default function CartPage() {
 
               {/* Trust Badges */}
               <div className="mt-6 pt-6 border-t border-gray-200">
-                <div className="space-y-3 text-sm text-gray-600">
+                <div className="space-y-3 text-sm text-gray-700">
                   <div className="flex items-center gap-2">
                     <svg className="w-5 h-5 text-success-500" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
