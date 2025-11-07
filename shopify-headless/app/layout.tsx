@@ -6,7 +6,11 @@ import { Footer } from "@/components/Footer";
 import { CartProvider } from "@/contexts/CartContext";
 import { ChatWidget } from "@/components/ChatWidget";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ 
+  subsets: ["latin"],
+  display: 'swap',
+  preload: true
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://shopify-headless-lemon.vercel.app'),
