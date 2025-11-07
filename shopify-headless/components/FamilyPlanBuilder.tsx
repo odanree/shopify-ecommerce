@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useCallback, useMemo } from 'react';
-import { ShoppingCart, Plus, X, Smartphone, Shield, Check } from 'lucide-react';
+import { ShoppingCart, Plus, X, Smartphone, Shield } from 'lucide-react';
 import styles from './FamilyPlanBuilder.module.css';
 
 export interface FamilyPlanLine {
@@ -29,9 +29,6 @@ export interface FamilyPlanConfig {
 interface FamilyPlanBuilderProps {
   config?: Partial<FamilyPlanConfig>;
   onAddToCart?: (lines: FamilyPlanLine[]) => void | Promise<void>;
-  showHero?: boolean;
-  showSteps?: boolean;
-  showFeatures?: boolean;
 }
 
 const defaultConfig: FamilyPlanConfig = {
@@ -49,48 +46,9 @@ const defaultConfig: FamilyPlanConfig = {
   addonEsimVariantId: '44300835815469', // Update if different
 };
 
-const defaultFeatures = [
-  'Unlimited 5G • 4G LTE Data per month',
-  'Unlimited Nationwide Talk & Global Text',
-  'Unlimited Talk to 90+ International Destinations',
-  'Unlimited Talk & Text in Mexico and Canada',
-  'Up to 10GB Mobile Hotspot',
-  'Monthly $10 International Call Credit',
-  'One-time $10 International Roaming Credit',
-  'Free 5GB Mexico Data Roaming Pass each month',
-  'Free 3-in-1 SIM Card or eSIM',
-  'Bonus International Minutes to 9 Destinations',
-];
-
-const steps = [
-  {
-    number: '01',
-    title: 'Get the first line',
-    description: 'Start with one primary unlimited plan for $49/mo',
-  },
-  {
-    number: '02',
-    title: 'Add more lines',
-    description: 'Add up to 4 additional lines for only $24/mo per line',
-  },
-  {
-    number: '03',
-    title: 'Activate your lines',
-    description: 'Activate your primary line first, then add the remaining lines',
-  },
-  {
-    number: '04',
-    title: 'Manage everything',
-    description: 'Easily manage all lines under one account on the website or in the app',
-  },
-];
-
 export default function FamilyPlanBuilder({
   config: customConfig,
   onAddToCart,
-  showHero = true,
-  showSteps = true,
-  showFeatures = true,
 }: FamilyPlanBuilderProps) {
   const config = useMemo(() => ({ ...defaultConfig, ...customConfig }), [customConfig]);
 
@@ -188,57 +146,6 @@ export default function FamilyPlanBuilder({
     <div className={styles.familyPlanBuilder}>
       <div className={styles.container}>
         
-        {/* Hero Section */}
-        {showHero && (
-          <div className={styles.hero}>
-            <h1 className={styles.heroTitle}>
-              Save More with a Family Plan
-            </h1>
-            <p className={styles.heroSubtitle}>
-              Get up to {config.maxLines} lines of unlimited data for as low as $
-              {config.addonLinePrice}/mo when you add-a-line
-            </p>
-            <a href="#builder" className={styles.heroCta}>
-              Build My Family Plan
-              <svg
-                className={styles.ctaIcon}
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M9 5l7 7-7 7"
-                />
-              </svg>
-            </a>
-          </div>
-        )}
-
-        {/* How It Works Section */}
-        {showSteps && (
-          <div className={styles.steps}>
-            <h2 className={styles.stepsTitle}>
-              How Family Plan Works
-            </h2>
-            <div className={styles.stepsGrid}>
-              {steps.map((step) => (
-                <div key={step.number} className={styles.stepCard}>
-                  <div className={styles.stepNumber}>
-                    {step.number}
-                  </div>
-                  <h3 className={styles.stepTitle}>
-                    {step.title}
-                  </h3>
-                  <p className={styles.stepDescription}>{step.description}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
         {/* Main Builder */}
         <div id="builder" className={styles.builderMain} data-cy="family-plan-builder">
           <h2 className={styles.builderTitle} data-cy="builder-title">
@@ -390,28 +297,6 @@ export default function FamilyPlanBuilder({
             </div>
           </div>
         </div>
-
-        {/* Features Section */}
-        {showFeatures && (
-          <div className={styles.features}>
-            <h2 className={styles.featuresTitle}>
-              Family Plan Features
-            </h2>
-            <p className={styles.featuresSubtitle}>
-              Each line has access to all these features. No need to share!
-            </p>
-            <div className={styles.featuresGrid}>
-              {defaultFeatures.map((feature, index) => (
-                <div key={index} className={styles.featureItem}>
-                  <div className={styles.featureIconWrapper}>
-                    <Check className={styles.featureIcon} strokeWidth={3} />
-                  </div>
-                  <span className={styles.featureText}>{feature}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );
