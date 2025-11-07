@@ -73,6 +73,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        {/* Preconnect to external domains to reduce latency */}
+        <link rel="preconnect" href="https://cdn.shopify.com" />
+        <link rel="dns-prefetch" href="https://cdn.shopify.com" />
+        <link rel="preconnect" href="https://ai-chatbot-lake-eight-99.vercel.app" />
+        <link rel="dns-prefetch" href="https://ai-chatbot-lake-eight-99.vercel.app" />
+      </head>
       <body className={inter.className}>
         <CartProvider>
           <Header />
