@@ -19,9 +19,29 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     };
   }
 
+  const imageUrl = collection.image?.url || '/placeholder.jpg';
+  const description = collection.description || `Shop our ${collection.title} collection - Find the best products curated just for you.`;
+
   return {
-    title: `${collection.title} | Shopify Headless`,
-    description: collection.description || `Shop our ${collection.title} collection`,
+    title: collection.title,
+    description,
+    openGraph: {
+      title: collection.title,
+      description,
+      type: 'website',
+      images: [{
+        url: imageUrl,
+        width: 800,
+        height: 800,
+        alt: collection.title,
+      }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: collection.title,
+      description,
+      images: [imageUrl],
+    },
   };
 }
 

@@ -3,9 +3,34 @@ import { searchProducts } from '@/lib/shopify';
 import { ProductCard } from '@/components/ProductCard';
 import { ShopifyProduct } from '@/types/shopify';
 import styles from './search.module.css';
+import type { Metadata } from 'next';
 
 interface SearchPageProps {
   searchParams: { q?: string };
+}
+
+export function generateMetadata({ searchParams }: SearchPageProps): Metadata {
+  const query = searchParams.q || '';
+  
+  if (!query) {
+    return {
+      title: 'Search Products',
+      description: 'Search our product catalog to find exactly what you need.',
+      robots: {
+        index: false,
+        follow: true,
+      },
+    };
+  }
+
+  return {
+    title: `Search Results for "${query}"`,
+    description: `Find products matching "${query}" in our catalog.`,
+    robots: {
+      index: false,
+      follow: true,
+    },
+  };
 }
 
 export default async function SearchPage({ searchParams }: SearchPageProps) {

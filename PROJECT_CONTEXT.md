@@ -198,11 +198,15 @@ shopify-headless/
 - [x] CI/CD pipeline setup
 - [x] Complete deployment documentation (750+ lines)
 - [x] Initial Vercel deployment
+- [x] Shopping cart functionality (CartContext, cart page, localStorage)
+- [x] Product search (SearchBar component, search page, API integration)
+- [x] Collection pages (listing, detail pages, E2E tests)
+- [x] Comprehensive test suite (109 tests, 55.18% coverage)
+- [x] SEO optimization (metadata, Open Graph, Twitter cards, JSON-LD, sitemap, robots.txt)
 
 ### In Progress 🚧
-- [ ] Shopping cart functionality (HIGH PRIORITY)
-- [ ] Product search
-- [ ] Collection pages
+- [ ] Newsletter integration
+- [ ] Performance optimization
 
 ### Pending ⏳
 - [ ] Customer authentication
@@ -247,8 +251,9 @@ npm run cypress:headless # Run Cypress headless
 - ✅ Create cart
 - ✅ Add to cart
 - ✅ Update cart
-- ⏳ Search products
-- ⏳ Fetch collections
+- ✅ Search products
+- ✅ Fetch collections
+- ✅ Fetch collection products
 
 ---
 
