@@ -108,9 +108,6 @@ export default function FamilyPlanPage() {
           addonEsimVariantId: '44300835815469', // Update if different
         }}
         onAddToCart={handleAddToCart}
-        showHero={true}
-        showSteps={true}
-        showFeatures={true}
       />
     </main>
   );
