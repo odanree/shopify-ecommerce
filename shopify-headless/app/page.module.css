@@ -50,12 +50,12 @@
 }
 
 .buttonSecondary {
-  background-color: #3b82f6;
+  background-color: #1e40af;
   color: white;
 }
 
 .buttonSecondary:hover {
-  background-color: #2563eb;
+  background-color: #1e3a8a;
   transform: translateY(-1px);
 }
 

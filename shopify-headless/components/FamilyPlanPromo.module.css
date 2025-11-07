@@ -63,7 +63,7 @@
 
 .button {
   display: inline-block;
-  background-color: #3b82f6;
+  background-color: #1e40af;
   color: white;
   padding: 0.75rem 2rem;
   border-radius: 0.5rem;
@@ -73,7 +73,7 @@
 }
 
 .button:hover {
-  background-color: #2563eb;
+  background-color: #1e3a8a;
   transform: translateY(-1px);
 }
 
