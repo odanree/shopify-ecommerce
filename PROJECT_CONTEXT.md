@@ -202,10 +202,11 @@ shopify-headless/
 - [x] Product search (SearchBar component, search page, API integration)
 - [x] Collection pages (listing, detail pages, E2E tests)
 - [x] Comprehensive test suite (109 tests, 55.18% coverage)
+- [x] SEO optimization (metadata, Open Graph, Twitter cards, JSON-LD, sitemap, robots.txt)
 
 ### In Progress 🚧
-- [ ] Customer authentication
-- [ ] Product reviews
+- [ ] Newsletter integration
+- [ ] Performance optimization
 
 ### Pending ⏳
 - [ ] Customer authentication
