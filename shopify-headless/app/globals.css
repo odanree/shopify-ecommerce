@@ -16,6 +16,12 @@ body {
   min-height: 100vh;
 }
 
+/* Prevent layout shifts */
+img, video {
+  max-width: 100%;
+  height: auto;
+}
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;

@@ -75,6 +75,7 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: 1.5rem;
+  min-height: 400px;
 }
 
 @media (max-width: 768px) {

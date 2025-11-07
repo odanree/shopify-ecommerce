@@ -91,11 +91,9 @@ export function AddToCart({
         {isLoading ? 'Adding...' : 'Add to Cart'}
       </button>
 
-      {message && (
-        <p className={`${styles.message} ${message.includes('Error') ? styles.errorMessage : styles.successMessage}`}>
-          {message}
-        </p>
-      )}
+      <p className={`${styles.message} ${message.includes('Error') ? styles.errorMessage : styles.successMessage}`}>
+        {message || '\u00A0'}
+      </p>
     </div>
   );
 }

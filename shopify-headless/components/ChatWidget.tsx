@@ -5,6 +5,17 @@ import Script from 'next/script';
 
 export function ChatWidget() {
   useEffect(() => {
+    // Load CSS asynchronously to prevent render blocking
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = 'https://ai-chatbot-lake-eight-99.vercel.app/chat-widget.css';
+    link.media = 'print';
+    link.onload = function() {
+      // @ts-ignore
+      this.media = 'all';
+    };
+    document.head.appendChild(link);
+
     // Initialize chatbot after component mounts
     const initializeChatbot = () => {
       // @ts-ignore - AIChatbot is loaded from external script
@@ -24,17 +35,11 @@ export function ChatWidget() {
   }, []);
 
   return (
-    <>
-      {/* AI Chatbot Widget Styles */}
-      <link
-        rel="stylesheet"
-        href="https://ai-chatbot-lake-eight-99.vercel.app/chat-widget.css"
-      />
-      
+    <>      
       {/* AI Chatbot Widget Script */}
       <Script
         src="https://ai-chatbot-lake-eight-99.vercel.app/chat-widget.js"
-        strategy="afterInteractive"
+        strategy="lazyOnload"
         onReady={() => {
           // @ts-ignore - AIChatbot is loaded from external script
           if (window.AIChatbot) {

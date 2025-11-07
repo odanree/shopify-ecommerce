@@ -2,8 +2,14 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import FamilyPlanBuilder from '@/components/FamilyPlanBuilder';
+import dynamic from 'next/dynamic';
 import { useCart } from '@/contexts/CartContext';
+
+// Lazy load FamilyPlanBuilder - it's a large component
+const FamilyPlanBuilder = dynamic(() => import('@/components/FamilyPlanBuilder'), {
+  ssr: false,
+  loading: () => <div className="text-center py-12">Loading Family Plan Builder...</div>,
+});
 
 export default function FamilyPlanPage() {
   const router = useRouter();

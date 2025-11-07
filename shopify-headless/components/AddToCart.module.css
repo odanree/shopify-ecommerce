@@ -63,6 +63,12 @@
   margin-top: 1rem;
   text-align: center;
   font-weight: 500;
+  min-height: 1.5rem;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.message:empty {
+  opacity: 0;
 }
 
 .successMessage {
