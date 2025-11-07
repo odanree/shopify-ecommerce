@@ -1,10 +1,15 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import dynamic from "next/dynamic";
 import "./globals.css";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { CartProvider } from "@/contexts/CartContext";
-import { ChatWidget } from "@/components/ChatWidget";
+
+// Lazy load ChatWidget - not critical for initial render
+const ChatWidget = dynamic(() => import("@/components/ChatWidget").then(mod => ({ default: mod.ChatWidget })), {
+  ssr: false,
+});
 
 const inter = Inter({ 
   subsets: ["latin"],

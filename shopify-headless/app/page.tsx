@@ -1,8 +1,14 @@
 import Link from 'next/link';
+import dynamicImport from 'next/dynamic';
 import { getProducts } from '@/lib/shopify';
 import { ProductCard } from '@/components/ProductCard';
-import { FamilyPlanPromo } from '@/components/FamilyPlanPromo';
 import styles from './page.module.css';
+
+// Lazy load FamilyPlanPromo - below the fold content
+const FamilyPlanPromo = dynamicImport(() => import('@/components/FamilyPlanPromo').then(mod => ({ default: mod.FamilyPlanPromo })), {
+  ssr: true,
+  loading: () => <div style={{ minHeight: '200px' }} />,
+});
 
 // Force dynamic rendering - don't prerender at build time
 export const dynamic = 'force-dynamic';
