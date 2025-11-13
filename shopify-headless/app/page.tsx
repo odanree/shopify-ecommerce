@@ -6,7 +6,7 @@ import styles from './page.module.css';
 
 // Lazy load components - below the fold content
 const HeroCarousel = dynamicImport(() => import('@/components/HeroCarousel').then(mod => ({ default: mod.HeroCarousel })), {
-  ssr: true,  // ✅ Changed from false - render on server immediately
+  ssr: true,  // ✅ SSR enabled - LazyMotion prevents Framer Motion useInsertionEffect errors
   loading: () => <div style={{ minHeight: '500px', background: '#f5f5f5' }} />,
 });
 

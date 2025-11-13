@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import Image from 'next/image';
-import { motion, AnimatePresence } from 'framer-motion';
+import { LazyMotion, domAnimation, m, AnimatePresence } from 'framer-motion';
 import styles from './HeroCarousel.module.css';
 
 interface HeroImage {
@@ -48,22 +48,23 @@ const HeroCarouselComponent: React.FC<{ images: HeroImage[] }> = ({ images }) =>
   }, [paginate]);
 
   return (
-    <section className={styles.carouselContainer}>
-      <div className={styles.carouselWrapper}>
-        <AnimatePresence initial={false} custom={direction} mode="wait">
-          <motion.div
-            key={currentIndex}
-            custom={direction}
-            variants={slideVariants}
-            initial="enter"
-            animate="center"
-            exit="exit"
-            transition={{
-              x: { type: 'tween', duration: 0.4, ease: 'easeInOut' },
-              opacity: { duration: 0.3 },
-            }}
-            className={styles.slide}
-          >
+    <LazyMotion features={domAnimation} strict>
+      <section className={styles.carouselContainer}>
+        <div className={styles.carouselWrapper}>
+          <AnimatePresence initial={false} custom={direction} mode="wait">
+            <m.div
+              key={currentIndex}
+              custom={direction}
+              variants={slideVariants}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              transition={{
+                x: { type: 'tween', duration: 0.4, ease: 'easeInOut' },
+                opacity: { duration: 0.3 },
+              }}
+              className={styles.slide}
+            >
             <div className={styles.imageWrapper}>
               <Image
                 src={images[currentIndex].src}
@@ -81,7 +82,7 @@ const HeroCarouselComponent: React.FC<{ images: HeroImage[] }> = ({ images }) =>
               <div className={styles.overlay} />
 
               {/* Text overlay - bottom left */}
-              <motion.div
+              <m.div
                 className={styles.textOverlay}
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -89,15 +90,15 @@ const HeroCarouselComponent: React.FC<{ images: HeroImage[] }> = ({ images }) =>
               >
                 <h2 className={styles.overlayTitle}>{images[currentIndex].title}</h2>
                 <p className={styles.overlayDescription}>{images[currentIndex].description}</p>
-              </motion.div>
+              </m.div>
             </div>
-          </motion.div>
+          </m.div>
         </AnimatePresence>
 
         {/* Navigation Dots */}
         <div className={styles.dotsContainer}>
           {images.map((_, index) => (
-            <motion.button
+            <m.button
               key={index}
               className={`${styles.dot} ${index === currentIndex ? styles.activeDot : ''}`}
               onClick={() => {
@@ -113,7 +114,7 @@ const HeroCarouselComponent: React.FC<{ images: HeroImage[] }> = ({ images }) =>
         </div>
 
         {/* Previous/Next buttons - simplified animations for performance */}
-        <motion.button
+        <m.button
           className={`${styles.navButton} ${styles.prevButton}`}
           onClick={() => paginate(-1)}
           whileHover={{ scale: 1.05 }}
@@ -122,8 +123,8 @@ const HeroCarouselComponent: React.FC<{ images: HeroImage[] }> = ({ images }) =>
           transition={{ duration: 0.1 }}
         >
           ←
-        </motion.button>
-        <motion.button
+        </m.button>
+        <m.button
           className={`${styles.navButton} ${styles.nextButton}`}
           onClick={() => paginate(1)}
           whileHover={{ scale: 1.05 }}
@@ -132,9 +133,10 @@ const HeroCarouselComponent: React.FC<{ images: HeroImage[] }> = ({ images }) =>
           transition={{ duration: 0.1 }}
         >
           →
-        </motion.button>
+        </m.button>
       </div>
     </section>
+    </LazyMotion>
   );
 };
 
