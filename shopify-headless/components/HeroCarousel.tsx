@@ -49,8 +49,8 @@ const HeroCarouselComponent: React.FC<{ images: HeroImage[] }> = ({ images }) =>
 
   return (
     <LazyMotion features={domAnimation} strict>
-      <section className={styles.carouselContainer}>
-        <div className={styles.carouselWrapper}>
+      <section className={styles.carouselContainer} data-cy="carousel-container">
+        <div className={styles.carouselWrapper} data-cy="carousel-wrapper">
           <AnimatePresence initial={false} custom={direction} mode="wait">
             <m.div
               key={currentIndex}
@@ -64,8 +64,9 @@ const HeroCarouselComponent: React.FC<{ images: HeroImage[] }> = ({ images }) =>
                 opacity: { duration: 0.3 },
               }}
               className={styles.slide}
+              data-cy="carousel-slide"
             >
-            <div className={styles.imageWrapper}>
+            <div className={styles.imageWrapper} data-cy="carousel-image-wrapper">
               <Image
                 src={images[currentIndex].src}
                 alt={images[currentIndex].alt}
@@ -75,6 +76,7 @@ const HeroCarouselComponent: React.FC<{ images: HeroImage[] }> = ({ images }) =>
                 placeholder="blur"
                 blurDataURL="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 600'%3E%3Crect fill='%23f0f0f0'/%3E%3C/svg%3E"
                 className={styles.image}
+                data-cy="carousel-image"
                 sizes="100vw"
                 loading={currentIndex === 0 ? 'eager' : 'lazy'}
               />

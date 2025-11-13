@@ -28,16 +28,16 @@ describe('Homepage', () => {
   describe('Hero Carousel (Below Fold)', () => {
     beforeEach(() => {
       // Scroll to carousel
-      cy.get('.carouselContainer').scrollIntoView()
+      cy.get('[data-cy="carousel-container"]').scrollIntoView()
       cy.wait(500) // Wait for scroll
     })
 
     it('should display carousel below fold', () => {
-      cy.get('.carouselWrapper').should('be.visible')
+      cy.get('[data-cy="carousel-wrapper"]').should('be.visible')
     })
 
     it('should display carousel image', () => {
-      cy.get('.image').should('be.visible')
+      cy.get('[data-cy="carousel-image"]').should('be.visible')
     })
 
     it('should display navigation dots', () => {
@@ -116,8 +116,8 @@ describe('Homepage', () => {
 
     it('should adjust carousel height on mobile', () => {
       cy.viewport('iphone-x')
-      cy.get('.carouselContainer').scrollIntoView()
-      cy.get('.carouselWrapper').should('be.visible')
+      cy.get('[data-cy="carousel-container"]').scrollIntoView()
+      cy.get('[data-cy="carousel-wrapper"]').should('be.visible')
     })
   })
 
@@ -128,7 +128,7 @@ describe('Homepage', () => {
     })
 
     it('should have alt text on images', () => {
-      cy.get('.image').should('have.attr', 'alt')
+      cy.get('[data-cy="carousel-image"]').should('have.attr', 'alt')
     })
 
     it('should have proper semantic HTML', () => {
