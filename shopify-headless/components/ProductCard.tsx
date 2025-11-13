@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
+import { memo } from 'react';
 import { ShopifyProduct } from '@/types/shopify';
 import styles from './ProductCard.module.css';
 
@@ -7,7 +8,7 @@ interface ProductCardProps {
   product: ShopifyProduct;
 }
 
-export function ProductCard({ product }: ProductCardProps) {
+const ProductCardComponent = memo(function ProductCard({ product }: ProductCardProps) {
   const price = product.priceRange.minVariantPrice;
 
   return (
@@ -42,4 +43,6 @@ export function ProductCard({ product }: ProductCardProps) {
       </div>
     </Link>
   );
-}
+});
+
+export { ProductCardComponent as ProductCard };
