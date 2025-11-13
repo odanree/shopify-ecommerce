@@ -59,8 +59,8 @@ const HeroCarouselComponent: React.FC<{ images: HeroImage[] }> = ({ images }) =>
             animate="center"
             exit="exit"
             transition={{
-              x: { type: 'spring', stiffness: 300, damping: 30 },
-              opacity: { duration: 0.5 },
+              x: { type: 'tween', duration: 0.4, ease: 'easeInOut' },
+              opacity: { duration: 0.3 },
             }}
             className={styles.slide}
           >
@@ -83,9 +83,9 @@ const HeroCarouselComponent: React.FC<{ images: HeroImage[] }> = ({ images }) =>
               {/* Text overlay - bottom left */}
               <motion.div
                 className={styles.textOverlay}
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3, duration: 0.6 }}
+                transition={{ delay: 0.05, duration: 0.3 }}
               >
                 <h2 className={styles.overlayTitle}>{images[currentIndex].title}</h2>
                 <p className={styles.overlayDescription}>{images[currentIndex].description}</p>
