@@ -86,23 +86,25 @@ const HeroCarouselComponent: React.FC<{ images: HeroImage[] }> = ({ images }) =>
               {/* Text overlay - bottom left */}
               <m.div
                 className={styles.textOverlay}
+                data-cy="text-overlay"
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.05, duration: 0.3 }}
               >
-                <h2 className={styles.overlayTitle}>{images[currentIndex].title}</h2>
-                <p className={styles.overlayDescription}>{images[currentIndex].description}</p>
+                <h2 className={styles.overlayTitle} data-cy="overlay-title">{images[currentIndex].title}</h2>
+                <p className={styles.overlayDescription} data-cy="overlay-description">{images[currentIndex].description}</p>
               </m.div>
             </div>
           </m.div>
         </AnimatePresence>
 
         {/* Navigation Dots */}
-        <div className={styles.dotsContainer}>
+        <div className={styles.dotsContainer} data-cy="dots-container">
           {images.map((_, index) => (
             <m.button
               key={index}
               className={`${styles.dot} ${index === currentIndex ? styles.activeDot : ''}`}
+              data-cy={index === currentIndex ? "active-dot" : "carousel-dot"}
               onClick={() => {
                 setDirection(index > currentIndex ? 1 : -1);
                 setCurrentIndex(index);
@@ -118,6 +120,7 @@ const HeroCarouselComponent: React.FC<{ images: HeroImage[] }> = ({ images }) =>
         {/* Previous/Next buttons - simplified animations for performance */}
         <m.button
           className={`${styles.navButton} ${styles.prevButton}`}
+          data-cy="prev-button"
           onClick={() => paginate(-1)}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.9 }}
@@ -128,6 +131,7 @@ const HeroCarouselComponent: React.FC<{ images: HeroImage[] }> = ({ images }) =>
         </m.button>
         <m.button
           className={`${styles.navButton} ${styles.nextButton}`}
+          data-cy="next-button"
           onClick={() => paginate(1)}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.9 }}

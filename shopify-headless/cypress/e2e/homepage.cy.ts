@@ -41,44 +41,44 @@ describe('Homepage', () => {
     })
 
     it('should display navigation dots', () => {
-      cy.get('.dotsContainer').children().should('have.length.at.least', 1)
+      cy.get('[data-cy="dots-container"]').children().should('have.length.at.least', 1)
     })
 
     it('should navigate to next slide on next button click', () => {
-      const initialDot = cy.get('.activeDot').first()
-      cy.get('.nextButton').click()
+      const initialDot = cy.get('[data-cy="active-dot"]').first()
+      cy.get('[data-cy="next-button"]').click()
       cy.wait(500) // Wait for animation
-      cy.get('.activeDot').should('exist')
+      cy.get('[data-cy="active-dot"]').should('exist')
     })
 
     it('should navigate to previous slide on prev button click', () => {
-      cy.get('.nextButton').click() // Move to next first
+      cy.get('[data-cy="next-button"]').click() // Move to next first
       cy.wait(500)
-      cy.get('.prevButton').click()
+      cy.get('[data-cy="prev-button"]').click()
       cy.wait(500)
-      cy.get('.activeDot').should('exist')
+      cy.get('[data-cy="active-dot"]').should('exist')
     })
 
     it('should navigate via dot click', () => {
-      const dots = cy.get('.dot')
+      const dots = cy.get('[data-cy="carousel-dot"]')
       dots.should('have.length.at.least', 2)
       dots.eq(1).click()
       cy.wait(500)
-      cy.get('.activeDot').eq(1).should('exist')
+      cy.get('[data-cy="active-dot"]').eq(1).should('exist')
     })
 
     it('should display overlay text on image', () => {
-      cy.get('.overlayTitle').should('be.visible')
-      cy.get('.overlayDescription').should('be.visible')
+      cy.get('[data-cy="overlay-title"]').should('be.visible')
+      cy.get('[data-cy="overlay-description"]').should('be.visible')
     })
 
     it('should have proper text contrast on image', () => {
-      cy.get('.textOverlay').should('have.css', 'color')
+      cy.get('[data-cy="text-overlay"]').should('have.css', 'color')
     })
 
     it('should have ARIA labels on buttons', () => {
-      cy.get('.navButton').first().should('have.attr', 'aria-label')
-      cy.get('.dot').first().should('have.attr', 'aria-label')
+      cy.get('[data-cy="prev-button"]').first().should('have.attr', 'aria-label')
+      cy.get('[data-cy="carousel-dot"]').first().should('have.attr', 'aria-label')
     })
   })
 
