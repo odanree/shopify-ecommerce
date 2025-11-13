@@ -1,15 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import dynamic from "next/dynamic";
 import "./globals.css";
-import { Header } from "@/components/Header";
-import { Footer } from "@/components/Footer";
-import { CartProvider } from "@/contexts/CartContext";
-
-// Lazy load ChatWidget - not critical for initial render
-const ChatWidget = dynamic(() => import("@/components/ChatWidget").then(mod => ({ default: mod.ChatWidget })), {
-  ssr: false,
-});
+import { RootLayoutClient } from "./layout-client";
 
 const inter = Inter({ 
   subsets: ["latin"],
@@ -119,14 +111,9 @@ export default function RootLayout({
         `}} />
       </head>
       <body className={inter.className}>
-        <CartProvider>
-          <Header />
-          <main className="min-h-screen">
-            {children}
-          </main>
-          <Footer />
-          <ChatWidget />
-        </CartProvider>
+        <RootLayoutClient>
+          {children}
+        </RootLayoutClient>
       </body>
     </html>
   );
