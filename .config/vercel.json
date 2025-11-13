@@ -9,6 +9,8 @@
     "deploymentEnabled": {
       "main": true,
       "dev": false
-    }
+    },
+    "productionBranch": "main",
+    "deploymentProtection": true
   }
 }
