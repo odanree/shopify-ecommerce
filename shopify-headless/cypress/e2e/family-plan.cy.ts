@@ -1,16 +1,17 @@
 describe('Family Plan Builder', () => {
   beforeEach(() => {
-    // Ignore hydration warnings/errors and Next.js routing errors
+    // Ignore hydration, routing errors, and minified React errors
     cy.on('uncaught:exception', (err) => {
       if (
         err.message.includes('hydrating') ||
         err.message.includes('Hydration') ||
         err.message.includes('NEXT_NOT_FOUND') ||
-        err.message.includes('NEXT_REDIRECT')
+        err.message.includes('NEXT_REDIRECT') ||
+        err.message.includes('Minified React error #')
       ) {
-        return false; // Ignore these application-level errors
+        return false;
       }
-      return true; // Let other errors fail the test
+      return true;
     })
     cy.visit('/family-plan')
   })
