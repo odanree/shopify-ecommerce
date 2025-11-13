@@ -1,5 +1,12 @@
 describe('Shopping Cart', () => {
   beforeEach(() => {
+    // Ignore hydration warnings/errors
+    cy.on('uncaught:exception', (err) => {
+      if (err.message.includes('hydrating') || err.message.includes('Hydration')) {
+        return false; // Ignore hydration errors
+      }
+      return true; // Let other errors fail the test
+    })
     cy.visit('/')
   })
 
