@@ -1,13 +1,11 @@
 name: E2E Tests
 
-# TEMPORARILY DISABLED - React hydration errors blocking tests
-# Re-enable after fixing client/server component boundaries
+# Re-enabled with LazyMotion fix for Framer Motion SSR issues
 on:
-  workflow_dispatch:
-    inputs:
-      disabled:
-        description: 'E2E tests disabled - fix React #329 and #423 before re-enabling'
-        required: false
+  pull_request:
+    branches: [dev, main]
+  push:
+    branches: [dev, main]
 
 jobs:
   cypress-run:
