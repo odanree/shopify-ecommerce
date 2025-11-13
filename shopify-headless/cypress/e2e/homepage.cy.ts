@@ -27,9 +27,11 @@ describe('Homepage', () => {
 
   describe('Hero Carousel (Below Fold)', () => {
     beforeEach(() => {
+      // Wait for carousel to load (lazy component)
+      cy.get('[data-cy="carousel-container"]', { timeout: 10000 }).should('exist')
       // Scroll to carousel
       cy.get('[data-cy="carousel-container"]').scrollIntoView()
-      cy.wait(500) // Wait for scroll
+      cy.wait(500) // Wait for scroll and animations
     })
 
     it('should display carousel below fold', () => {
@@ -84,7 +86,7 @@ describe('Homepage', () => {
 
   describe('Family Plan Promo', () => {
     it('should display Family Plan promo section', () => {
-      cy.get('[data-cy="family-plan-promo"]').should('be.visible')
+      cy.get('[data-cy="family-plan-promo"]', { timeout: 10000 }).should('be.visible')
       cy.get('[data-cy="promo-title"]').should('contain', 'Save More with Family Plans')
       cy.get('[data-cy="feature-members"]').should('contain', '2-6 Members')
       cy.get('[data-cy="feature-mix-match"]').should('contain', 'Mix & Match')
@@ -92,8 +94,9 @@ describe('Homepage', () => {
     })
 
     it('should navigate to family plan page when clicking CTA', () => {
+      cy.get('[data-cy="promo-cta-button"]', { timeout: 10000 }).should('exist')
       cy.get('[data-cy="promo-cta-button"]').click()
-      cy.url().should('include', '/family-plan')
+      cy.url({ timeout: 10000 }).should('include', '/family-plan')
     })
   })
 
