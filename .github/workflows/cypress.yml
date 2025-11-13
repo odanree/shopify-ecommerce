@@ -26,16 +26,18 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'npm'
-          cache-dependency-path: shopify-headless/package-lock.json
+          cache: ''
 
       - name: Install dependencies
         working-directory: ./shopify-headless
         run: npm ci
 
-      - name: Clear Next.js cache
+      - name: Clear build caches
         working-directory: ./shopify-headless
-        run: rm -rf .next
+        run: |
+          rm -rf .next
+          rm -rf .swc
+          rm -rf node_modules/.cache
 
       - name: Create .env.local
         working-directory: ./shopify-headless
