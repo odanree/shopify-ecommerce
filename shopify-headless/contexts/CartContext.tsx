@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
+import React, { createContext, useContext, useState, useCallback, useEffect, ReactNode } from 'react';
 
 export interface CartItem {
   id: string;
@@ -23,25 +23,35 @@ interface CartContextType {
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
-export function CartProvider({ children }: { children: React.ReactNode }) {
+export function CartProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);
+  const [isMounted, setIsMounted] = useState(false);
 
-  // Load cart from localStorage on mount
+  // Load cart from localStorage on mount (client-side only)
   useEffect(() => {
-    const savedCart = localStorage.getItem('cart');
-    if (savedCart) {
+    setIsMounted(true);
+    if (typeof window !== 'undefined') {
       try {
-        setItems(JSON.parse(savedCart));
+        const savedCart = localStorage.getItem('cart');
+        if (savedCart) {
+          setItems(JSON.parse(savedCart));
+        }
       } catch (error) {
         console.error('Error loading cart:', error);
       }
     }
   }, []);
 
-  // Save cart to localStorage whenever it changes
+  // Save cart to localStorage whenever it changes (only after mount)
   useEffect(() => {
-    localStorage.setItem('cart', JSON.stringify(items));
-  }, [items]);
+    if (isMounted && typeof window !== 'undefined') {
+      try {
+        localStorage.setItem('cart', JSON.stringify(items));
+      } catch (error) {
+        console.error('Error saving cart:', error);
+      }
+    }
+  }, [items, isMounted]);
 
   const addItem = useCallback((item: CartItem) => {
     setItems((prev) => {
