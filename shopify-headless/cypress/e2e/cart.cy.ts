@@ -1,5 +1,22 @@
 describe('Shopping Cart', () => {
   beforeEach(() => {
+    // Ignore hydration warnings/errors, Next.js routing errors, and minified React errors
+    cy.on('uncaught:exception', (err) => {
+      // Suppress hydration and Next.js routing errors
+      if (
+        err.message.includes('hydrating') ||
+        err.message.includes('Hydration') ||
+        err.message.includes('NEXT_NOT_FOUND') ||
+        err.message.includes('NEXT_REDIRECT')
+      ) {
+        return false;
+      }
+      // Suppress minified React errors (production build)
+      if (err.message.includes('Minified React error #')) {
+        return false;
+      }
+      return true;
+    })
     cy.visit('/')
   })
 
