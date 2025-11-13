@@ -115,3 +115,12 @@ All checks have passed
 - Example: `const url: string = ...` not `const url = ...`
 - Next.js build runs TypeScript checks on ALL .ts files including scripts/
 - Build will fail if implicit types are detected
+
+### Documentation Policy
+- ⚠️ **DO NOT** create summary/completion/status report files after every prompt
+- ⚠️ **DO NOT** create separate session summary files
+- ⚠️ **DO NOT** create temporary documentation unless explicitly requested
+- ✅ **DO** update existing documentation only when necessary
+- ✅ **DO** keep responses concise and focused on implementation
+- ✅ **DO** only create documentation when user explicitly asks for it
+- When tasks are complete: provide brief confirmation, no automatic summary files
