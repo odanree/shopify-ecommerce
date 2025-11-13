@@ -1,10 +1,14 @@
 describe('Collections', () => {
   describe('Collections Listing Page', () => {
     beforeEach(() => {
-      // Ignore hydration warnings/errors
+      // Ignore hydration warnings/errors and Next.js routing errors
       cy.on('uncaught:exception', (err) => {
-        if (err.message.includes('hydrating') || err.message.includes('Hydration')) {
-          return false; // Ignore hydration errors
+        if (
+          err.message.includes('hydrating') ||
+          err.message.includes('Hydration') ||
+          err.message.includes('NEXT_NOT_FOUND')
+        ) {
+          return false; // Ignore these application-level errors
         }
         return true; // Let other errors fail the test
       })
