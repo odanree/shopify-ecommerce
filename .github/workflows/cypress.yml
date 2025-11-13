@@ -33,6 +33,10 @@ jobs:
         working-directory: ./shopify-headless
         run: npm ci
 
+      - name: Clear Next.js cache
+        working-directory: ./shopify-headless
+        run: rm -rf .next
+
       - name: Create .env.local
         working-directory: ./shopify-headless
         run: |
