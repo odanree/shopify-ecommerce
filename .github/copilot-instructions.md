@@ -16,25 +16,37 @@ Shopify Ecommerce Development Workspace with:
 ## Project Structure
 ```
 shopify-ecommerce-docs/          # Repository root
+├── vercel.json                  # ⚠️ CRITICAL - Vercel reads THIS file (repository root)
 ├── shopify-theme/               # Traditional Shopify theme with Liquid templating
-└── shopify-headless/            # ⚠️ SUBDIRECTORY - Headless commerce with Next.js
-    ├── vercel.json              # ⚠️ Vercel config is in THIS subdirectory, not root
+└── shopify-headless/            # Headless commerce with Next.js
     ├── package.json
     ├── app/
     ├── components/
     └── ...
 ```
 
-**⚠️ IMPORTANT: Vercel Configuration**
-- The `vercel.json` is located at `shopify-headless/vercel.json` (NOT in repository root)
-- When checking/updating Vercel settings, always use the subdirectory path
-- Vercel's root directory is set to `shopify-headless/` in project settings
+**⚠️ CRITICAL: Vercel Configuration**
+- **vercel.json MUST be at REPOSITORY ROOT** (not in subdirectories)
+- Vercel only reads `./vercel.json` at the repository root
+- Configuration includes:
+  - `"dev": false` - Prevents deployments on dev branch (IMPORTANT)
+  - `"productionBranch": "main"` - Only main branch deploys to production
+  - Build commands: `cd shopify-headless && npm run build`
+  - Root directory setting in Vercel dashboard: `shopify-headless/`
+- **NEVER move vercel.json to `.config/` or `shopify-headless/`** - It will be ignored
+- If deployments are happening on unexpected branches, verify:
+  1. `vercel.json` exists at repository root with `"dev": false`
+  2. Vercel dashboard Root Directory is set to `shopify-headless/`
+  3. Check git status: `git ls-files vercel.json` (must show `vercel.json` at root)
 
 ## Important: Read PROJECT_CONTEXT.md
 For complete project setup, configurations, and AI assistance context, see: `PROJECT_CONTEXT.md`
 
 Key points:
-- **Styling**: CSS Modules (NOT TailwindCSS)
+- **Styling**: CSS Modules (NOT TailwindCSS) - Tailwind dependencies removed from package.json
+  - ⚠️ **DO NOT add back**: tailwindcss, autoprefixer, postcss
+  - ⚠️ **DO NOT create**: tailwind.config.js or postcss.config.js
+  - All styling uses custom CSS in `app/globals.css` and CSS Modules
 - **Git Workflow**: See `.github/BRANCHING_STRATEGY.md` for complete workflow
   - feature/* → dev → main
   - Use "Squash and merge" for PRs (NOT regular merge)
@@ -115,3 +127,12 @@ All checks have passed
 - Example: `const url: string = ...` not `const url = ...`
 - Next.js build runs TypeScript checks on ALL .ts files including scripts/
 - Build will fail if implicit types are detected
+
+### Documentation Policy
+- ⚠️ **DO NOT** create summary/completion/status report files after every prompt
+- ⚠️ **DO NOT** create separate session summary files
+- ⚠️ **DO NOT** create temporary documentation unless explicitly requested
+- ✅ **DO** update existing documentation only when necessary
+- ✅ **DO** keep responses concise and focused on implementation
+- ✅ **DO** only create documentation when user explicitly asks for it
+- When tasks are complete: provide brief confirmation, no automatic summary files

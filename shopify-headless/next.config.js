@@ -6,6 +6,10 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'cdn.shopify.com',
       },
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+      },
     ],
     formats: ['image/avif', 'image/webp'],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
@@ -22,7 +26,7 @@ const nextConfig = {
     removeConsole: process.env.NODE_ENV === 'production',
   },
   experimental: {
-    optimizePackageImports: ['lucide-react'],
+    optimizePackageImports: ['lucide-react', 'framer-motion'],
   },
   // Optimize dev server
   webpack: (config, { dev, isServer }) => {
