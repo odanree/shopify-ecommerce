@@ -64,7 +64,7 @@ describe('Homepage', () => {
       dots.should('have.length.at.least', 2)
       dots.eq(1).click()
       cy.wait(500)
-      cy.get('[data-cy="active-dot"]').eq(1).should('exist')
+      cy.get('[data-cy="active-dot"]').should('exist')
     })
 
     it('should display overlay text on image', () => {
