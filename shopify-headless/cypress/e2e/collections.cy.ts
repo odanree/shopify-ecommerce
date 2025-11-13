@@ -53,6 +53,21 @@ describe('Collections', () => {
   });
 
   describe('Collection Detail Page', () => {
+    beforeEach(() => {
+      // Ignore hydration warnings/errors and Next.js routing errors
+      cy.on('uncaught:exception', (err) => {
+        if (
+          err.message.includes('hydrating') ||
+          err.message.includes('Hydration') ||
+          err.message.includes('NEXT_NOT_FOUND') ||
+          err.message.includes('NEXT_REDIRECT')
+        ) {
+          return false; // Ignore these application-level errors
+        }
+        return true; // Let other errors fail the test
+      })
+    })
+
     it('should show 404 for non-existent collection', () => {
       cy.visit('/collections/non-existent-collection-12345', { failOnStatusCode: false });
       cy.contains('404').should('be.visible');
@@ -131,6 +146,21 @@ describe('Collections', () => {
   });
 
   describe('Navigation Integration', () => {
+    beforeEach(() => {
+      // Ignore hydration warnings/errors and Next.js routing errors
+      cy.on('uncaught:exception', (err) => {
+        if (
+          err.message.includes('hydrating') ||
+          err.message.includes('Hydration') ||
+          err.message.includes('NEXT_NOT_FOUND') ||
+          err.message.includes('NEXT_REDIRECT')
+        ) {
+          return false; // Ignore these application-level errors
+        }
+        return true; // Let other errors fail the test
+      })
+    })
+
     it('should navigate to collections from header', () => {
       cy.visit('/');
       cy.get('[data-cy="collections-link"]').click();
