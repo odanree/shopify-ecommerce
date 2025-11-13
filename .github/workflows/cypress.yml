@@ -1,20 +1,10 @@
 name: E2E Tests
 
-# TEMPORARILY DISABLED - E2E test selectors need fixes
-# Re-enable after updating test data attributes
-# on:
-#   pull_request:
-#     branches: [dev, main]
-#   push:
-#     branches: [dev, main]
-
 on:
-  # This trigger will never fire, effectively disabling the workflow
-  workflow_dispatch:
-    inputs:
-      disabled:
-        description: 'E2E tests disabled - fix test selectors before re-enabling'
-        required: false
+  pull_request:
+    branches: [dev, main]
+  push:
+    branches: [dev, main]
 
 jobs:
   cypress-run:
