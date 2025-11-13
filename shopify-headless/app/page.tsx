@@ -6,7 +6,7 @@ import styles from './page.module.css';
 
 // Lazy load components - below the fold content
 const HeroCarousel = dynamicImport(() => import('@/components/HeroCarousel').then(mod => ({ default: mod.HeroCarousel })), {
-  ssr: false,
+  ssr: true,  // ✅ Changed from false - render on server immediately
   loading: () => <div style={{ minHeight: '500px', background: '#f5f5f5' }} />,
 });
 
@@ -76,7 +76,10 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* Featured Products Section - Between Hero and Carousel */}
+      {/* Hero Carousel - Image Section with Lazy Loading */}
+      <HeroCarousel images={heroImages} />
+
+      {/* Featured Products Section - After Carousel */}
       <section className={styles.productsSection} data-cy="featured-products-section">
         <h2 className={styles.sectionTitle} data-cy="featured-products-title">Featured Products</h2>
         <div className={styles.productsGrid} data-cy="featured-products-grid">
@@ -85,9 +88,6 @@ export default async function Home() {
           ))}
         </div>
       </section>
-
-      {/* Hero Carousel - Below the Fold with Lazy Loading */}
-      <HeroCarousel images={heroImages} />
 
       {/* Family Plan Promo Section */}
       <FamilyPlanPromo />

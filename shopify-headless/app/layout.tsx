@@ -14,7 +14,9 @@ const ChatWidget = dynamic(() => import("@/components/ChatWidget").then(mod => (
 const inter = Inter({ 
   subsets: ["latin"],
   display: 'swap',
-  preload: true
+  preload: true,
+  weight: ['400', '500', '600', '700'],
+  fallback: ['system-ui', '-apple-system', 'sans-serif'],
 });
 
 export const metadata: Metadata = {
@@ -79,11 +81,42 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        {/* Preconnect to external domains to reduce latency */}
+        {/* Preconnect to critical origins - Shopify CDN */}
         <link rel="preconnect" href="https://cdn.shopify.com" />
         <link rel="dns-prefetch" href="https://cdn.shopify.com" />
-        <link rel="preconnect" href="https://ai-chatbot-lake-eight-99.vercel.app" />
-        <link rel="dns-prefetch" href="https://ai-chatbot-lake-eight-99.vercel.app" />
+        
+        {/* Preconnect to Unsplash for hero images */}
+        <link rel="preconnect" href="https://images.unsplash.com" />
+        <link rel="dns-prefetch" href="https://images.unsplash.com" />
+        
+        {/* Preload critical fonts to reduce LCP */}
+        <link
+          rel="preload"
+          href="https://fonts.gstatic.com/s/inter/v13/UcC73FwrK3iLTeHuS_fvQtMwCp50KjMjqmKcsm0QiI2-UNionodG_w.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
+        
+        {/* Inline critical CSS to eliminate render-blocking requests */}
+        <style dangerouslySetInnerHTML={{__html: `
+          .heroSection { max-width: 1200px; margin: 0 auto; padding: 4rem 1rem; width: 100%; }
+          .heroContent { text-align: center; }
+          .heroTitle { font-size: 3rem; font-weight: 700; margin-bottom: 1rem; color: #1a1a1a; line-height: 1.2; letter-spacing: -0.02em; }
+          .heroSubtitle { font-size: 1.25rem; color: #666; margin-bottom: 2rem; font-weight: 400; line-height: 1.6; }
+          .heroButtons { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-top: 2rem; }
+          .button { display: inline-flex; align-items: center; justify-content: center; padding: 0.875rem 2.5rem; border-radius: 0.375rem; font-weight: 600; text-decoration: none; transition: all 0.2s; border: 2px solid transparent; cursor: pointer; font-size: 1rem; }
+          .buttonPrimary { background-color: #2563eb; color: white; }
+          .buttonPrimary:hover { background-color: #1d4ed8; transform: translateY(-2px); }
+          .buttonSecondary { background-color: transparent; color: #2563eb; border-color: #2563eb; }
+          .buttonSecondary:hover { background-color: #f0f9ff; }
+          .container { width: 100%; margin: 0 auto; padding: 0; }
+          @media (max-width: 768px) {
+            .heroTitle { font-size: 2rem; }
+            .heroSubtitle { font-size: 1rem; }
+            .button { padding: 0.75rem 1.5rem; font-size: 0.875rem; }
+          }
+        `}} />
       </head>
       <body className={inter.className}>
         <CartProvider>

@@ -1,34 +1,73 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* Global styles - minimal for performance */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
 :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 255, 255, 255;
   --background-end-rgb: 255, 255, 255;
+  --primary-color: #0066cc;
+  --secondary-color: #666666;
+  --border-color: #e0e0e0;
 }
 
-/* Removed dark mode - keeping light theme only */
+html, body {
+  height: 100%;
+  width: 100%;
+}
 
 body {
   color: rgb(var(--foreground-rgb));
   background: rgb(var(--background-start-rgb));
-  min-height: 100vh;
+  font-family: var(--font-inter, system-ui, -apple-system, sans-serif);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 /* Prevent layout shifts */
 img, video {
   max-width: 100%;
   height: auto;
+  display: block;
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
-  
-  .animate-slide-in {
-    animation: slideIn 0.3s ease-out;
+/* Links */
+a {
+  color: var(--primary-color);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+a:hover {
+  color: var(--secondary-color);
+}
+
+/* Buttons */
+button, [role="button"] {
+  cursor: pointer;
+  border: none;
+  font-family: inherit;
+  font-size: inherit;
+}
+
+/* Forms */
+input, textarea, select {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+/* Animations */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }
 

@@ -1,7 +1,8 @@
 import Link from 'next/link';
+import { memo } from 'react';
 import styles from './FamilyPlanPromo.module.css';
 
-export function FamilyPlanPromo() {
+const FamilyPlanPromoComponent = memo(function FamilyPlanPromo() {
   return (
     <section className={styles.promo} data-cy="family-plan-promo">
       <div className={styles.content}>
@@ -39,4 +40,6 @@ export function FamilyPlanPromo() {
       </div>
     </section>
   );
-}
+});
+
+export { FamilyPlanPromoComponent as FamilyPlanPromo };

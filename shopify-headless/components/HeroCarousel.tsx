@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import styles from './HeroCarousel.module.css';
@@ -13,11 +13,11 @@ interface HeroImage {
   description: string;
 }
 
-export const HeroCarousel: React.FC<{ images: HeroImage[] }> = ({ images }) => {
+const HeroCarouselComponent: React.FC<{ images: HeroImage[] }> = ({ images }) => {
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [direction, setDirection] = useState<number>(0);
 
-  const slideVariants = {
+  const slideVariants = useMemo(() => ({
     enter: (dir: number) => ({
       x: dir > 0 ? 1000 : -1000,
       opacity: 0,
@@ -32,7 +32,7 @@ export const HeroCarousel: React.FC<{ images: HeroImage[] }> = ({ images }) => {
       x: dir < 0 ? 1000 : -1000,
       opacity: 0,
     }),
-  };
+  }), []);
 
   const paginate = useCallback((newDirection: number) => {
     setDirection(newDirection);
@@ -70,8 +70,12 @@ export const HeroCarousel: React.FC<{ images: HeroImage[] }> = ({ images }) => {
                 alt={images[currentIndex].alt}
                 fill
                 priority={currentIndex === 0}
+                quality={85}
+                placeholder="blur"
+                blurDataURL="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 600'%3E%3Crect fill='%23f0f0f0'/%3E%3C/svg%3E"
                 className={styles.image}
                 sizes="100vw"
+                loading={currentIndex === 0 ? 'eager' : 'lazy'}
               />
               {/* Overlay with gradient */}
               <div className={styles.overlay} />
@@ -100,29 +104,32 @@ export const HeroCarousel: React.FC<{ images: HeroImage[] }> = ({ images }) => {
                 setDirection(index > currentIndex ? 1 : -1);
                 setCurrentIndex(index);
               }}
-              whileHover={{ scale: 1.2 }}
-              whileTap={{ scale: 0.9 }}
+              whileHover={{ scale: 1.15 }}
+              whileTap={{ scale: 0.85 }}
               aria-label={`Go to slide ${index + 1}`}
+              transition={{ duration: 0.15 }}
             />
           ))}
         </div>
 
-        {/* Previous/Next buttons */}
+        {/* Previous/Next buttons - simplified animations for performance */}
         <motion.button
           className={`${styles.navButton} ${styles.prevButton}`}
           onClick={() => paginate(-1)}
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.95 }}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.9 }}
           aria-label="Previous slide"
+          transition={{ duration: 0.1 }}
         >
           ←
         </motion.button>
         <motion.button
           className={`${styles.navButton} ${styles.nextButton}`}
           onClick={() => paginate(1)}
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.95 }}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.9 }}
           aria-label="Next slide"
+          transition={{ duration: 0.1 }}
         >
           →
         </motion.button>
@@ -130,3 +137,5 @@ export const HeroCarousel: React.FC<{ images: HeroImage[] }> = ({ images }) => {
     </section>
   );
 };
+
+export const HeroCarousel = HeroCarouselComponent;
