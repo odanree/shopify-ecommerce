@@ -3,12 +3,12 @@
   "buildCommand": "npm run build",
   "devCommand": "npm run dev",
   "installCommand": "npm install",
+  "ignoreCommand": "git diff --quiet HEAD^ HEAD -- shopify-headless/ .github/ vercel.json || [ \"$VERCEL_GIT_COMMIT_REF\" != \"main\" ]",
   "framework": "nextjs",
   "outputDirectory": ".next",
   "git": {
     "deploymentEnabled": {
-      "main": true,
-      "dev": false
+      "main": true
     },
     "productionBranch": "main",
     "deploymentProtection": true
