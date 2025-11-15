@@ -81,14 +81,7 @@ export default function RootLayout({
         <link rel="preconnect" href="https://images.unsplash.com" />
         <link rel="dns-prefetch" href="https://images.unsplash.com" />
         
-        {/* Preload critical fonts to reduce LCP */}
-        <link
-          rel="preload"
-          href="https://fonts.gstatic.com/s/inter/v13/UcC73FwrK3iLTeHuS_fvQtMwCp50KjMjqmKcsm0QiI2-UNionodG_w.woff2"
-          as="font"
-          type="font/woff2"
-          crossOrigin="anonymous"
-        />
+        {/* Google Fonts automatically preloaded via next/font/google */}
         
         {/* Inline critical CSS to eliminate render-blocking requests */}
         <style dangerouslySetInnerHTML={{__html: `

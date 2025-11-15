@@ -16,6 +16,19 @@ Features:
 - ✅ CI/CD with GitHub Actions + Vercel auto-deploy
 - ✅ TypeScript type safety throughout
 
+### Architecture Highlights
+
+**✅ Performance Optimized**
+- SSR carousel (ssr: true)
+- Inline critical CSS (1.3 KiB)
+- Custom CSS only (no Tailwind)
+- Dynamic imports
+
+**✅ React Architecture**
+- Server layout (metadata)
+- Client wrapper (contexts)
+- Proper hydration boundaries
+
 📖 **[Family Plan Documentation](./docs/FAMILY_PLAN_README.md)**
 
 ## 📁 Project Structure

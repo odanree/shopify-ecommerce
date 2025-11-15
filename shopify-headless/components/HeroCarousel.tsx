@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import Image from 'next/image';
-import { motion, AnimatePresence } from 'framer-motion';
+import { LazyMotion, domAnimation, m, AnimatePresence } from 'framer-motion';
 import styles from './HeroCarousel.module.css';
 
 interface HeroImage {
@@ -48,23 +48,25 @@ const HeroCarouselComponent: React.FC<{ images: HeroImage[] }> = ({ images }) =>
   }, [paginate]);
 
   return (
-    <section className={styles.carouselContainer}>
-      <div className={styles.carouselWrapper}>
-        <AnimatePresence initial={false} custom={direction} mode="wait">
-          <motion.div
-            key={currentIndex}
-            custom={direction}
-            variants={slideVariants}
-            initial="enter"
-            animate="center"
-            exit="exit"
-            transition={{
-              x: { type: 'spring', stiffness: 300, damping: 30 },
-              opacity: { duration: 0.5 },
-            }}
-            className={styles.slide}
-          >
-            <div className={styles.imageWrapper}>
+    <LazyMotion features={domAnimation} strict>
+      <section className={styles.carouselContainer} data-cy="carousel-container">
+        <div className={styles.carouselWrapper} data-cy="carousel-wrapper">
+          <AnimatePresence initial={false} custom={direction} mode="wait">
+            <m.div
+              key={currentIndex}
+              custom={direction}
+              variants={slideVariants}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              transition={{
+                x: { type: 'tween', duration: 0.4, ease: 'easeInOut' },
+                opacity: { duration: 0.3 },
+              }}
+              className={styles.slide}
+              data-cy="carousel-slide"
+            >
+            <div className={styles.imageWrapper} data-cy="carousel-image-wrapper">
               <Image
                 src={images[currentIndex].src}
                 alt={images[currentIndex].alt}
@@ -74,6 +76,7 @@ const HeroCarouselComponent: React.FC<{ images: HeroImage[] }> = ({ images }) =>
                 placeholder="blur"
                 blurDataURL="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 600'%3E%3Crect fill='%23f0f0f0'/%3E%3C/svg%3E"
                 className={styles.image}
+                data-cy="carousel-image"
                 sizes="100vw"
                 loading={currentIndex === 0 ? 'eager' : 'lazy'}
               />
@@ -81,25 +84,27 @@ const HeroCarouselComponent: React.FC<{ images: HeroImage[] }> = ({ images }) =>
               <div className={styles.overlay} />
 
               {/* Text overlay - bottom left */}
-              <motion.div
+              <m.div
                 className={styles.textOverlay}
-                initial={{ opacity: 0, y: 20 }}
+                data-cy="text-overlay"
+                initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3, duration: 0.6 }}
+                transition={{ delay: 0.05, duration: 0.3 }}
               >
-                <h2 className={styles.overlayTitle}>{images[currentIndex].title}</h2>
-                <p className={styles.overlayDescription}>{images[currentIndex].description}</p>
-              </motion.div>
+                <h2 className={styles.overlayTitle} data-cy="overlay-title">{images[currentIndex].title}</h2>
+                <p className={styles.overlayDescription} data-cy="overlay-description">{images[currentIndex].description}</p>
+              </m.div>
             </div>
-          </motion.div>
+          </m.div>
         </AnimatePresence>
 
         {/* Navigation Dots */}
-        <div className={styles.dotsContainer}>
+        <div className={styles.dotsContainer} data-cy="dots-container">
           {images.map((_, index) => (
-            <motion.button
+            <m.button
               key={index}
               className={`${styles.dot} ${index === currentIndex ? styles.activeDot : ''}`}
+              data-cy={index === currentIndex ? "active-dot" : "carousel-dot"}
               onClick={() => {
                 setDirection(index > currentIndex ? 1 : -1);
                 setCurrentIndex(index);
@@ -113,8 +118,9 @@ const HeroCarouselComponent: React.FC<{ images: HeroImage[] }> = ({ images }) =>
         </div>
 
         {/* Previous/Next buttons - simplified animations for performance */}
-        <motion.button
+        <m.button
           className={`${styles.navButton} ${styles.prevButton}`}
+          data-cy="prev-button"
           onClick={() => paginate(-1)}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.9 }}
@@ -122,9 +128,10 @@ const HeroCarouselComponent: React.FC<{ images: HeroImage[] }> = ({ images }) =>
           transition={{ duration: 0.1 }}
         >
           ←
-        </motion.button>
-        <motion.button
+        </m.button>
+        <m.button
           className={`${styles.navButton} ${styles.nextButton}`}
+          data-cy="next-button"
           onClick={() => paginate(1)}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.9 }}
@@ -132,9 +139,10 @@ const HeroCarouselComponent: React.FC<{ images: HeroImage[] }> = ({ images }) =>
           transition={{ duration: 0.1 }}
         >
           →
-        </motion.button>
+        </m.button>
       </div>
     </section>
+    </LazyMotion>
   );
 };
 

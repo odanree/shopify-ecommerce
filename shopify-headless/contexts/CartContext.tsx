@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
+import React, { createContext, useContext, useState, useCallback, useEffect, ReactNode } from 'react';
 
 export interface CartItem {
   id: string;
@@ -23,25 +23,39 @@ interface CartContextType {
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
-export function CartProvider({ children }: { children: React.ReactNode }) {
+export function CartProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);
+  const [isHydrated, setIsHydrated] = useState(false);
 
-  // Load cart from localStorage on mount
+  // Hydrate cart from localStorage on client mount only
   useEffect(() => {
-    const savedCart = localStorage.getItem('cart');
-    if (savedCart) {
-      try {
+    // Only run on client side
+    if (typeof window === 'undefined') return;
+
+    try {
+      const savedCart = localStorage.getItem('cart');
+      if (savedCart) {
         setItems(JSON.parse(savedCart));
-      } catch (error) {
-        console.error('Error loading cart:', error);
       }
+    } catch (error) {
+      console.error('Error loading cart from localStorage:', error);
     }
+
+    // Mark as hydrated after attempting to load
+    setIsHydrated(true);
   }, []);
 
-  // Save cart to localStorage whenever it changes
+  // Save cart to localStorage whenever it changes (client-side only, after hydration)
   useEffect(() => {
-    localStorage.setItem('cart', JSON.stringify(items));
-  }, [items]);
+    // Only save after hydration to avoid SSR issues
+    if (!isHydrated || typeof window === 'undefined') return;
+
+    try {
+      localStorage.setItem('cart', JSON.stringify(items));
+    } catch (error) {
+      console.error('Error saving cart to localStorage:', error);
+    }
+  }, [items, isHydrated]);
 
   const addItem = useCallback((item: CartItem) => {
     setItems((prev) => {

@@ -1,20 +1,11 @@
 name: E2E Tests
 
-# TEMPORARILY DISABLED - E2E test selectors need fixes
-# Re-enable after updating test data attributes
-# on:
-#   pull_request:
-#     branches: [dev, main]
-#   push:
-#     branches: [dev, main]
-
+# Re-enabled with LazyMotion fix for Framer Motion SSR issues
 on:
-  # This trigger will never fire, effectively disabling the workflow
-  workflow_dispatch:
-    inputs:
-      disabled:
-        description: 'E2E tests disabled - fix test selectors before re-enabling'
-        required: false
+  pull_request:
+    branches: [dev, main]
+  push:
+    branches: [dev, main]
 
 jobs:
   cypress-run:
@@ -35,12 +26,18 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'npm'
-          cache-dependency-path: shopify-headless/package-lock.json
+          cache: ''
 
       - name: Install dependencies
         working-directory: ./shopify-headless
         run: npm ci
+
+      - name: Clear build caches
+        working-directory: ./shopify-headless
+        run: |
+          rm -rf .next
+          rm -rf .swc
+          rm -rf node_modules/.cache
 
       - name: Create .env.local
         working-directory: ./shopify-headless
@@ -48,15 +45,28 @@ jobs:
           echo "SHOPIFY_STORE_DOMAIN=${{ secrets.SHOPIFY_STORE_DOMAIN }}" >> .env.local
           echo "SHOPIFY_STOREFRONT_ACCESS_TOKEN=${{ secrets.SHOPIFY_STOREFRONT_ACCESS_TOKEN }}" >> .env.local
 
-      - name: Cypress run
-        uses: cypress-io/github-action@v6
-        with:
-          working-directory: ./shopify-headless
-          build: npm run build
-          start: npm start
-          wait-on: 'http://localhost:3000'
-          wait-on-timeout: 120
-          browser: chrome
+      - name: Build Next.js application
+        working-directory: ./shopify-headless
+        run: npm run build
+        env:
+          NODE_ENV: production
+          SHOPIFY_STORE_DOMAIN: ${{ secrets.SHOPIFY_STORE_DOMAIN }}
+          SHOPIFY_STOREFRONT_ACCESS_TOKEN: ${{ secrets.SHOPIFY_STOREFRONT_ACCESS_TOKEN }}
+
+      - name: Start production server
+        working-directory: ./shopify-headless
+        run: npm start &
+        env:
+          NODE_ENV: production
+          SHOPIFY_STORE_DOMAIN: ${{ secrets.SHOPIFY_STORE_DOMAIN }}
+          SHOPIFY_STOREFRONT_ACCESS_TOKEN: ${{ secrets.SHOPIFY_STOREFRONT_ACCESS_TOKEN }}
+
+      - name: Wait for server to start
+        run: npx wait-on http://localhost:3000 --timeout 120000
+
+      - name: Run Cypress tests
+        working-directory: ./shopify-headless
+        run: npx cypress run --browser chrome
         env:
           CYPRESS_BASE_URL: 'http://localhost:3000'
           SHOPIFY_STORE_DOMAIN: ${{ secrets.SHOPIFY_STORE_DOMAIN }}
