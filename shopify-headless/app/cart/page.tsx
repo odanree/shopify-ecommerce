@@ -5,6 +5,7 @@ import { ShoppingCart, Trash2, Plus, Minus, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useCart } from '@/contexts/CartContext';
+import styles from './CartPage.module.css';
 
 export default function CartPage() {
   const { items: cartItems, updateQuantity, removeItem } = useCart();
@@ -17,10 +18,10 @@ export default function CartPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto mb-4"></div>
-          <p className="text-gray-700">Loading your cart...</p>
+      <div className={styles.loadingScreen}>
+        <div className={styles.loadingContent}>
+          <div className={styles.spinner}></div>
+          <p className={styles.loadingText}>Loading your cart...</p>
         </div>
       </div>
     );
@@ -28,20 +29,20 @@ export default function CartPage() {
 
   if (cartItems.length === 0) {
     return (
-      <div className="min-h-screen bg-gray-50 py-16" data-cy="empty-cart-page">
-        <div className="container mx-auto px-4 max-w-4xl">
-          <div className="bg-white rounded-2xl shadow-lg p-12 text-center">
-            <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
-              <ShoppingCart className="w-12 h-12 text-gray-400" />
+      <div className={styles.emptyCartScreen} data-cy="empty-cart-page">
+        <div className={styles.emptyCartContainer}>
+          <div className={styles.emptyCardBox}>
+            <div className={styles.emptyIconBox}>
+              <ShoppingCart className={styles.emptyIcon} />
             </div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-4" data-cy="empty-cart-title">Your Cart is Empty</h1>
-            <p className="text-gray-700 mb-8 text-lg" data-cy="empty-cart-message">
+            <h1 className={styles.emptyTitle} data-cy="empty-cart-title">Your Cart is Empty</h1>
+            <p className={styles.emptyMessage} data-cy="empty-cart-message">
               Looks like you haven&apos;t added any items to your cart yet.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center" data-cy="empty-cart-actions">
+            <div className={styles.emptyActions} data-cy="empty-cart-actions">
               <Link
                 href="/family-plan"
-                className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-primary-600 text-white rounded-lg font-semibold hover:bg-primary-700 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
+                className={`${styles.actionButton} ${styles.primaryButton}`}
                 data-cy="build-family-plan-link"
               >
                 <ShoppingCart className="w-5 h-5" />
@@ -49,7 +50,7 @@ export default function CartPage() {
               </Link>
               <Link
                 href="/products"
-                className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white text-primary-600 border-2 border-primary-600 rounded-lg font-semibold hover:bg-primary-50 transition-all duration-300"
+                className={`${styles.actionButton} ${styles.secondaryButton}`}
                 data-cy="browse-products-link"
               >
                 Browse Products
@@ -62,42 +63,42 @@ export default function CartPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-16" data-cy="cart-page">
-      <div className="container mx-auto px-4 max-w-6xl">
+    <div className={styles.cartScreen} data-cy="cart-page">
+      <div className={styles.cartContainer}>
         {/* Header */}
-        <div className="mb-8">
+        <div className={styles.cartHeader}>
           <Link
             href="/products"
-            className="inline-flex items-center gap-2 text-primary-600 hover:text-primary-700 font-semibold mb-4"
+            className={styles.backLink}
             data-cy="continue-shopping-link"
           >
             <ArrowLeft className="w-5 h-5" />
             Continue Shopping
           </Link>
-          <h1 className="text-4xl font-bold text-gray-900" data-cy="cart-title">Shopping Cart</h1>
-          <p className="text-gray-700 mt-2" data-cy="cart-item-count">
+          <h1 className={styles.cartTitle} data-cy="cart-title">Shopping Cart</h1>
+          <p className={styles.cartSubtitle} data-cy="cart-item-count">
             {cartItems.length} {cartItems.length === 1 ? 'item' : 'items'} in your cart
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className={styles.cartGrid}>
           {/* Cart Items */}
-          <div className="lg:col-span-2 space-y-4" data-cy="cart-items-list">
+          <div className={styles.cartItemsList} data-cy="cart-items-list">
             {cartItems.map((item) => (
               <div
                 key={item.id}
-                className="bg-white rounded-xl shadow-md p-6 flex gap-6 items-center hover:shadow-lg transition-shadow"
+                className={styles.cartItem}
                 data-cy="cart-item"
               >
                 {/* Product Image */}
-                <div className="w-24 h-24 bg-gray-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                <div className={styles.itemImageBox}>
                   {item.image ? (
                     <Image
                       src={item.image}
                       alt={item.title}
                       width={96}
                       height={96}
-                      className="w-full h-full object-cover rounded-lg"
+                      className={styles.itemImage}
                     />
                   ) : (
                     <ShoppingCart className="w-10 h-10 text-gray-400" />
@@ -105,116 +106,113 @@ export default function CartPage() {
                 </div>
 
                 {/* Product Details */}
-                <div className="flex-1 min-w-0">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-1">
+                <div className={styles.itemDetails}>
+                  <h3 className={styles.itemTitle}>
                     {item.title}
                   </h3>
-                  <p className="text-sm text-gray-700 mb-2">{item.variant}</p>
-                  <p className="text-primary-600 font-bold text-lg">
+                  <p className={styles.itemVariant}>{item.variant}</p>
+                  <p className={styles.itemPrice}>
                     ${item.price.toFixed(2)}
                   </p>
                 </div>
 
                 {/* Quantity Controls */}
-                <div className="flex items-center gap-3">
+                <div className={styles.itemControls}>
+                  <div className={styles.quantityControl}>
+                    <button
+                      onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                      className={styles.quantityButton}
+                      aria-label="Decrease quantity"
+                    >
+                      <Minus className="w-4 h-4" />
+                    </button>
+                    <span className={styles.quantityDisplay}>
+                      {item.quantity}
+                    </span>
+                    <button
+                      onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                      className={styles.quantityButton}
+                      aria-label="Increase quantity"
+                    >
+                      <Plus className="w-4 h-4" />
+                    </button>
+                  </div>
+
+                  {/* Remove Button */}
                   <button
-                    onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                    className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 transition-colors"
-                    aria-label="Decrease quantity"
+                    onClick={() => removeItem(item.id)}
+                    className={styles.removeButton}
+                    aria-label="Remove item"
                   >
-                    <Minus className="w-4 h-4 text-gray-700" />
-                  </button>
-                  <span className="text-lg font-semibold text-gray-900 w-8 text-center">
-                    {item.quantity}
-                  </span>
-                  <button
-                    onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                    className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 transition-colors"
-                    aria-label="Increase quantity"
-                  >
-                    <Plus className="w-4 h-4 text-gray-700" />
+                    <Trash2 className="w-5 h-5" />
                   </button>
                 </div>
-
-                {/* Remove Button */}
-                <button
-                  onClick={() => removeItem(item.id)}
-                  className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors"
-                  aria-label="Remove item"
-                >
-                  <Trash2 className="w-5 h-5" />
-                </button>
               </div>
             ))}
           </div>
 
           {/* Order Summary */}
-          <div className="lg:col-span-1">
-            <div className="bg-white rounded-xl shadow-md p-6 sticky top-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">Order Summary</h2>
+          <div className={styles.summaryBox}>
+            <h2 className={styles.summaryTitle}>Order Summary</h2>
 
-              <div className="space-y-4 mb-6">
-                <div className="flex justify-between text-gray-700">
-                  <span>Subtotal</span>
-                  <span className="font-semibold text-gray-900">
-                    ${subtotal.toFixed(2)}
-                  </span>
-                </div>
-                <div className="flex justify-between text-gray-700">
-                  <span>Shipping</span>
-                  <span className="font-semibold text-success-600">
-                    {shipping === 0 ? 'FREE' : `$${shipping.toFixed(2)}`}
-                  </span>
-                </div>
-                <div className="flex justify-between text-gray-700">
-                  <span>Estimated Tax</span>
-                  <span className="font-semibold text-gray-900">
-                    ${tax.toFixed(2)}
-                  </span>
-                </div>
-                <div className="border-t-2 border-gray-200 pt-4">
-                  <div className="flex justify-between items-baseline">
-                    <span className="text-lg font-semibold text-gray-900">Total</span>
-                    <span className="text-3xl font-bold text-primary-600">
-                      ${total.toFixed(2)}
-                    </span>
-                  </div>
-                </div>
+            <div className={styles.summaryRows}>
+              <div className={styles.summaryRow}>
+                <span className={styles.summaryLabel}>Subtotal</span>
+                <span className={styles.summaryValue}>
+                  ${subtotal.toFixed(2)}
+                </span>
               </div>
+              <div className={styles.summaryRow}>
+                <span className={styles.summaryLabel}>Shipping</span>
+                <span className={`${styles.summaryValue} ${styles.shippingFree}`}>
+                  {shipping === 0 ? 'FREE' : `$${shipping.toFixed(2)}`}
+                </span>
+              </div>
+              <div className={styles.summaryRow}>
+                <span className={styles.summaryLabel}>Estimated Tax</span>
+                <span className={styles.summaryValue}>
+                  ${tax.toFixed(2)}
+                </span>
+              </div>
+            </div>
 
-              <button className="w-full py-4 bg-primary-600 text-white rounded-lg font-bold text-lg hover:bg-primary-700 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl mb-4">
-                Proceed to Checkout
-              </button>
+            <div className={styles.summaryTotal}>
+              <span className={styles.totalLabel}>Total</span>
+              <span className={styles.totalAmount}>
+                ${total.toFixed(2)}
+              </span>
+            </div>
 
-              <Link
-                href="/family-plan"
-                className="block text-center text-primary-600 hover:text-primary-700 font-semibold"
-              >
-                Add More Lines
-              </Link>
+            <button className={styles.checkoutButton}>
+              Proceed to Checkout
+            </button>
 
-              {/* Trust Badges */}
-              <div className="mt-6 pt-6 border-t border-gray-200">
-                <div className="space-y-3 text-sm text-gray-700">
-                  <div className="flex items-center gap-2">
-                    <svg className="w-5 h-5 text-success-500" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                    </svg>
-                    <span>Free shipping on all orders</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <svg className="w-5 h-5 text-success-500" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                    </svg>
-                    <span>30-day money-back guarantee</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <svg className="w-5 h-5 text-success-500" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                    </svg>
-                    <span>Secure checkout</span>
-                  </div>
-                </div>
+            <Link
+              href="/family-plan"
+              className={styles.addMoreLink}
+            >
+              Add More Lines
+            </Link>
+
+            {/* Trust Badges */}
+            <div className={styles.badges}>
+              <div className={styles.badge}>
+                <svg className={styles.badgeIcon} fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                </svg>
+                <span>Free shipping on all orders</span>
+              </div>
+              <div className={styles.badge}>
+                <svg className={styles.badgeIcon} fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                </svg>
+                <span>30-day money-back guarantee</span>
+              </div>
+              <div className={styles.badge}>
+                <svg className={styles.badgeIcon} fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                </svg>
+                <span>Secure checkout</span>
               </div>
             </div>
           </div>

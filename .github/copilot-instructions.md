@@ -8,6 +8,29 @@
 - [x] Launch the Project - Instructions provided in README files
 - [x] Ensure Documentation is Complete - All README files created
 
+## ⚠️ CRITICAL: PowerShell Syntax for All Commands
+
+**ALWAYS use PowerShell syntax for terminal commands:**
+- ✅ Use `|` for piping and `Select-Object`, `Select-String` for filtering
+- ✅ Use `;` to separate commands on one line: `git add file.ts; git commit -m "msg"`
+- ✅ Use PowerShell path separators: `\` (backslashes) or `/` (forward slashes work too)
+- ✅ Use `$LASTEXITCODE` instead of `$?` for exit code checks
+- ✅ Use `Start-Sleep -Seconds 5` instead of `sleep 5`
+- ❌ **NEVER** use Unix/bash commands: `head`, `tail`, `grep`, `sed`, `awk`
+- ❌ **NEVER** use pipes like `| head -20` (bash syntax)
+
+**PowerShell Equivalent Commands:**
+| Bash | PowerShell |
+|------|-----------|
+| `grep pattern file` | `Select-String -Pattern "pattern" file` |
+| `\| head -20` | `\| Select-Object -First 20` |
+| `\| tail -20` | `\| Select-Object -Last 20` |
+| `ls -la` | `Get-ChildItem -Force` or `dir` |
+| `cat file` | `Get-Content file` or `cat file` |
+| `export VAR=value` | `$env:VAR = "value"` |
+| `sleep 5` | `Start-Sleep -Seconds 5` |
+| `&& next_cmd` | `; next_cmd` |
+
 ## Project Type
 Shopify Ecommerce Development Workspace with:
 1. Custom Shopify Theme (Liquid templates)
