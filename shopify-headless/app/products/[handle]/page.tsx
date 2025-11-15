@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { AddToCart } from '@/components/AddToCart';
 import type { Metadata } from 'next';
 import { generateProductSchema } from '@/lib/structured-data';
+import styles from './ProductPage.module.css';
 
 // Force dynamic rendering - don't prerender at build time
 export const dynamic = 'force-dynamic';
@@ -73,16 +74,16 @@ export default async function ProductPage({ params }: ProductPageProps) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }}
       />
-      <div className="container mx-auto px-4 py-8">
-        <div className="grid md:grid-cols-2 gap-8">
+      <div className={styles.container}>
+        <div className={styles.grid}>
           {/* Product Image */}
-          <div className="relative aspect-square">
+          <div className={styles.imageContainer}>
           {product.featuredImage && (
             <Image
               src={product.featuredImage.url}
               alt={product.featuredImage.altText || product.title}
               fill
-              className="object-cover rounded-lg"
+              className={styles.image}
               sizes="(max-width: 768px) 100vw, 50vw"
               priority
             />
@@ -90,19 +91,19 @@ export default async function ProductPage({ params }: ProductPageProps) {
           </div>
 
           {/* Product Info */}
-          <div>
-            <h1 className="text-4xl font-bold mb-4">{product.title}</h1>
+          <div className={styles.infoContainer}>
+            <h1 className={styles.title}>{product.title}</h1>
             
             {product.vendor && (
-              <p className="text-gray-700 mb-2">by {product.vendor}</p>
+              <p className={styles.vendor}>by {product.vendor}</p>
             )}
 
-            <div className="text-3xl font-bold mb-6">
+            <div className={styles.price}>
               ${defaultVariant.price.amount}
             </div>
 
             <div 
-              className="prose mb-6"
+              className={styles.description}
               dangerouslySetInnerHTML={{ __html: product.descriptionHtml }}
             />
 
@@ -116,9 +117,9 @@ export default async function ProductPage({ params }: ProductPageProps) {
             />
 
             {/* Product Details */}
-            <div className="mt-8 border-t pt-6">
-              <h3 className="font-semibold mb-2">Product Details</h3>
-              <ul className="space-y-2 text-gray-700">
+            <div className={styles.details}>
+              <h3 className={styles.detailsTitle}>Product Details</h3>
+              <ul className={styles.detailsList}>
                 {product.availableForSale ? (
                   <li>✓ In Stock</li>
                 ) : (
