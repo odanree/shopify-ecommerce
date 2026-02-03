@@ -315,6 +315,14 @@
   padding: 1.5rem;
   position: sticky;
   top: 2rem;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+@media (max-width: 1023px) {
+  .summaryBox {
+    position: static;
+  }
 }
 
 .summaryTitle {
@@ -334,8 +342,11 @@
 .summaryRow {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   padding: 0.75rem 0;
   border-bottom: 1px solid #e5e7eb;
+  gap: 1rem;
+  min-width: 0;
 }
 
 .summaryRow:last-child {
@@ -344,11 +355,15 @@
 
 .summaryLabel {
   color: #666;
+  flex-shrink: 0;
 }
 
 .summaryValue {
   color: #111;
   font-weight: 600;
+  text-align: right;
+  flex-shrink: 1;
+  word-break: break-word;
 }
 
 .shippingFree {
@@ -379,6 +394,7 @@
   width: 100%;
   padding: 1rem;
   margin-top: 1.5rem;
+  margin-bottom: 1rem;
   background-color: #0284c7;
   color: white;
   border: none;
