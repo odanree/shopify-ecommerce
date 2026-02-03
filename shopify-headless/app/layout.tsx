@@ -13,6 +13,7 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://shopify-headless-lemon.vercel.app'),
+  viewport: 'width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes',
   title: {
     default: 'Modern Ecommerce Store | Premium Tech T-Shirts',
     template: '%s | Modern Ecommerce Store',
