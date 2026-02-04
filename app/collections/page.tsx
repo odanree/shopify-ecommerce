@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 };
 
 export default async function CollectionsPage() {
-  let collections = [];
+  let collections: any[] = [];
   
   // Handle cases where API credentials are not available (e.g., during preview builds)
   try {
