@@ -1,213 +1,290 @@
-# Shopify Ecommerce Development Workspace
+# Shopify Headless Commerce with Next.js
 
-A complete Shopify ecommerce development environment with two approaches: a traditional custom Shopify theme and a modern headless commerce solution.
+A modern headless ecommerce storefront built with Next.js 14, TypeScript, CSS Modules, and Shopify Storefront API—featuring AI-powered product recommendations via integrated chatbot.
 
-## 🚀 Production Site
+**🎯 [Live Demo](https://shopify-headless-lemon.vercel.app/)** — Visit the production site
 
-**Live Demo**: https://shopify-headless-lemon.vercel.app/
+## Features
 
-Features:
-- ✅ **Performance Excellence**: 99.9% CLS reduction (25→0.028), 0ms Total Blocking Time (optimized from 680ms)
-- ✅ Family Plan Builder with real-time pricing
-- ✅ Shopping cart with Context API state management
-- ✅ Product pages with Shopify integration
-- ✅ AI Chatbot with ecommerce strategy (product search, recommendations)
-- ✅ Cypress E2E testing (13+ tests)
-- ✅ CI/CD with GitHub Actions + Vercel auto-deploy
-- ✅ TypeScript type safety throughout
+- ⚡ **Next.js 14 App Router** - Latest React features with Server Components
+- 🎨 **CSS Modules** - Component-scoped styling
+- 📱 **Fully Responsive** - Mobile-first design
+- 🛍️ **Shopify Storefront API** - Direct integration with Shopify
+- 🔍 **TypeScript** - Type-safe development
+- 🖼️ **Optimized Images** - Next.js Image component with CDN
+- ⚡ **Fast Performance** - 99.9% CLS reduction (0.028 score), 0ms Total Blocking Time
+- 🎯 **SEO Optimized** - Meta tags and structured data
+- 🤖 **AI Chatbot** - GPT-4 powered product search & recommendations (see [CHATBOT.md](./docs/CHATBOT.md))
 
-### Architecture Highlights
+## Prerequisites
 
-**✅ Performance Optimized**
-- SSR carousel (ssr: true)
-- Inline critical CSS (1.3 KiB)
-- Custom CSS only (no Tailwind)
-- Dynamic imports
+- Node.js 18+ installed
+- A Shopify store (development or production)
+- Shopify Storefront API access token
 
-**✅ React Architecture**
-- Server layout (metadata)
-- Client wrapper (contexts)
-- Proper hydration boundaries
+## Getting Started
 
-📖 **[Family Plan Documentation](./docs/FAMILY_PLAN_README.md)**
+### 1. Shopify Setup
 
-## 📁 Project Structure
+First, you need to create a Storefront API access token in your Shopify admin:
 
-This workspace contains two complete Shopify ecommerce implementations:
+1. Go to your Shopify Admin
+2. Navigate to **Settings** → **Apps and sales channels** → **Develop apps**
+3. Click **Create an app** (or use an existing one)
+4. Go to **API credentials** tab
+5. Under **Storefront API**, click **Configure**
+6. Enable the following permissions:
+   - Read products
+   - Read product listings
+   - Read customer tags
+   - Read inventory
+7. Click **Save**
+8. Go back to **API credentials** and copy the **Storefront API access token**
 
-### 1. **shopify-theme/** - Custom Shopify Theme
-Traditional Shopify theme using Liquid templating, perfect for stores that want full Shopify admin integration and traditional theme customization.
+### 2. Environment Setup
 
-**Features:**
-- Complete Shopify theme structure (Liquid templates)
-- Customizable sections and snippets
-- Theme settings for easy customization
-- Product, collection, and cart pages
-- Responsive design
-
-**Current Status:**
-- Header and footer sections: not yet complete
-- Collection pages: in progress
-- Newsletter signup: not yet complete
-
-[→ View shopify-theme README](./shopify-theme/README.md)
-
-### 2. **shopify-headless/** - Headless Next.js + Shopify
-Modern headless commerce solution using Next.js, TypeScript, and Shopify Storefront API for maximum flexibility and performance.
-
-**Features:**
-- Next.js 14 with App Router
-- TypeScript for type safety
-- CSS Modules for component-scoped styling
-- Shopify Storefront API integration
-- **Performance Optimized**: Code splitting, dynamic imports, webpack optimization (CLS: 0.028, TBT: 0ms)
-- Shopping cart with Context API
-- AI Chatbot widget (Ecommerce strategy with GPT-4)
-- Cypress E2E testing
-- CI/CD with GitHub Actions
-- Vercel auto-deploy
-- Optimized performance and SEO
-- Full control over frontend
-- Docker containerization for reproducible dev, CI/CD, and onboarding
-
-**Current Status:**
-- Collections pages: complete
-- AI chatbot integration: complete ✅
-- Product search: in progress
-
-[→ View shopify-headless README](./shopify-headless/README.md)
-
-## 🚀 Quick Start
-
-### Option 1: Custom Shopify Theme
-
+1. Clone or navigate to this project directory:
 ```bash
-cd shopify-theme
-
-# Install Shopify CLI
-npm install -g @shopify/cli @shopify/theme
-
-# Connect and start development
-shopify theme dev --store your-store.myshopify.com
+git clone https://github.com/odanree/shopify-ecommerce.git
+cd shopify-ecommerce
 ```
 
-### Option 2: Headless Next.js Store
+2. Install dependencies:
+```bash
+npm install
+```
+
+3. Create a `.env.local` file in the root directory:
+```bash
+cp .env.local.example .env.local
+```
+
+4. Edit `.env.local` and add your Shopify credentials:
+```env
+SHOPIFY_STORE_DOMAIN=your-store.myshopify.com
+SHOPIFY_STOREFRONT_ACCESS_TOKEN=your_storefront_access_token_here
+SHOPIFY_ADMIN_API_TOKEN=your_admin_api_token_here
+SHOPIFY_LOCATION_ID=your_location_id_here
+```
+
+> **Note:** `SHOPIFY_ADMIN_API_TOKEN` and `SHOPIFY_LOCATION_ID` are only needed if you want to use the product management scripts.
+
+### 3. Create Demo Products (Optional)
+
+If your store is empty, you can create demo products using our automated scripts:
 
 ```bash
-cd shopify-headless
+# Create 10 tech-themed t-shirt products
+npx tsx scripts/create-products.ts
 
-# Install dependencies
-npm install
+# Publish them to the headless storefront channel
+npx tsx scripts/publish-to-channel.ts
 
-# Set up environment variables
-cp .env.local.example .env.local
-# Edit .env.local with your Shopify credentials
+# Verify they're visible
+npx tsx scripts/verify-products.ts
+```
 
-# Start development server
+Or manually create products in your Shopify Admin and make sure to publish them to the **"headless storefront"** sales channel.
+
+See [scripts/README.md](./scripts/README.md) for more details.
+
+### 4. Run Development Server
+
+```bash
 npm run dev
 ```
 
-### Option 3: Dockerized Development (Recommended for teams)
+Open [http://localhost:3000](http://localhost:3000) to see your store.
 
-```bash
-cd shopify-headless
-# Build and run the container
-# (Requires Docker Desktop)
-docker build -t shopify-headless .
-docker run -p 3000:3000 --env-file .env.local shopify-headless
+## Project Structure
+
+```
+.
+├── app/                    # Next.js App Router pages
+│   ├── layout.tsx         # Root layout with header/footer
+│   ├── page.tsx           # Homepage
+│   ├── products/          # Products pages
+│   │   ├── page.tsx       # All products listing
+│   │   └── [handle]/      # Individual product page
+│   ├── cart/              # Shopping cart
+│   └── api/               # API routes
+├── components/             # React components
+│   ├── Header.tsx
+│   ├── Footer.tsx
+│   ├── ProductCard.tsx
+│   ├── AddToCart.tsx
+│   └── FamilyPlanBuilder.tsx  # Premium feature demo
+├── lib/                    # Utility functions
+│   └── shopify.ts         # Shopify API client
+├── types/                  # TypeScript type definitions
+│   └── shopify.ts
+├── public/                 # Static assets
+├── contexts/               # React Context for state management
+│   └── CartContext.tsx    # Shopping cart state
+├── cypress/                # E2E tests
+│   └── e2e/               # Test files
+├── docs/                   # Documentation
+│   ├── CHATBOT.md         # AI chatbot architecture & integration
+│   └── ...
+├── next.config.js         # Next.js configuration
+├── tsconfig.json          # TypeScript configuration
+└── cypress.config.ts      # Cypress configuration
 ```
 
-## 🤔 Which Approach Should I Use?
+## Available Scripts
 
-### Use **Custom Shopify Theme** if you:
-- Want to use Shopify's native checkout
-- Need Shopify admin theme customization
-- Prefer working within Shopify's ecosystem
-- Want merchants to customize via Shopify admin
-- Are building for the Shopify Theme Store
+### Development
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm start` - Start production server
+- `npm run lint` - Run ESLint
 
-### Use **Headless Next.js** if you:
-- Need complete frontend control
-- Want modern React development experience
-- Need custom routing and page structures
-- Require advanced performance optimization
-- Want to integrate with multiple data sources
-- Need custom user experiences beyond Shopify's capabilities
+### Testing
+- `npm run cypress` - Open Cypress test runner
+- `npm run test:e2e` - Run E2E tests (requires dev server running)
+- `npm run test:e2e:ci` - Run E2E tests in CI mode
 
-## 📋 Prerequisites
+### Product Management
+- `npx tsx scripts/create-products.ts` - Create 10 tech-themed t-shirt products
+- `npx tsx scripts/publish-to-channel.ts` - Publish products to headless storefront
+- `npx tsx scripts/verify-products.ts` - Verify products are visible in Storefront API
+- `npx tsx scripts/delete-products.ts` - Delete all products (use with caution!)
 
-### For Shopify Theme:
-- Shopify store (trial or paid account)
-- Shopify CLI installed
-- Node.js 18+
+See [scripts/README.md](./scripts/README.md) for detailed script documentation.
 
-### For Headless Next.js:
-- Shopify store with Storefront API access
-- Node.js 18+
-- Shopify Storefront API access token
+## Shopify API Integration
 
-## 🛠️ Development Tools
+### Fetching Products
 
-### Recommended VS Code Extensions:
-- **Shopify Liquid** - Syntax highlighting and snippets for Liquid
-- **ES7+ React/Redux/React-Native snippets** - For Next.js components
-- **TypeScript** - TypeScript language support
-- **ESLint** - Code linting
-- **Prettier** - Code formatting
-- **Cypress** - E2E testing support
-- **Docker** - Containerized dev and test environments
+```typescript
+import { getProducts } from '@/lib/shopify';
 
-## 📚 Documentation
+const products = await getProducts();
+```
 
-- [Shopify Theme Development](https://shopify.dev/themes)
-- [Shopify Storefront API](https://shopify.dev/api/storefront)
+### Fetching Single Product
+
+```typescript
+import { getProduct } from '@/lib/shopify';
+
+const product = await getProduct('product-handle');
+```
+
+### Cart Operations
+
+```typescript
+import { createCart, addToCart } from '@/lib/shopify';
+
+// Create a new cart
+const cart = await createCart();
+
+// Add item to cart
+const updatedCart = await addToCart(cart.id, variantId, quantity);
+```
+
+## Customization
+
+### Styling
+
+This project uses CSS Modules for component-scoped styling:
+- `components/*.module.css` - Component-specific styles
+- `app/globals.css` - Global styles and CSS variables
+- Create new `.module.css` files for new components
+
+### Adding Features
+
+1. **Search** - Implement product search using Shopify Search API
+2. **Collections** - Add collection pages
+3. **Customer Accounts** - Integrate customer login/register
+4. **Checkout** - Customize checkout experience
+5. **Wishlist** - Add product wishlist functionality
+
+## Deployment
+
+### Vercel (Recommended) - Auto Deploy Enabled ✅
+
+This project is configured for automatic deployment to Vercel with GitHub integration.
+
+**Quick Deploy:**
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/odanree/shopify-ecommerce&env=SHOPIFY_STORE_DOMAIN,SHOPIFY_STOREFRONT_ACCESS_TOKEN&envDescription=Shopify%20API%20credentials%20required&project-name=shopify-headless-store)
+
+**Manual Setup with Auto-Deploy:**
+
+📖 **See [VERCEL_DEPLOYMENT.md](./docs/VERCEL_DEPLOYMENT.md) for complete step-by-step instructions**
+
+**Quick Overview:**
+1. Push your code to GitHub (already done ✅)
+2. Import project in [Vercel](https://vercel.com/new)
+3. Root directory is already set to repo root (no subdirectory needed!)
+4. Add environment variables:
+   - `SHOPIFY_STORE_DOMAIN`
+   - `SHOPIFY_STOREFRONT_ACCESS_TOKEN`
+5. Deploy!
+
+**Auto-Deploy Features:**
+- ✅ Every push to `main` branch deploys to production
+- ✅ Pull requests get automatic preview deployments
+- ✅ Instant rollback to previous versions
+- ✅ Built-in CI/CD pipeline
+
+### Other Platforms
+
+This Next.js app can be deployed to:
+- Netlify
+- AWS Amplify
+- Cloudflare Pages
+- Any Node.js hosting
+
+Make sure to set environment variables on your hosting platform.
+
+## Performance Optimization
+
+- **Image Optimization**: Uses Next.js Image component
+- **Caching**: API responses cached for 60 seconds
+- **Static Generation**: Product pages pre-rendered at build time
+- **Code Splitting**: Automatic code splitting with App Router
+
+## TypeScript
+
+The project is fully typed with TypeScript. Main types are in `types/shopify.ts`:
+- `ShopifyProduct` - Product data structure
+- `ShopifyVariant` - Product variant
+- `ShopifyCart` - Cart data structure
+- `ShopifyCartLine` - Cart line item
+
+## Troubleshooting
+
+### "Cannot connect to Shopify API"
+- Verify your `.env.local` file has correct credentials
+- Check your Storefront API token is valid
+- Ensure your store domain is correct (include `.myshopify.com`)
+
+### Images not loading
+- Verify `next.config.js` has Shopify CDN in `remotePatterns`
+- Check products have featured images in Shopify admin
+
+### Build errors
+- Run `npm install` to ensure all dependencies are installed
+- Delete `.next` folder and rebuild
+- Check Node.js version (18+ required)
+
+## Resources
+
+- [🤖 AI Chatbot Documentation](./docs/CHATBOT.md) - Architecture, integration, and customization
 - [Next.js Documentation](https://nextjs.org/docs)
+- [Shopify Storefront API](https://shopify.dev/api/storefront)
 - [TypeScript Documentation](https://www.typescriptlang.org/docs)
 - [Cypress Documentation](https://docs.cypress.io)
-- [Project Context](./PROJECT_CONTEXT.md) - Complete project reference
-- [Deployment Guide](./shopify-headless/VERCEL_DEPLOYMENT.md)
+- [CSS Modules Documentation](https://github.com/css-modules/css-modules)
+- [Vercel Deployment Guide](./docs/VERCEL_DEPLOYMENT.md)
 
-## 🎯 Project Status
+## Support
 
-### Completed ✅
-- Shopping cart functionality (Context API + cart page + E2E tests)
-- Family Plan Builder (Liquid + React versions)
-- Collections pages (listing + detail + breadcrumbs) — complete for Headless Storefront, in progress for Custom Theme
-- Product images (11 products with Unsplash images)
-- Product and collection management scripts (create, publish, delete, test, images)
-- Vercel auto-deploy configuration
-- CI/CD with GitHub Actions + Cypress
-- TypeScript type safety
-- Production deployment: https://shopify-headless-lemon.vercel.app/
+For issues or questions:
+- Check [Shopify Dev Forums](https://community.shopify.com/c/shopify-apis-and-sdks/bd-p/shopify-apis-and-technology)
+- Review [Next.js Documentation](https://nextjs.org/docs)
 
-### In Progress 🚧
-- Jest/React Testing Library unit tests
-- Storybook component library
-- Product search functionality (Headless Storefront, in progress)
-- Docker containerization for local dev, CI/CD, and onboarding (planned)
+## License
 
-See [ROADMAP.md](./ROADMAP.md) for complete development plan
-
-## 🎯 Next Steps
-
-1. **View Live Site**: Visit https://shopify-headless-lemon.vercel.app/
-2. **Run Locally**: `cd shopify-headless && npm install && npm run dev`
-3. **Run Tests**: `npm run test:e2e` (Cypress E2E tests)
-4. **Read Documentation**: Check [PROJECT_CONTEXT.md](./PROJECT_CONTEXT.md) for setup details
-5. **Start Development**: Follow [CONTRIBUTING.md](./CONTRIBUTING.md) for workflow
-
-## 🆘 Getting Help
-
-- [Shopify Community Forums](https://community.shopify.com/)
-- [Shopify Dev Discord](https://discord.gg/shopifydevs)
-- [Next.js Discord](https://nextjs.org/discord)
-
-## 📄 License
-
-MIT License - Free to use for your projects!
-
----
-
-**Happy Building! 🎉**
-
-Start with either `shopify-theme/` or `shopify-headless/` directory and follow their respective README files for detailed setup instructions.
+MIT License - feel free to use this for your projects!
