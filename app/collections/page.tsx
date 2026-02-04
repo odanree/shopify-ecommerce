@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import { getCollections } from '@/lib/shopify';
+import { ShopifyCollection } from '@/types/shopify';
 import CollectionCard from '@/components/CollectionCard';
 import styles from './page.module.css';
 
@@ -9,7 +10,7 @@ export const metadata: Metadata = {
 };
 
 export default async function CollectionsPage() {
-  let collections: any[] = [];
+  let collections: ShopifyCollection[] = [];
   
   // Handle cases where API credentials are not available (e.g., during preview builds)
   try {
