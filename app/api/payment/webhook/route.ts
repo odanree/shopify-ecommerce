@@ -4,9 +4,9 @@ import { createShopifyOrder } from '@/lib/shopify-admin';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '');
 
-const webhookSecret = process.env.VERCEL_ENV === 'production' 
+const webhookSecret = (process.env.VERCEL_ENV === 'production' 
   ? process.env.STRIPE_WEBHOOK_SECRET_PROD 
-  : process.env.STRIPE_WEBHOOK_SECRET;
+  : process.env.STRIPE_WEBHOOK_SECRET) || '';
 
 if (!webhookSecret) {
   throw new Error('STRIPE_WEBHOOK_SECRET is not defined in environment variables');
