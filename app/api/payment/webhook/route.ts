@@ -8,6 +8,9 @@ const webhookSecret = process.env.VERCEL_ENV === 'production'
   ? process.env.STRIPE_WEBHOOK_SECRET_PROD 
   : process.env.STRIPE_WEBHOOK_SECRET;
 
+if (!webhookSecret) {
+  throw new Error('STRIPE_WEBHOOK_SECRET is not defined in environment variables');
+}
 /**
  * Background task: Create Shopify order asynchronously
  * Separated from webhook response to allow immediate 200 OK acknowledgment
