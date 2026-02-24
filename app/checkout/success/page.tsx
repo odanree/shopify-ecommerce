@@ -19,8 +19,10 @@ export default function CheckoutSuccessPage() {
   useEffect(() => {
     setMounted(true);
 
-    // Immediately clear cart (no dependencies, just do it)
+    // Immediately clear cart (defensive: clear React state + localStorage)
+    console.log('🧹 Success page mounted - clearing cart...');
     clearCart();
+    console.log('✅ Cart cleared on success page');
 
     // Fetch order number from cache
     if (paymentIntentId) {
@@ -30,6 +32,7 @@ export default function CheckoutSuccessPage() {
           if (response.ok) {
             const data = await response.json();
             setOrderNumber(data.orderNumber);
+            console.log(`📦 Order #${data.orderNumber} found in cache`);
           }
         } catch (error) {
           console.error('Failed to fetch order number:', error);
