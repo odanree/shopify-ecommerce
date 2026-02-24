@@ -108,7 +108,7 @@ function PaymentForm({
       <button
         type="submit"
         disabled={submitting || !stripe || !elements || !clientSecret || isLoading}
-        className="w-full py-2.5 px-4 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-semibold rounded-lg transition flex items-center justify-center gap-2"
+        className="w-full h-fit py-2.5 px-4 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-semibold rounded-lg transition flex items-center justify-center gap-2"
       >
         {submitting ? (
           <>
