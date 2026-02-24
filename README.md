@@ -6,6 +6,22 @@ A high-performance headless ecommerce storefront built with **Next.js 14**, **Ty
 
 ---
 
+## 🛠️ Tech Stack & System Architecture
+
+### The Core Engine
+
+- **Framework:** [Next.js 14+](https://nextjs.org/) (App Router) for Server-Side Rendering and optimized Route Handlers
+- **Language:** [TypeScript](https://www.typescriptlang.org/) for strict type-safety across the payment and order pipelines
+- **Styling:** CSS Modules for scoped, maintainable component styling
+
+### The "Headless" Integration
+
+- **Commerce:** [Shopify Admin API](https://shopify.dev/docs/api/admin-rest) (REST) for robust order management, tagging, and inventory sync
+- **Payments:** [Stripe SDK](https://stripe.com/docs/api) utilizing Stripe Elements for a secure, PCI-compliant checkout experience
+- **Architecture:** Asynchronous Webhook Handshake with frontend polling to ensure data consistency between Stripe and Shopify
+
+---
+
 ## 🏗️ Technical Architecture: The Stripe-to-Shopify Bridge
 
 The core of this project is a bespoke checkout system that maintains **100% brand control** while ensuring data consistency between two distinct third-party ecosystems.
@@ -65,7 +81,43 @@ Unlike basic Shopify integrations, this project implements a **Resilient Webhook
 - Direct link to `admin.shopify.com/store/{store}/orders/{shopifyOrderId}`
 - Recruiter/client can instantly verify the order exists in Shopify with correct customer data
 
-### The Complete Webhook Sequence
+### The Complete Webhook Sequence (Interactive Diagram)
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant Frontend as Next.js Client
+    participant API as Next.js API (Route Handlers)
+    participant Stripe as Stripe API
+    participant Shopify as Shopify Admin API
+    
+    User->>Frontend: Clicks "Pay Now"
+    Frontend->>Stripe: Process Payment (Stripe Elements)
+    Stripe-->>Frontend: Payment Successful (Client-side)
+    
+    par Background Webhook Handshake
+        Stripe->>API: POST /api/payment/webhook (payment_intent.succeeded)
+        API->>API: Verify Stripe Signature
+        API-->>Stripe: 200 OK (Immediate Acknowledge)
+        API->>Shopify: Create Order (Line Items + Metadata)
+        Shopify-->>API: Order #1014 Created
+        API->>API: Cache Order Mapping (PI ID -> Order #)
+    and Frontend UX
+        Frontend->>User: Redirect to /checkout/success
+        loop Polling
+            Frontend->>API: GET /api/payment/order-number?pi=xyz
+            alt Not in Cache
+                API-->>Frontend: 404 Not Found
+            else Order Found
+                API-->>Frontend: 200 OK (Order #1014)
+            end
+        end
+    end
+    
+    Frontend->>User: Display Order #1014 & Admin Link
+```
+
+### ASCII Sequence Diagram (Reference)
 
 ```
 ┌─────────┐              ┌────────┐              ┌──────────┐              ┌────────┐
