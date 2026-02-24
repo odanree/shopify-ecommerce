@@ -10,6 +10,7 @@ interface PaymentStepProps {
   isLoading?: boolean;
   onSuccess?: (paymentIntentId: string) => void;
   onError?: (error: string) => void;
+  onClearCart?: () => void;
 }
 
 const stripePromise = loadStripe(
@@ -21,6 +22,7 @@ function PaymentForm({
   isLoading,
   onSuccess,
   onError,
+  onClearCart,
 }: PaymentStepProps) {
   const stripe = useStripe();
   const elements = useElements();
@@ -62,6 +64,8 @@ function PaymentForm({
         setError(stripeError.message || 'Payment failed');
         onError?.(stripeError.message || 'Payment failed');
       } else if (paymentIntent?.status === 'succeeded') {
+        // Clear cart and call success callback
+        onClearCart?.();
         onSuccess?.(paymentIntent.id);
       }
     } catch (err) {

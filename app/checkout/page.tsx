@@ -12,7 +12,7 @@ import Link from 'next/link';
 
 export default function CheckoutPage() {
   const router = useRouter();
-  const { items: cartItems } = useCart();
+  const { items: cartItems, clearCart } = useCart();
 
   const [clientSecret, setClientSecret] = useState<string | null>(null);
   const [status, setStatus] = useState<CheckoutStatusType>(null);
@@ -148,6 +148,7 @@ export default function CheckoutPage() {
                   setStatus('error');
                   setStatusMessage(error);
                 }}
+                onClearCart={clearCart}
               />
             </div>
           </div>

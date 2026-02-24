@@ -80,6 +80,21 @@ export async function POST(request: NextRequest) {
           `✅ Shopify order created: #${shopifyOrder.order_number} (ID: ${shopifyOrder.id})`
         );
 
+        // Store order number for success page lookup
+        try {
+          await fetch(`${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/api/payment/order-number`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              paymentIntentId: paymentIntent.id,
+              orderNumber: shopifyOrder.order_number,
+              orderId: shopifyOrder.id,
+            }),
+          });
+        } catch (cacheError) {
+          console.warn('⚠️  Failed to cache order number, but order was created successfully', cacheError);
+        }
+
         // STEP 4: Store in local database for order history
         // TODO: Implement with your database (Supabase, MongoDB, etc.)
         // For now, we'll just log it

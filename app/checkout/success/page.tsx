@@ -10,6 +10,8 @@ export default function CheckoutSuccessPage() {
   const searchParams = useSearchParams();
   const { clearCart } = useCart();
   const [mounted, setMounted] = useState(false);
+  const [orderNumber, setOrderNumber] = useState<number | null>(null);
+  const [loading, setLoading] = useState(true);
 
   // Extract payment intent ID from URL (Stripe redirects here)
   const paymentIntentId = searchParams.get('payment_intent');
@@ -18,7 +20,27 @@ export default function CheckoutSuccessPage() {
     setMounted(true);
     // Clear cart on success
     clearCart();
-  }, [clearCart]);
+
+    // Fetch order number from cache
+    if (paymentIntentId) {
+      async function fetchOrderNumber() {
+        try {
+          const response = await fetch(`/api/payment/order-number?paymentIntentId=${paymentIntentId}`);
+          if (response.ok) {
+            const data = await response.json();
+            setOrderNumber(data.orderNumber);
+          }
+        } catch (error) {
+          console.error('Failed to fetch order number:', error);
+        } finally {
+          setLoading(false);
+        }
+      }
+      fetchOrderNumber();
+    } else {
+      setLoading(false);
+    }
+  }, [clearCart, paymentIntentId]);
 
   if (!mounted) {
     return null; // Avoid hydration mismatch
@@ -47,14 +69,20 @@ export default function CheckoutSuccessPage() {
         </p>
 
         {/* Confirmation Number */}
-        {paymentIntentId && (
-          <div className="bg-gray-50 rounded-lg p-4 mb-6">
-            <p className="text-sm text-gray-600 mb-1">Confirmation Number</p>
+        <div className="bg-gray-50 rounded-lg p-4 mb-6">
+          <p className="text-sm text-gray-600 mb-1">Your Order Number</p>
+          {loading ? (
+            <div className="h-6 bg-gray-200 rounded animate-pulse" />
+          ) : orderNumber ? (
+            <p className="font-mono text-3xl font-bold text-blue-600">
+              #{orderNumber}
+            </p>
+          ) : (
             <p className="font-mono text-lg font-semibold text-gray-900 break-all">
               {paymentIntentId}
             </p>
-          </div>
-        )}
+          )}
+        </div>
 
         {/* Order Details */}
         <div className="space-y-3 mb-6 text-left bg-gray-50 rounded-lg p-4">
