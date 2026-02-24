@@ -105,25 +105,23 @@ function PaymentForm({
         )}
       </div>
 
-      <div className="w-full h-fit">
-        <button
-          type="submit"
-          disabled={submitting || !stripe || !elements || !clientSecret || isLoading}
-          className="w-full py-2.5 px-4 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-semibold rounded-lg transition flex items-center justify-center gap-2"
-        >
-          {submitting ? (
-            <>
-              <Loader2 className="w-4 h-4 animate-spin" />
-              Securely processing payment...
-            </>
-          ) : (
-            'Complete Purchase'
-          )}
-        </button>
-      </div>
+      <button
+        type="submit"
+        disabled={submitting || !stripe || !elements || !clientSecret || isLoading}
+        className="w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-bold rounded-lg transition flex items-center justify-center gap-2 text-base"
+      >
+        {submitting ? (
+          <>
+            <Loader2 className="w-5 h-5 animate-spin" />
+            Securely processing payment...
+          </>
+        ) : (
+          'Complete Purchase'
+        )}
+      </button>
 
-      <p className="text-xs text-gray-500 text-center leading-relaxed w-full">
-        💳 Test card: 4242 4242 4242 4242 (any future date, any 3-digit CVC)
+      <p className="text-xs text-gray-400">
+        💳 Test: 4242 4242 4242 4242
       </p>
     </form>
   );
