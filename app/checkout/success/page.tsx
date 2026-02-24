@@ -40,7 +40,7 @@ console.log("Domain Var:", process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN);
       }
 
       try {
-        const response = await fetch(`/api/payment/order-number?paymentIntentId=${paymentIntentId}`);
+        const response = await fetch(`/api/payment/order-number?payment_intent=${paymentIntentId}`);
         if (response.ok) {
           const data = await response.json();
           setOrder({
@@ -48,9 +48,9 @@ console.log("Domain Var:", process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN);
             shopifyOrderId: data.shopifyOrderId,
           });
           setLoading(false);
-          console.log(`✅ Order #${data.orderNumber} found in cache`);
+          console.log(`✅ Order #${data.orderNumber} found`);
         } else if (response.status === 404) {
-          // Order not yet in cache, retry after 2 seconds
+          // Order not yet in Shopify, retry after 2 seconds
           attempts++;
           timer = setTimeout(pollOrder, 2000);
         } else {

@@ -12,11 +12,12 @@ import { NextResponse } from 'next/server';
 export async function GET(req: Request) {
   try {
     const { searchParams } = new URL(req.url);
-    const paymentIntentId = searchParams.get('paymentIntentId');
+    // CRITICAL: Stripe sends 'payment_intent' (snake_case), not 'paymentIntentId' (camelCase)
+    const paymentIntentId = searchParams.get('payment_intent');
 
     if (!paymentIntentId) {
       return NextResponse.json(
-        { error: 'Missing paymentIntentId' },
+        { error: 'Missing payment_intent parameter' },
         { status: 400 }
       );
     }
