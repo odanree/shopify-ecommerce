@@ -30,6 +30,8 @@ export async function POST(request: NextRequest) {
       
       // KEY: Metadata passed to webhook for Shopify order creation
       metadata: {
+        firstName: shippingAddress?.firstName || '',
+        lastName: shippingAddress?.lastName || '',
         cartId: cartId || '',
         lineItems: JSON.stringify(lineItems || []),
         shippingAddress: JSON.stringify(shippingAddress || {}),

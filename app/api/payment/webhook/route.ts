@@ -16,6 +16,8 @@ const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET || '';
 async function processOrderAsync(
   paymentIntent: any,
   email: string,
+  firstName: string,
+  lastName: string,
   lineItems: string,
   shippingAddress: string,
   cartId: string
@@ -43,6 +45,8 @@ async function processOrderAsync(
       shippingAddress: parsedShippingAddress,
       paymentIntentId: paymentIntent.id,
       cartId,
+      firstName: firstName || 'Guest',
+      lastName: lastName || 'Customer',
     });
 
     console.log(
@@ -72,6 +76,7 @@ async function processOrderAsync(
       amount: paymentIntent.amount,
       currency: paymentIntent.currency,
       customerEmail: email,
+      customerName: `${firstName || 'Guest'} ${lastName || 'Customer'}`,
       status: 'completed',
       createdAt: new Date().toISOString(),
     };
@@ -135,7 +140,7 @@ export async function POST(request: NextRequest) {
     // STEP 2: Handle payment success
     if (event.type === 'payment_intent.succeeded') {
       const paymentIntent = event.data.object as any;
-      const { lineItems, shippingAddress, cartId } = paymentIntent.metadata;
+      const { firstName, lastName, lineItems, shippingAddress, cartId } = paymentIntent.metadata;
 
       // Extract email from Stripe PaymentIntent (billing_details or charges)
       // Prefer Stripe's email over form email to ensure verified customer data
@@ -149,7 +154,7 @@ export async function POST(request: NextRequest) {
 
       const email = stripeEmail || 'noreply@stripe-payment.local'; // Fallback if no email from Stripe
 
-      console.log(`💳 Payment succeeded: ${paymentIntent.id}, Email: ${email}`);
+      console.log(`💳 Payment succeeded: ${paymentIntent.id}, Customer: ${firstName} ${lastName}, Email: ${email}`);
 
       // OPTIMIZATION: Return 200 OK immediately to prevent Stripe retries
       // Process the order creation in the background (fire-and-forget pattern)
@@ -159,7 +164,7 @@ export async function POST(request: NextRequest) {
       // 3. Order is still created reliably (idempotency check prevents duplicates)
       
       // Fire-and-forget: Process order in background without awaiting
-      processOrderAsync(paymentIntent, email, lineItems, shippingAddress, cartId).catch((err) => {
+      processOrderAsync(paymentIntent, email, firstName, lastName, lineItems, shippingAddress, cartId).catch((err) => {
         console.error('🔴 Background order processing failed:', err);
         // Note: This won't retry automatically; consider using a job queue (Bull, Inngest)
         // for production systems with high transaction volume

@@ -39,6 +39,8 @@ export interface ShippingAddress {
 
 export interface OrderData {
   email: string;
+  firstName: string;
+  lastName: string;
   lineItems: LineItem[];
   shippingAddress: ShippingAddress;
   paymentIntentId: string;
@@ -120,6 +122,10 @@ export async function createShopifyOrder(
 
     console.log('📋 Line items payload:', JSON.stringify(lineItemsPayload, null, 2));
 
+    // Use provided names or fallback to defaults
+    const firstName = orderData.firstName || 'Guest';
+    const lastName = orderData.lastName || 'Customer';
+
     const response = await fetch(
       `https://${SHOPIFY_DOMAIN}/admin/api/2024-01/orders.json`,
       {
@@ -139,8 +145,8 @@ export async function createShopifyOrder(
 
             // Customer data with name and address
             customer: {
-              first_name: orderData.shippingAddress.firstName,
-              last_name: orderData.shippingAddress.lastName,
+              first_name: firstName,
+              last_name: lastName,
               email: orderData.email,
             },
 
@@ -149,8 +155,8 @@ export async function createShopifyOrder(
 
             // Shipping address
             shipping_address: {
-              first_name: orderData.shippingAddress.firstName,
-              last_name: orderData.shippingAddress.lastName,
+              first_name: firstName,
+              last_name: lastName,
               address1: orderData.shippingAddress.address1,
               address2: orderData.shippingAddress.address2 || '',
               city: orderData.shippingAddress.city,
