@@ -26,7 +26,9 @@ describe('Shopping Cart', () => {
 
   it('should navigate to cart page', () => {
     cy.get('[data-cy="cart-link"]').click()
+    // Wait up to 10 seconds for page to navigate to /cart
     cy.url().should('include', '/cart')
+    cy.get('[data-cy="empty-cart-page"]', { timeout: 10000 }).should('be.visible')
   })
 
   it('should display empty cart message initially', () => {
