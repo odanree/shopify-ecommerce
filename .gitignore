@@ -53,3 +53,5 @@ next-env.d.ts
 *.bak
 *.tmp
 .cache/
+cypress/screenshots/
+cypress/videos/
