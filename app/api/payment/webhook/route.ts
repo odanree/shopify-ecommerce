@@ -106,6 +106,14 @@ async function processOrderAsync(
 export async function POST(request: NextRequest) {
   try {
     const signature = request.headers.get('stripe-signature');
+
+    // 🕵️ DEBUG LOGS
+    console.log('--- WEBHOOK DEBUG START ---');
+    console.log('Signature Header Exists:', !!signature);
+    console.log('Webhook Secret Defined:', !!process.env.STRIPE_WEBHOOK_SECRET);
+    console.log('Webhook Secret Start:', process.env.STRIPE_WEBHOOK_SECRET?.substring(0, 10));
+    console.log('--- WEBHOOK DEBUG END ---');
+
     const body = await request.text();
 
     if (!signature) {
