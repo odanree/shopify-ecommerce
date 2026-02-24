@@ -36,7 +36,7 @@ const heroImages = [
   },
   {
     id: 3,
-    src: 'https://images.unsplash.com/photo-1515909335684-cf51ea0f3155?w=1200&h=600&fit=crop',
+    src: 'https://images.unsplash.com/photo-1556821552-9f6db051193a?w=1200&h=600&fit=crop',
     alt: 'Signature Style',
     title: 'Signature Style',
     description: 'Express yourself with our timeless collection',
