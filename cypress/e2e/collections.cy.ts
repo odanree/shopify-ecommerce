@@ -81,30 +81,30 @@ describe('Collections', () => {
       
       cy.get('body').then(($body) => {
         if (!$body.text().includes('No collections found')) {
-          // Get the first collection link's href
-          cy.get('a[href^="/collections/"]')
+          // Get the first collection link's href with timeout
+          cy.get('a[href^="/collections/"]', { timeout: 10000 })
             .first()
             .invoke('attr', 'href')
             .then((href) => {
               // Visit the collection detail page
               if (href) {
-                cy.visit(href);
+                cy.visit(href, { timeout: 10000 });
                 
-                // Should have breadcrumbs
-                cy.contains('Home').should('be.visible');
-                cy.contains('Collections').should('be.visible');
+                // Should have breadcrumbs with extended timeout for slow networks
+                cy.contains('Home', { timeout: 10000 }).should('be.visible');
+                cy.contains('Collections', { timeout: 10000 }).should('be.visible');
                 
                 // Should have collection title
-                cy.get('h1').should('be.visible');
+                cy.get('h1', { timeout: 10000 }).should('be.visible');
                 
                 // Should have products or empty state
-                cy.get('body').then(($detailBody) => {
+                cy.get('body', { timeout: 10000 }).then(($detailBody) => {
                   if ($detailBody.text().includes('No products in this collection')) {
-                    cy.contains('No products in this collection').should('be.visible');
-                    cy.contains('Browse Other Collections').should('be.visible');
+                    cy.contains('No products in this collection', { timeout: 10000 }).should('be.visible');
+                    cy.contains('Browse Other Collections', { timeout: 10000 }).should('be.visible');
                   } else {
                     // Should have products grid
-                    cy.get('a[href^="/products/"]').should('exist');
+                    cy.get('a[href^="/products/"]', { timeout: 10000 }).should('exist');
                   }
                 });
               }
@@ -118,12 +118,12 @@ describe('Collections', () => {
       
       cy.get('body').then(($body) => {
         if (!$body.text().includes('No collections found')) {
-          cy.get('a[href^="/collections/"]').first().click();
+          cy.get('a[href^="/collections/"]', { timeout: 10000 }).first().click();
           
-          // Click breadcrumb to go back
-          cy.contains('a', 'Collections').click();
-          cy.url().should('include', '/collections');
-          cy.url().should('not.include', '/collections/');
+          // Click breadcrumb to go back with timeout
+          cy.contains('a', 'Collections', { timeout: 10000 }).click();
+          cy.url({ timeout: 10000 }).should('include', '/collections');
+          cy.url({ timeout: 10000 }).should('not.include', '/collections/');
         }
       });
     });
@@ -133,13 +133,13 @@ describe('Collections', () => {
       
       cy.get('body').then(($body) => {
         if (!$body.text().includes('No collections found')) {
-          cy.get('a[href^="/collections/"]').first().click();
+          cy.get('a[href^="/collections/"]', { timeout: 10000 }).first().click();
           
-          cy.get('body').then(($detailBody) => {
+          cy.get('body', { timeout: 10000 }).then(($detailBody) => {
             if (!$detailBody.text().includes('No products in this collection')) {
-              // Click on a product
-              cy.get('a[href^="/products/"]').first().click();
-              cy.url().should('include', '/products/');
+              // Click on a product with timeout
+              cy.get('a[href^="/products/"]', { timeout: 10000 }).first().click();
+              cy.url({ timeout: 10000 }).should('include', '/products/');
             }
           });
         }
