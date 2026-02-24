@@ -1,0 +1,6 @@
+defaults
+last 2 versions
+> 0.5%
+supports es6-module
+not dead
+not IE 11
