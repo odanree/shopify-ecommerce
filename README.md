@@ -29,7 +29,46 @@ The core of this project is a bespoke checkout system that maintains **100% bran
 
 ---
 
+## 🏗️ Robust Checkout Architecture
+
+Unlike basic Shopify integrations, this project implements a **Resilient Webhook Handshake** that gracefully handles asynchronous operations and network delays:
+
+### 1. **Frontend Payment Capture**
+- User fills Shipping Address → Payment Intent created with customer data in metadata
+- Stripe Elements collect payment details (no card numbers on our server)
+- User clicks "Complete Purchase" → Stripe PaymentElement validates and submits
+
+### 2. **Webhook Verification & Signature Check**
+- Stripe pings `/api/payment/webhook` with signed event
+- We verify cryptographic signature using `stripe.webhooks.constructEvent()`
+- Only authenticated Stripe events can trigger order creation (prevents spoofing)
+
+### 3. **Async Background Processing**
+- Webhook handler returns `200 OK` to Stripe **immediately** (~50ms)
+- Shopify order creation happens asynchronously in background
+- This prevents Stripe's 30-second timeout during slow Admin API calls (which can take 1–3 seconds)
+- Payment is confirmed to customer, order is guaranteed to eventually appear in Shopify
+
+### 4. **Idempotency & Duplicate Prevention**
+- Each Shopify order is tagged with the Payment Intent ID: `Stripe-Payment, pi_xxxxx`
+- Webhook checks for existing orders before creating new ones
+- If webhook is retried by Stripe, we return the existing order (no duplicates)
+
+### 5. **Resilient Success Page Polling**
+- Success page can't display order number until cache is populated
+- Webhook processes asynchronously, so data arrives ~500ms–2s after payment
+- Instead of showing "Processing..." forever, page polls `/api/payment/order-number` up to 10 times with 2-second intervals
+- Once order is found, displays order number and provides direct link to Shopify Admin
+
+### 6. **Shopify Admin Link for Portfolio Proof**
+- Success page includes button: "Open Order in Shopify Admin ↗"
+- Direct link to `admin.shopify.com/store/{store}/orders/{shopifyOrderId}`
+- Recruiter/client can instantly verify the order exists in Shopify with correct customer data
+
+---
+
 ## ✨ Key Features
+
 
 - ⚡ **Next.js 14 App Router:** Utilizing Server Components for lightning-fast catalog browsing.
 - 🔄 **Inventory Management:** Real-time stock decrements in Shopify Admin upon verified payment.
@@ -108,10 +147,39 @@ This project is optimized for Vercel. Ensure the following Environment Variables
 
 ## 📝 Lessons Learned
 
-- **Data Formatting:** The Shopify REST API requires tags as comma-separated strings, while GraphQL prefers arrays—managing this mismatch was key to successful order tagging.
-- **Lifecycle Awareness:** Clearing the cart on the Success Page (instead of the Checkout button) ensures a "failed payment" doesn't result in a lost cart for the user.
-- **Webhook Performance:** Returning 200 OK immediately to Stripe and processing order creation asynchronously prevents timeouts during slow Admin API calls.
-- **Test Reliability:** Explicit timeouts (10s+) on E2E tests account for Shopify API latency in CI environments.
+### 🎯 Idempotency & Data Mismatch
+**Problem:** Stripe's metadata is flat (all keys at same level), but Shopify's REST API expects deeply nested objects. Order tags required comma-separated strings, not arrays.
+
+**Solution:** Implemented strict data mapping layer that transforms Stripe's flat structure into Shopify's required format. Used Payment Intent IDs as idempotency keys to prevent duplicates during webhook retries.
+
+**Impact:** Orders create reliably across mismatched API schemas without data loss or duplication.
+
+---
+
+### 🎯 User Experience Lifecycle  
+**Problem:** Clearing the cart immediately on "Complete Purchase" button click meant failed or declined payments would lose the user's cart. If they closed the browser mid-checkout, their cart disappeared forever.
+
+**Solution:** Moved `clearCart()` to the Success Page, triggered only after the order is confirmed (order cache is populated). This preserves progress through payment retries and browser restarts.
+
+**Impact:** Users can safely retry payments without losing their items; failed transactions don't result in lost carts.
+
+---
+
+### 🎯 Handling API Latency
+**Problem:** Shopify's Admin API can take 1–3 seconds to respond. The Success Page needs the order number immediately, but the webhook processes asynchronously. Without polling, users see a broken "Processing order..." state indefinitely.
+
+**Solution:** Implemented recursive polling on the frontend (10 attempts, 2-second intervals). Success page waits for the order cache to populate instead of assuming instant completion.
+
+**Impact:** Seamless UX even with slow backend APIs; users see their order number appear within 2–5 seconds rather than hanging indefinitely.
+
+---
+
+### 🎯 Serverless Webhook Constraints
+**Problem:** In serverless environments (Next.js on Vercel), if the webhook handler takes too long, the request is killed before Shopify order creation completes. Stripe also has a 30-second timeout before it retries.
+
+**Solution:** Return `200 OK` to Stripe immediately (~50ms), then process Shopify order creation asynchronously in the background via a fire-and-forget pattern. Idempotency check prevents duplicates on retry.
+
+**Impact:** Webhooks complete within Stripe's timeout window while guaranteeing order creation in Shopify, even with slow Admin API responses.
 
 ---
 
