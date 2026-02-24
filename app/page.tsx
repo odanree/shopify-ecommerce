@@ -22,21 +22,21 @@ export const dynamic = 'force-dynamic';
 const heroImages = [
   {
     id: 1,
-    src: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=1200&h=600&fit=crop',
+    src: 'https://picsum.photos/1200/600?random=1',
     alt: 'Premium Tech Apparel',
     title: 'Premium Tech Collection',
     description: 'High-quality t-shirts designed for tech enthusiasts',
   },
   {
     id: 2,
-    src: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=1200&h=600&fit=crop',
+    src: 'https://picsum.photos/1200/600?random=2',
     alt: 'Latest Innovation',
     title: 'Latest Innovation',
     description: 'Discover our newest designs and exclusive releases',
   },
   {
     id: 3,
-    src: 'https://images.unsplash.com/photo-1556821552-9f6db051193a?w=1200&h=600&fit=crop',
+    src: 'https://picsum.photos/1200/600?random=3',
     alt: 'Signature Style',
     title: 'Signature Style',
     description: 'Express yourself with our timeless collection',
