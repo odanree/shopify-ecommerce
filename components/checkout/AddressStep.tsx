@@ -48,14 +48,14 @@ export function AddressStep({ onAddressChange, isLoading = false }: AddressStepP
 
       <div className={`${styles.formRow} ${styles.formRowFull}`}>
         <div className={styles.formGroup}>
-          <label className={styles.formLabel}>Email</label>
+          <label className={styles.formLabel}>Email (Optional - from payment method)</label>
           <input
             type="email"
             name="email"
             onChange={handleChange}
             disabled={isLoading}
             className={styles.formInput}
-            required
+            placeholder="Will use email from card payment"
           />
         </div>
       </div>

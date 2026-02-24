@@ -20,26 +20,20 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (!email) {
-      return NextResponse.json(
-        { error: 'Email is required' },
-        { status: 400 }
-      );
-    }
-
     // Create Payment Intent with metadata for webhook
+    // Note: Email is optional here; we'll get it from Stripe's payment method if available
     const paymentIntent = await stripe.paymentIntents.create({
       amount: Math.round(amount * 100), // Convert to cents
       currency,
-      description: `Order for ${email}`,
-      receipt_email: email,
+      description: email ? `Order for ${email}` : 'Order',
+      ...(email && { receipt_email: email }), // Only set receipt_email if provided
       
       // KEY: Metadata passed to webhook for Shopify order creation
       metadata: {
-        email,
         cartId: cartId || '',
         lineItems: JSON.stringify(lineItems || []),
         shippingAddress: JSON.stringify(shippingAddress || {}),
+        // Note: email NOT stored in metadata; we'll extract from PaymentIntent in webhook
       },
 
       // Automatically handle Apple Pay / Google Pay

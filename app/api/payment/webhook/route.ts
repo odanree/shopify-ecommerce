@@ -135,9 +135,21 @@ export async function POST(request: NextRequest) {
     // STEP 2: Handle payment success
     if (event.type === 'payment_intent.succeeded') {
       const paymentIntent = event.data.object as any;
-      const { email, lineItems, shippingAddress, cartId } = paymentIntent.metadata;
+      const { lineItems, shippingAddress, cartId } = paymentIntent.metadata;
 
-      console.log(`💳 Payment succeeded: ${paymentIntent.id}`);
+      // Extract email from Stripe PaymentIntent (billing_details or charges)
+      // Prefer Stripe's email over form email to ensure verified customer data
+      let stripeEmail = '';
+      
+      if (paymentIntent.charges?.data?.[0]?.billing_details?.email) {
+        stripeEmail = paymentIntent.charges.data[0].billing_details.email;
+      } else if (paymentIntent.billing_details?.email) {
+        stripeEmail = paymentIntent.billing_details.email;
+      }
+
+      const email = stripeEmail || 'noreply@stripe-payment.local'; // Fallback if no email from Stripe
+
+      console.log(`💳 Payment succeeded: ${paymentIntent.id}, Email: ${email}`);
 
       // OPTIMIZATION: Return 200 OK immediately to prevent Stripe retries
       // Process the order creation in the background (fire-and-forget pattern)

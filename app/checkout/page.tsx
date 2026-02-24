@@ -57,7 +57,7 @@ export default function CheckoutPage() {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             amount: total,
-            email: address.email || 'guest@example.com',
+            email: address.email || undefined, // Let Stripe extract email from payment method
             cartId: Math.random().toString(36),
             lineItems: cartItems.map((item) => ({
               variantId: item.variantId,
