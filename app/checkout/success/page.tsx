@@ -12,26 +12,26 @@ function SuccessPageContent() {
   const { clearCart } = useCart();
   const [mounted, setMounted] = useState(false);
   const [orderNumber, setOrderNumber] = useState<number | null>(null);
+  const [orderId, setOrderId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
   // Extract payment intent ID from URL (Stripe redirects here)
   const paymentIntentId = searchParams.get('payment_intent');
 
+  // Get Shopify store name from domain for admin link
+  const shopifyStoreName = process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN?.replace('.myshopify.com', '') || '';
+
+  // Fetch order data from cache (webhook already created the order)
   useEffect(() => {
     setMounted(true);
 
-    // Immediately clear cart (defensive: clear React state + localStorage)
-    console.log('🧹 Success page mounted - clearing cart...');
-    clearCart();
-    console.log('✅ Cart cleared on success page');
-
-    // Fetch order number from cache
     const fetchOrderNumber = async () => {
       try {
         const response = await fetch(`/api/payment/order-number?paymentIntentId=${paymentIntentId}`);
         if (response.ok) {
           const data = await response.json();
           setOrderNumber(data.orderNumber);
+          setOrderId(data.orderId);
           console.log(`📦 Order #${data.orderNumber} found in cache`);
         }
       } catch (error) {
@@ -46,7 +46,17 @@ function SuccessPageContent() {
     } else {
       setLoading(false);
     }
-  }, []);
+  }, [paymentIntentId]);
+
+  // Clear cart only after order is confirmed (orderNumber received from webhook)
+  // This ensures items don't disappear if payment fails mid-checkout
+  useEffect(() => {
+    if (orderNumber) {
+      console.log('🧹 Order confirmed - clearing cart...');
+      clearCart();
+      console.log('✅ Cart cleared after order confirmation');
+    }
+  }, [orderNumber]); // Note: clearCart dependency omitted to prevent unnecessary re-runs
 
   if (!mounted) {
     return null; // Avoid hydration mismatch
@@ -87,6 +97,21 @@ function SuccessPageContent() {
             </p>
           )}
         </div>
+
+        {/* Developer Portal: View in Shopify Admin (dev mode only) */}
+        {process.env.NODE_ENV === 'development' && orderId && shopifyStoreName && (
+          <div className={styles.devPortalBox}>
+            <p className={styles.devPortalLabel}>🧪 Developer Mode</p>
+            <a
+              href={`https://admin.shopify.com/store/${shopifyStoreName}/orders/${orderId}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.devPortalLink}
+            >
+              View Order in Shopify Admin →
+            </a>
+          </div>
+        )}
 
         {/* Order Details */}
         <div className={styles.orderDetailsBox}>

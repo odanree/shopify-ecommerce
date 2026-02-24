@@ -214,3 +214,33 @@
 .supportLink:hover {
   text-decoration: underline;
 }
+
+/* Developer Portal: View in Shopify Admin (dev mode only) */
+.devPortalBox {
+  background-color: #fef3c7;
+  border: 1px solid #fcd34d;
+  border-radius: 0.5rem;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.devPortalLabel {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #92400e;
+  margin-bottom: 0.5rem;
+}
+
+.devPortalLink {
+  display: inline-block;
+  color: #0284c7;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.devPortalLink:hover {
+  color: #0369a1;
+  text-decoration: underline;
+}
