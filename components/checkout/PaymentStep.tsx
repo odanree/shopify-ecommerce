@@ -76,7 +76,7 @@ function PaymentForm({
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form onSubmit={handleSubmit} className="space-y-4">
       {error && (
         <div className="flex items-center gap-3 p-4 bg-red-50 border border-red-200 rounded-lg">
           <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0" />
@@ -108,7 +108,7 @@ function PaymentForm({
       <button
         type="submit"
         disabled={submitting || !stripe || !elements || !clientSecret || isLoading}
-        className="w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-semibold rounded-lg transition flex items-center justify-center gap-2"
+        className="w-full py-2.5 px-4 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-semibold rounded-lg transition flex items-center justify-center gap-2"
       >
         {submitting ? (
           <>
@@ -120,7 +120,7 @@ function PaymentForm({
         )}
       </button>
 
-      <p className="text-xs text-gray-600 text-center">
+      <p className="text-xs text-gray-500 text-center leading-relaxed">
         💳 Test card: 4242 4242 4242 4242 (any future date, any 3-digit CVC)
       </p>
     </form>
