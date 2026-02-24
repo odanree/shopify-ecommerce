@@ -39,11 +39,20 @@ function PaymentForm({
     setError(null);
 
     try {
-      // Confirm payment with Stripe
+      // Step 1: MUST CALL THIS FIRST
+      // This triggers form validation and prepares the data
+      const { error: submitError } = await elements.submit();
+      if (submitError) {
+        setError(submitError.message || 'Form validation failed');
+        onError?.(submitError.message || 'Form validation failed');
+        setSubmitting(false);
+        return;
+      }
+
+      // Step 2: Now safely confirm payment with Stripe
       const { error: stripeError, paymentIntent } =
         await stripe.confirmPayment({
           elements,
-          clientSecret,
           confirmParams: {
             return_url: `${window.location.origin}/checkout/success`,
           },
@@ -97,12 +106,12 @@ function PaymentForm({
       <button
         type="submit"
         disabled={submitting || !stripe || !elements || !clientSecret || isLoading}
-        className="w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white font-semibold rounded-lg transition flex items-center justify-center gap-2"
+        className="w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-semibold rounded-lg transition flex items-center justify-center gap-2"
       >
         {submitting ? (
           <>
             <Loader2 className="w-4 h-4 animate-spin" />
-            Processing...
+            Securely processing payment...
           </>
         ) : (
           'Complete Purchase'
