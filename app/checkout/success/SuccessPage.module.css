@@ -1,0 +1,216 @@
+/* Checkout Success Page Styling */
+
+.successContainer {
+  min-height: 100vh;
+  background: linear-gradient(to bottom, #f0fdf4, #f9fafb);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+.successCard {
+  max-width: 28rem;
+  width: 100%;
+  background: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+  text-align: center;
+}
+
+.successIconContainer {
+  margin-bottom: 1.5rem;
+  display: flex;
+  justify-content: center;
+}
+
+.successIconCircle {
+  width: 5rem;
+  height: 5rem;
+  background-color: #dcfce7;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: bounce 1s infinite;
+}
+
+.successIcon {
+  width: 2.5rem;
+  height: 2.5rem;
+  color: #16a34a;
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-0.5rem);
+  }
+}
+
+.successTitle {
+  font-size: 1.875rem;
+  font-weight: 700;
+  color: #111;
+  margin-bottom: 0.5rem;
+}
+
+.successSubtitle {
+  color: #666;
+  margin-bottom: 1.5rem;
+}
+
+.confirmationBox {
+  background-color: #f9fafb;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.confirmationLabel {
+  font-size: 0.875rem;
+  color: #666;
+  margin-bottom: 0.25rem;
+}
+
+.orderNumberLoading {
+  height: 1.5rem;
+  background-color: #e5e7eb;
+  border-radius: 0.25rem;
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.orderNumber {
+  font-family: monospace;
+  font-size: 1.875rem;
+  font-weight: 700;
+  color: #0284c7;
+}
+
+.orderNumberFallback {
+  font-family: monospace;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #111;
+  word-break: break-all;
+}
+
+.orderDetailsBox {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+  text-align: left;
+  background-color: #f9fafb;
+  border-radius: 0.5rem;
+  padding: 1rem;
+}
+
+.detailRow {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.detailIcon {
+  width: 1.25rem;
+  height: 1.25rem;
+  color: #0284c7;
+  flex-shrink: 0;
+}
+
+.detailEmoji {
+  font-size: 1.5rem;
+}
+
+.detailContent {
+  flex: 1;
+}
+
+.detailLabel {
+  font-size: 0.75rem;
+  color: #666;
+}
+
+.detailValue {
+  font-weight: 500;
+  color: #111;
+}
+
+.actionsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.primaryAction {
+  display: block;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background-color: #0284c7;
+  color: white;
+  font-weight: 600;
+  border-radius: 0.5rem;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+  border: none;
+}
+
+.primaryAction:hover {
+  background-color: #0369a1;
+}
+
+.secondaryAction {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid #d1d5db;
+  color: #666;
+  font-weight: 600;
+  border-radius: 0.5rem;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+  background-color: white;
+}
+
+.secondaryAction:hover {
+  background-color: #f9fafb;
+}
+
+.homeIcon {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.supportText {
+  font-size: 0.75rem;
+  color: #666;
+}
+
+.supportLink {
+  color: #0284c7;
+  text-decoration: none;
+  transition: text-decoration 0.2s ease;
+}
+
+.supportLink:hover {
+  text-decoration: underline;
+}
