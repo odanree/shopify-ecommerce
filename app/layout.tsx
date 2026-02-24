@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { RootLayoutClient } from "./layout-client";
@@ -11,9 +11,15 @@ const inter = Inter({
   fallback: ['system-ui', '-apple-system', 'sans-serif'],
 });
 
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+  userScalable: true,
+};
+
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://shopify-headless-lemon.vercel.app'),
-  viewport: 'width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes',
   title: {
     default: 'Modern Ecommerce Store | Premium Tech T-Shirts',
     template: '%s | Modern Ecommerce Store',
