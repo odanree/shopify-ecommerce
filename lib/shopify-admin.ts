@@ -100,8 +100,7 @@ export async function createShopifyOrder(
 
     if (existingOrder) {
       console.log(
-        '✅ Order already exists, returning existing order #',
-        existingOrder.id
+        `✅ Order already exists (idempotency): #${existingOrder.order_number}`
       );
       return {
         id: existingOrder.id,
@@ -111,7 +110,6 @@ export async function createShopifyOrder(
 
     // STEP 2: Create new order with inventory tracking
     const lineItemsPayload = orderData.lineItems.map((item) => {
-      console.log(`📦 Line item: variantId=${item.variantId}, quantity=${item.quantity}`);
       return {
         variant_id: item.variantId,
         quantity: item.quantity,
@@ -119,8 +117,6 @@ export async function createShopifyOrder(
         price: item.price,
       };
     });
-
-    console.log('📋 Line items payload:', JSON.stringify(lineItemsPayload, null, 2));
 
     // Use provided names or fallback to defaults
     const firstName = orderData.firstName || 'Guest';

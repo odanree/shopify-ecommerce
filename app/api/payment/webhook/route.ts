@@ -81,7 +81,8 @@ async function processOrderAsync(
       createdAt: new Date().toISOString(),
     };
 
-    console.log('📦 Order record:', orderRecord);
+    // Audit: order record is available for monitoring systems
+    // console.log('📦 Order record:', orderRecord); // Uncomment for debugging
   } catch (error) {
     console.error('❌ Background order processing failed:', error);
     // Note: This is a fire-and-forget pattern. For production systems with
@@ -135,8 +136,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    console.log(`📨 Webhook event received: ${event.type}`);
-
     // STEP 2: Handle payment success
     if (event.type === 'payment_intent.succeeded') {
       const paymentIntent = event.data.object as any;
@@ -179,9 +178,7 @@ export async function POST(request: NextRequest) {
 
     // Handle other event types if needed
     if (event.type === 'payment_intent.payment_failed') {
-      const paymentIntent = event.data.object as any;
-      console.log(`⚠️  Payment failed: ${paymentIntent.id}`);
-      // Don't create order, just log
+      // Payment failed, don't create order - just acknowledge receipt
     }
 
     return NextResponse.json({ received: true }, { status: 200 });

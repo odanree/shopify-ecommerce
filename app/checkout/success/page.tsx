@@ -22,30 +22,50 @@ function SuccessPageContent() {
   const shopifyStoreName = process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN?.replace('.myshopify.com', '') || '';
 
   // Fetch order data from cache (webhook already created the order)
+  // Uses recursive polling with retry logic (up to 10 attempts, 2-second intervals)
   useEffect(() => {
     setMounted(true);
 
-    const fetchOrderNumber = async () => {
+    let timer: NodeJS.Timeout;
+    let attempts = 0;
+    const maxAttempts = 10;
+
+    const pollOrder = async () => {
+      if (attempts >= maxAttempts) {
+        console.error('❌ Max polling attempts reached');
+        setLoading(false);
+        return;
+      }
+
       try {
         const response = await fetch(`/api/payment/order-number?paymentIntentId=${paymentIntentId}`);
         if (response.ok) {
           const data = await response.json();
           setOrderNumber(data.orderNumber);
           setOrderId(data.orderId);
-          console.log(`📦 Order #${data.orderNumber} found in cache`);
+          setLoading(false);
+          console.log(`✅ Order #${data.orderNumber} found in cache`);
+        } else if (response.status === 404) {
+          // Order not yet in cache, retry after 2 seconds
+          attempts++;
+          timer = setTimeout(pollOrder, 2000);
+        } else {
+          console.error(`⚠️ Unexpected response: ${response.status}`);
+          setLoading(false);
         }
       } catch (error) {
-        console.error('Failed to fetch order number:', error);
-      } finally {
+        console.error('Polling error:', error);
         setLoading(false);
       }
     };
 
     if (paymentIntentId) {
-      fetchOrderNumber();
+      pollOrder();
     } else {
       setLoading(false);
     }
+
+    return () => clearTimeout(timer);
   }, [paymentIntentId]);
 
   // Clear cart only after order is confirmed (orderNumber received from webhook)
