@@ -53,20 +53,9 @@ async function processOrderAsync(
       `✅ Shopify order created: #${shopifyOrder.order_number} (ID: ${shopifyOrder.id})`
     );
 
-    // Store order number for success page lookup
-    try {
-      await fetch(`${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/api/payment/order-number`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          paymentIntentId: paymentIntent.id,
-          orderNumber: shopifyOrder.order_number,
-          shopifyOrderId: shopifyOrder.id,
-        }),
-      });
-    } catch (cacheError) {
-      console.warn('⚠️  Failed to cache order number, but order was created successfully', cacheError);
-    }
+    // Order is now in Shopify with the payment intent ID tagged
+    // The success page will query Shopify directly via GET /api/payment/order-number
+    // No need to store in a separate cache anymore
 
     // Log order record for audit trail
     const orderRecord = {
