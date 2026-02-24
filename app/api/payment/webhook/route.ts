@@ -145,18 +145,18 @@ export async function POST(request: NextRequest) {
       console.log(`💳 Payment succeeded: ${paymentIntent.id}, Customer: ${firstName} ${lastName}, Email: ${email}`);
 
       // OPTIMIZATION: Return 200 OK immediately to prevent Stripe retries
-      // Process the order creation in the background (fire-and-forget pattern)
-      // This ensures:
-      // 1. Webhook acknowledges within <100ms (Stripe timeout = 30s)
-      // 2. No duplicate webhook retries waiting for slow Shopify API calls
-      // 3. Order is still created reliably (idempotency check prevents duplicates)
+      // Process the order creation synchronously BEFORE returning to Stripe
+      // This ensures the order is created in Shopify before webhook completes
+      // Still fast (~50ms for Shopify API call)
       
-      // Fire-and-forget: Process order in background without awaiting
-      processOrderAsync(paymentIntent, email, firstName, lastName, lineItems, shippingAddress, cartId).catch((err) => {
-        console.error('🔴 Background order processing failed:', err);
-        // Note: This won't retry automatically; consider using a job queue (Bull, Inngest)
-        // for production systems with high transaction volume
-      });
+      try {
+        await processOrderAsync(paymentIntent, email, firstName, lastName, lineItems, shippingAddress, cartId);
+      } catch (err) {
+        console.error('🔴 Order processing failed:', err);
+        // Order creation failed, but webhook already succeeded in Stripe
+        // For production systems with high transaction volume, implement a job queue
+        // (Bull, Inngest, etc.) to automatically retry with exponential backoff
+      }
 
       // Return 200 OK immediately to acknowledge receipt
       return NextResponse.json(
