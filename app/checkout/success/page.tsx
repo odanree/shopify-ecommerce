@@ -11,7 +11,7 @@ function SuccessPageContent() {
   const searchParams = useSearchParams();
   const { clearCart } = useCart();
   const [mounted, setMounted] = useState(false);
-  const [order, setOrder] = useState<{ orderNumber: number; orderId: string } | null>(null);
+  const [order, setOrder] = useState<{ orderNumber: number; shopifyOrderId: string } | null>(null);
   const [loading, setLoading] = useState(true);
 
   // Extract payment intent ID from URL (Stripe redirects here)
@@ -24,6 +24,9 @@ function SuccessPageContent() {
   // Uses recursive polling with retry logic (up to 10 attempts, 2-second intervals)
   useEffect(() => {
     setMounted(true);
+
+    console.log("Current Order State:", order);
+console.log("Domain Var:", process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN);
 
     let timer: NodeJS.Timeout;
     let attempts = 0;
@@ -42,7 +45,7 @@ function SuccessPageContent() {
           const data = await response.json();
           setOrder({
             orderNumber: data.orderNumber,
-            orderId: data.orderId,
+            shopifyOrderId: data.shopifyOrderId,
           });
           setLoading(false);
           console.log(`✅ Order #${data.orderNumber} found in cache`);
@@ -124,7 +127,7 @@ function SuccessPageContent() {
           <div className={styles.devPortalBox}>
             <p className={styles.devPortalLabel}>🧪 Developer Demo</p>
             <a
-              href={`https://admin.shopify.com/store/${shopifyStoreDomain.split('.')[0]}/orders/${order.orderId}`}
+              href={`https://admin.shopify.com/store/${shopifyStoreDomain.split('.')[0]}/orders/${order.shopifyOrderId}`}
               target="_blank"
               rel="noopener noreferrer"
               className={styles.devPortalLink}

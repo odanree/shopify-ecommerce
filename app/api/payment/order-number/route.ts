@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 
 // Simple in-memory cache for payment_intent_id -> order_number mapping
 // In production, store this in your database (Supabase, MongoDB, etc.)
-const orderCache = new Map<string, { orderNumber: number; orderId: string; createdAt: number }>();
+const orderCache = new Map<string, { orderNumber: number; shopifyOrderId: string; createdAt: number }>();
 
 /**
  * POST: Store order number for payment intent
@@ -10,7 +10,7 @@ const orderCache = new Map<string, { orderNumber: number; orderId: string; creat
  */
 export async function POST(request: NextRequest) {
   try {
-    const { paymentIntentId, orderNumber, orderId } = await request.json();
+    const { paymentIntentId, orderNumber, shopifyOrderId } = await request.json();
 
     if (!paymentIntentId || !orderNumber) {
       return NextResponse.json(
@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
     // Store the mapping (with timestamp for potential cleanup)
     orderCache.set(paymentIntentId, {
       orderNumber,
-      orderId,
+      shopifyOrderId,
       createdAt: Date.now(),
     });
 

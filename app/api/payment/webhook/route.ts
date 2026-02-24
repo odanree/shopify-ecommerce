@@ -61,7 +61,7 @@ async function processOrderAsync(
         body: JSON.stringify({
           paymentIntentId: paymentIntent.id,
           orderNumber: shopifyOrder.order_number,
-          orderId: shopifyOrder.id,
+          shopifyOrderId: shopifyOrder.id,
         }),
       });
     } catch (cacheError) {
