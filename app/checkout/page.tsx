@@ -22,6 +22,7 @@ export default function CheckoutPage() {
     lastName: '',
     address1: '',
     city: '',
+    province: '',
     zip: '',
     country: 'US',
   });
@@ -33,7 +34,7 @@ export default function CheckoutPage() {
   const total = subtotal + shipping + tax;
 
   // Validate address form
-  const isAddressValid = address.firstName && address.lastName && address.address1 && address.city && address.zip;
+  const isAddressValid = address.firstName && address.lastName && address.address1 && address.city && address.province && address.zip;
 
   // Create Payment Intent when user submits address form
   // This ensures firstName, lastName are populated in metadata

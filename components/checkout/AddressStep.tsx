@@ -11,6 +11,7 @@ interface AddressStepProps {
     lastName: string;
     address1: string;
     city: string;
+    province: string;
     zip: string;
     country: string;
   };
@@ -84,6 +85,21 @@ export function AddressStep({ address, onAddressChange, isLoading = false }: Add
             required
           />
         </div>
+        <div className={styles.formGroup}>
+          <label className={styles.formLabel}>State / Province</label>
+          <input
+            type="text"
+            name="province"
+            value={address.province}
+            onChange={handleChange}
+            disabled={isLoading}
+            className={styles.formInput}
+            required
+          />
+        </div>
+      </div>
+
+      <div className={`${styles.formRow} ${styles.formRowFull}`}>
         <div className={styles.formGroup}>
           <label className={styles.formLabel}>ZIP Code</label>
           <input
