@@ -3,7 +3,7 @@ import Stripe from 'stripe';
 import { createShopifyOrder } from '@/lib/shopify-admin';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
-  apiVersion: '2024-01-15',
+  apiVersion: '2025-01-27',
 });
 
 const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET || '';
