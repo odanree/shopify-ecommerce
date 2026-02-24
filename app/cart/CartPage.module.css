@@ -423,6 +423,7 @@
 }
 
 .checkoutButton {
+  display: block;
   width: 100%;
   padding: 1rem;
   margin-top: 1.5rem;
@@ -435,6 +436,8 @@
   font-size: 1.125rem;
   cursor: pointer;
   transition: all 0.3s ease;
+  text-align: center;
+  text-decoration: none;
 }
 
 .checkoutButton:hover {

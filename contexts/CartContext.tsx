@@ -19,6 +19,7 @@ interface CartContextType {
   updateQuantity: (itemId: string, quantity: number) => void;
   clearCart: () => void;
   itemCount: number;
+  isHydrated: boolean;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -86,14 +87,24 @@ export function CartProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const clearCart = useCallback(() => {
+    // Defensive: clear React state AND localStorage
     setItems([]);
+    // Ensure localStorage is removed immediately (don't rely on useEffect)
+    if (typeof window !== 'undefined') {
+      try {
+        localStorage.removeItem('cart');
+        console.log('✅ Cart cleared: React state + localStorage');
+      } catch (error) {
+        console.error('Error clearing cart from localStorage:', error);
+      }
+    }
   }, []);
 
   const itemCount = items.reduce((sum, item) => sum + item.quantity, 0);
 
   return (
     <CartContext.Provider
-      value={{ items, addItem, removeItem, updateQuantity, clearCart, itemCount }}
+      value={{ items, addItem, removeItem, updateQuantity, clearCart, itemCount, isHydrated }}
     >
       {children}
     </CartContext.Provider>

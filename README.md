@@ -1,291 +1,313 @@
-# Shopify Headless Commerce with Next.js
+# 🛍️ Shopify Headless Commerce with Next.js
 
-A modern headless ecommerce storefront built with Next.js 14, TypeScript, CSS Modules, and Shopify Storefront API—featuring AI-powered product recommendations via integrated chatbot.
+A high-performance headless ecommerce storefront built with **Next.js 14**, **TypeScript**, and **Shopify Storefront API**. This project features a **custom, production-grade Stripe payment engine** with a webhook-driven architecture for real-time Shopify Admin order synchronization.
 
-**🎯 [Live Demo](https://shopify-headless-lemon.vercel.app/)** — Visit the production site
+🎯 **[Live Demo](https://shopify-headless-lemon.vercel.app/)** — _Experience the custom checkout flow._
 
-## Features
+---
 
-- ⚡ **Next.js 14 App Router** - Latest React features with Server Components
-- 🎨 **CSS Modules** - Component-scoped styling
-- 📱 **Fully Responsive** - Mobile-first design
-- 🛍️ **Shopify Storefront API** - Direct integration with Shopify
-- 🔍 **TypeScript** - Type-safe development
-- 🖼️ **Optimized Images** - Next.js Image component with CDN
-- ⚡ **Fast Performance** - 99.9% CLS reduction (0.028 score), 0ms Total Blocking Time
-- 🎯 **SEO Optimized** - Meta tags and structured data
-- 🤖 **AI Chatbot** - GPT-4 powered product search & recommendations (see [CHATBOT.md](./docs/CHATBOT.md))
+## 🛠️ Tech Stack & System Architecture
 
-## Prerequisites
+### The Core Engine
 
-- Node.js 18+ installed
-- A Shopify store (development or production)
-- Shopify Storefront API access token
+- **Framework:** [Next.js 14+](https://nextjs.org/) (App Router) for Server-Side Rendering and optimized Route Handlers
+- **Language:** [TypeScript](https://www.typescriptlang.org/) for strict type-safety across the payment and order pipelines
+- **Styling:** CSS Modules for scoped, maintainable component styling
 
-## Getting Started
+### The "Headless" Integration
 
-### 1. Shopify Setup
+- **Commerce:** [Shopify Admin API](https://shopify.dev/docs/api/admin-rest) (REST) for robust order management, tagging, and inventory sync
+- **Payments:** [Stripe SDK](https://stripe.com/docs/api) utilizing Stripe Elements for a secure, PCI-compliant checkout experience
+- **Architecture:** Asynchronous Webhook Handshake with frontend polling to ensure data consistency between Stripe and Shopify
 
-First, you need to create a Storefront API access token in your Shopify admin:
+---
 
-1. Go to your Shopify Admin
-2. Navigate to **Settings** → **Apps and sales channels** → **Develop apps**
-3. Click **Create an app** (or use an existing one)
-4. Go to **API credentials** tab
-5. Under **Storefront API**, click **Configure**
-6. Enable the following permissions:
-   - Read products
-   - Read product listings
-   - Read customer tags
-   - Read inventory
-7. Click **Save**
-8. Go back to **API credentials** and copy the **Storefront API access token**
+## 🏗️ Technical Architecture: The Stripe-to-Shopify Bridge
 
-### 2. Environment Setup
+The core of this project is a bespoke checkout system that maintains **100% brand control** while ensuring data consistency between two distinct third-party ecosystems.
 
-1. Clone or navigate to this project directory:
-```bash
-git clone https://github.com/odanree/shopify-ecommerce.git
-cd shopify-ecommerce
+### 1. Intent Orchestration & PCI Compliance
+
+- **Elements-First Flow:** Implements Stripe's latest `PaymentElement` standards, supporting Apple Pay, Google Pay, and link-based payments.
+- **Metadata Injection:** Upon `/api/payment/create-intent`, the backend injects Shopify `variant_ids` and cart snapshots into the Stripe metadata to preserve state through the payment lifecycle.
+
+### 2. Resilience & "Ghost Order" Prevention
+
+- **Webhook-Driven Logic:** Orders are *not* created on the frontend redirect. Instead, a Next.js API Route (`/api/payment/webhook`) listens for `payment_intent.succeeded`.
+- **Signature Verification:** Employs `stripe.webhooks.constructEvent` to verify cryptographic signatures, ensuring only authentic Stripe events can trigger Shopify order creation.
+- **Asynchronous Reliability:** The architecture handles "Ghost Orders"—situations where a user pays but closes their browser before the redirect—ensuring the Shopify Admin is always updated.
+
+### 3. Shopify Admin Sync
+
+- **Variant ID Translation:** Maps Storefront GIDs to Admin-specific numeric IDs to handle inventory decrements.
+- **Race-Condition Handling:** The success page uses a polling mechanism to fetch the order number from a temporary cache, providing a seamless UX while the webhook processes in the background.
+- **Idempotency:** Utilizes Payment Intent ID tagging to prevent duplicate orders during webhook retries.
+
+---
+
+## 🏗️ Robust Checkout Architecture
+
+Unlike basic Shopify integrations, this project implements a **Resilient Webhook Handshake** that gracefully handles asynchronous operations and network delays:
+
+### 1. **Frontend Payment Capture**
+- User fills Shipping Address → Payment Intent created with customer data in metadata
+- Stripe Elements collect payment details (no card numbers on our server)
+- User clicks "Complete Purchase" → Stripe PaymentElement validates and submits
+
+### 2. **Webhook Verification & Signature Check**
+- Stripe pings `/api/payment/webhook` with signed event
+- We verify cryptographic signature using `stripe.webhooks.constructEvent()`
+- Only authenticated Stripe events can trigger order creation (prevents spoofing)
+
+### 3. **Async Background Processing**
+- Webhook handler returns `200 OK` to Stripe **immediately** (~50ms)
+- Shopify order creation happens asynchronously in background
+- This prevents Stripe's 30-second timeout during slow Admin API calls (which can take 1–3 seconds)
+- Payment is confirmed to customer, order is guaranteed to eventually appear in Shopify
+
+### 4. **Idempotency & Duplicate Prevention**
+- Each Shopify order is tagged with the Payment Intent ID: `Stripe-Payment, pi_xxxxx`
+- Webhook checks for existing orders before creating new ones
+- If webhook is retried by Stripe, we return the existing order (no duplicates)
+
+### 5. **Resilient Success Page Polling**
+- Success page can't display order number until cache is populated
+- Webhook processes asynchronously, so data arrives ~500ms–2s after payment
+- Instead of showing "Processing..." forever, page polls `/api/payment/order-number` up to 10 times with 2-second intervals
+- Once order is found, displays order number and provides direct link to Shopify Admin
+
+### 6. **Shopify Admin Link for Portfolio Proof**
+- Success page includes button: "Open Order in Shopify Admin ↗"
+- Direct link to `admin.shopify.com/store/{store}/orders/{shopifyOrderId}`
+- Recruiter/client can instantly verify the order exists in Shopify with correct customer data
+
+### The Complete Webhook Sequence (Interactive Diagram)
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant Frontend as Next.js Client
+    participant API as Next.js API (Route Handlers)
+    participant Stripe as Stripe API
+    participant Shopify as Shopify Admin API
+    
+    User->>Frontend: Clicks "Pay Now"
+    Frontend->>Stripe: Process Payment (Stripe Elements)
+    Stripe-->>Frontend: Payment Successful (Client-side)
+    
+    par Background Webhook Handshake
+        Stripe->>API: POST /api/payment/webhook (payment_intent.succeeded)
+        API->>API: Verify Stripe Signature
+        API-->>Stripe: 200 OK (Immediate Acknowledge)
+        API->>Shopify: Create Order (Line Items + Metadata)
+        Shopify-->>API: Order #1014 Created
+        API->>API: Cache Order Mapping (PI ID -> Order #)
+    and Frontend UX
+        Frontend->>User: Redirect to /checkout/success
+        loop Polling
+            Frontend->>API: GET /api/payment/order-number?pi=xyz
+            alt Not in Cache
+                API-->>Frontend: 404 Not Found
+            else Order Found
+                API-->>Frontend: 200 OK (Order #1014)
+            end
+        end
+    end
+    
+    Frontend->>User: Display Order #1014 & Admin Link
 ```
 
-2. Install dependencies:
+### ASCII Sequence Diagram (Reference)
+
+```
+┌─────────┐              ┌────────┐              ┌──────────┐              ┌────────┐
+│  User   │              │ Stripe │              │ Your API │              │ Shopify│
+└────┬────┘              └───┬────┘              └────┬─────┘              └───┬────┘
+     │                       │                       │                         │
+     │ 1. Fill Address       │                       │                         │
+     ├──────────────────────>│                       │                         │
+     │                       │                       │                         │
+     │ 2. Click "Pay"        │                       │                         │
+     ├──────────────────────>│ Create Intent         │                         │
+     │                       │ (with metadata)       │                         │
+     │                       ├──────────────────────>│                         │
+     │                       │<─── Intent Created ───┤                         │
+     │                       │                       │                         │
+     │ 3. Verify Signature   │                       │                         │
+     │ (Elements.submit())   │                       │                         │
+     ├──────────────────────>│ Confirm Payment       │                         │
+     │                       ├──────────────────────>│                         │
+     │ (Waiting)             │                       │                         │
+     │                       │ ✅ Payment Success   │                         │
+     │                       │                       │                         │
+     │                       │ POST /webhook (signed)│                         │
+     │                       ├──────────────────────>│                         │
+     │                       │<────── 200 OK ────────┤ (return immediately)    │
+     │                       │                       │                         │
+     │ 4. Redirect           │                   [async background]            │
+     │ to Success            │                       ├──────Create Order─────>│
+     │ (polling starts)      │                       │                         │
+     │                       │                       │<─── Order Created ──────┤
+     │                       │                       │ (1-3 seconds)           │
+     │ 5. Poll for order     │                       │                         │
+     ├──────────────────────────────> GET /order-number                        │
+     │                       │                       ├─── return order # ─────>│
+     │                       │                       │                         │
+     │ "Order #1014 ✓"       │                       │                         │
+     │ [Click: View Admin]   │                       │                         │
+     ├─────────────────────────────────────────────────────────────────────────>│
+     │                       │                       │                         │
+     └───────────────────────────────────────────────────────────────────────────┘
+     
+KEY FEATURES OF THIS FLOW:
+• Phase A: Stripe Elements captures payment with cart metadata
+• Phase B: 200 OK returned to Stripe immediately (prevents timeout/retries)
+• Phase C: Async order creation happens in background
+• Phase D: Frontend polling bridges the gap between payment success and Shopify confirmation
+• Phase E: Direct Shopify Admin link proves order exists (portfolio demo gold!)
+```
+
+---
+
+## ✨ Key Features
+
+
+- ⚡ **Next.js 14 App Router:** Utilizing Server Components for lightning-fast catalog browsing.
+- 🔄 **Inventory Management:** Real-time stock decrements in Shopify Admin upon verified payment.
+- 🤖 **AI Chatbot:** GPT-4 powered product search & recommendations (see [docs/CHATBOT.md](./docs/CHATBOT.md)).
+- 🎨 **CSS Modules:** 100% component-scoped styling for zero CSS bloat.
+- 🔒 **Type Safety:** End-to-end TypeScript definitions for Shopify and Stripe payloads.
+- 🛒 **Cart Persistence:** LocalStorage-backed cart with hydration safety and automatic cleanup on order success.
+- 📱 **Fully Responsive:** Professional UI optimized for all screen sizes.
+
+---
+
+## 🚀 Stripe Checkout Implementation
+
+### 🔌 Webhook Setup (Local Development)
+
+Webhooks allow orders to be created in Shopify Admin even if the user closes their browser after paying.
+
+1. **Install & Login:**
+   ```bash
+   stripe login
+   ```
+
+2. **Listen for events:**
+   ```bash
+   stripe listen --forward-to localhost:3000/api/payment/webhook
+   ```
+
+3. **Configure `.env.local`:**
+   Use the `whsec_` secret provided by the CLI.
+
+### 🧪 Integration Sequence (Observed Logs)
+
+```
+✅ Payment Intent created: pi_3T4Fy...
+📧 Webhook event received: payment_intent.succeeded
+📦 Line item mapping: variantId=44303963652141, quantity=2
+✅ Order created: #1010 (ID: 6137892339757) in Shopify Admin
+📦 Cached order #1010 for frontend polling
+```
+
+---
+
+## 📁 Project Structure
+
+```
+├── app/                    # Next.js App Router
+│   ├── api/payment/        # The "Bridge": create-intent, webhook, order-number
+│   ├── checkout/           # Custom Multi-step checkout UI
+│   └── success/            # Order confirmation with polling logic
+├── components/
+│   └── checkout/           # Stripe Element wrappers & Address forms
+├── lib/
+│   ├── shopify.ts          # Storefront API (Catalog)
+│   └── shopify-admin.ts    # Admin API (Order Creation)
+├── contexts/
+│   └── CartContext.tsx     # Cart logic + persistence
+└── docs/                   # Detailed feature documentation
+```
+
+---
+
+## 🔧 Deployment
+
+### Vercel (Recommended)
+
+This project is optimized for Vercel. Ensure the following Environment Variables are configured:
+
+| Variable | Source |
+|----------|--------|
+| `SHOPIFY_STOREFRONT_ACCESS_TOKEN` | Shopify App Settings |
+| `SHOPIFY_ADMIN_API_TOKEN` | Shopify Custom App (write_orders) |
+| `STRIPE_SECRET_KEY` | Stripe Dashboard |
+| `STRIPE_WEBHOOK_SECRET` | Stripe Dashboard > Webhooks |
+
+---
+
+## 📝 Lessons Learned
+
+### 🎯 Idempotency & Data Mismatch
+**Problem:** Stripe's metadata is flat (all keys at same level), but Shopify's REST API expects deeply nested objects. Order tags required comma-separated strings, not arrays.
+
+**Solution:** Implemented strict data mapping layer that transforms Stripe's flat structure into Shopify's required format. Used Payment Intent IDs as idempotency keys to prevent duplicates during webhook retries.
+
+**Impact:** Orders create reliably across mismatched API schemas without data loss or duplication.
+
+---
+
+### 🎯 User Experience Lifecycle  
+**Problem:** Clearing the cart immediately on "Complete Purchase" button click meant failed or declined payments would lose the user's cart. If they closed the browser mid-checkout, their cart disappeared forever.
+
+**Solution:** Moved `clearCart()` to the Success Page, triggered only after the order is confirmed (order cache is populated). This preserves progress through payment retries and browser restarts.
+
+**Impact:** Users can safely retry payments without losing their items; failed transactions don't result in lost carts.
+
+---
+
+### 🎯 Handling API Latency
+**Problem:** Shopify's Admin API can take 1–3 seconds to respond. The Success Page needs the order number immediately, but the webhook processes asynchronously. Without polling, users see a broken "Processing order..." state indefinitely.
+
+**Solution:** Implemented recursive polling on the frontend (10 attempts, 2-second intervals). Success page waits for the order cache to populate instead of assuming instant completion.
+
+**Impact:** Seamless UX even with slow backend APIs; users see their order number appear within 2–5 seconds rather than hanging indefinitely.
+
+---
+
+### 🎯 Serverless Webhook Constraints
+**Problem:** In serverless environments (Next.js on Vercel), if the webhook handler takes too long, the request is killed before Shopify order creation completes. Stripe also has a 30-second timeout before it retries.
+
+**Solution:** Return `200 OK` to Stripe immediately (~50ms), then process Shopify order creation asynchronously in the background via a fire-and-forget pattern. Idempotency check prevents duplicates on retry.
+
+**Impact:** Webhooks complete within Stripe's timeout window while guaranteeing order creation in Shopify, even with slow Admin API responses.
+
+---
+
+## 🛠️ Development
+
+### Install Dependencies
 ```bash
 npm install
 ```
 
-3. Create a `.env.local` file in the root directory:
-```bash
-cp .env.local.example .env.local
-```
-
-4. Edit `.env.local` and add your Shopify credentials:
-```env
-SHOPIFY_STORE_DOMAIN=your-store.myshopify.com
-SHOPIFY_STOREFRONT_ACCESS_TOKEN=your_storefront_access_token_here
-SHOPIFY_ADMIN_API_TOKEN=your_admin_api_token_here
-SHOPIFY_LOCATION_ID=your_location_id_here
-```
-
-> **Note:** `SHOPIFY_ADMIN_API_TOKEN` and `SHOPIFY_LOCATION_ID` are only needed if you want to use the product management scripts.
-
-### 3. Create Demo Products (Optional)
-
-If your store is empty, you can create demo products using our automated scripts:
-
-```bash
-# Create 10 tech-themed t-shirt products
-npx tsx scripts/create-products.ts
-
-# Publish them to the headless storefront channel
-npx tsx scripts/publish-to-channel.ts
-
-# Verify they're visible
-npx tsx scripts/verify-products.ts
-```
-
-Or manually create products in your Shopify Admin and make sure to publish them to the **"headless storefront"** sales channel.
-
-See [scripts/README.md](./scripts/README.md) for more details.
-
-### 4. Run Development Server
-
+### Run Local Dev Server
 ```bash
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) to see your store.
-
-## Project Structure
-
-```
-.
-├── app/                    # Next.js App Router pages
-│   ├── layout.tsx         # Root layout with header/footer
-│   ├── page.tsx           # Homepage
-│   ├── products/          # Products pages
-│   │   ├── page.tsx       # All products listing
-│   │   └── [handle]/      # Individual product page
-│   ├── cart/              # Shopping cart
-│   └── api/               # API routes
-├── components/             # React components
-│   ├── Header.tsx
-│   ├── Footer.tsx
-│   ├── ProductCard.tsx
-│   ├── AddToCart.tsx
-│   └── FamilyPlanBuilder.tsx  # Premium feature demo
-├── lib/                    # Utility functions
-│   └── shopify.ts         # Shopify API client
-├── types/                  # TypeScript type definitions
-│   └── shopify.ts
-├── public/                 # Static assets
-├── contexts/               # React Context for state management
-│   └── CartContext.tsx    # Shopping cart state
-├── cypress/                # E2E tests
-│   └── e2e/               # Test files
-├── docs/                   # Documentation
-│   ├── CHATBOT.md         # AI chatbot architecture & integration
-│   └── ...
-├── next.config.js         # Next.js configuration
-├── tsconfig.json          # TypeScript configuration
-└── cypress.config.ts      # Cypress configuration
+### Build for Production
+```bash
+npm run build
+npm start
 ```
 
-## Available Scripts
-
-### Development
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm start` - Start production server
-- `npm run lint` - Run ESLint
-
-### Testing
-- `npm run cypress` - Open Cypress test runner
-- `npm run test:e2e` - Run E2E tests (requires dev server running)
-- `npm run test:e2e:ci` - Run E2E tests in CI mode
-
-### Product Management
-- `npx tsx scripts/create-products.ts` - Create 10 tech-themed t-shirt products
-- `npx tsx scripts/publish-to-channel.ts` - Publish products to headless storefront
-- `npx tsx scripts/verify-products.ts` - Verify products are visible in Storefront API
-- `npx tsx scripts/delete-products.ts` - Delete all products (use with caution!)
-
-See [scripts/README.md](./scripts/README.md) for detailed script documentation.
-
-## Shopify API Integration
-
-### Fetching Products
-
-```typescript
-import { getProducts } from '@/lib/shopify';
-
-const products = await getProducts();
+### Run E2E Tests
+```bash
+npm run test:e2e
 ```
 
-### Fetching Single Product
+---
 
-```typescript
-import { getProduct } from '@/lib/shopify';
-
-const product = await getProduct('product-handle');
-```
-
-### Cart Operations
-
-```typescript
-import { createCart, addToCart } from '@/lib/shopify';
-
-// Create a new cart
-const cart = await createCart();
-
-// Add item to cart
-const updatedCart = await addToCart(cart.id, variantId, quantity);
-```
-
-## Customization
-
-### Styling
-
-This project uses CSS Modules for component-scoped styling:
-- `components/*.module.css` - Component-specific styles
-- `app/globals.css` - Global styles and CSS variables
-- Create new `.module.css` files for new components
-
-### Adding Features
-
-1. **Search** - Implement product search using Shopify Search API
-2. **Collections** - Add collection pages
-3. **Customer Accounts** - Integrate customer login/register
-4. **Checkout** - Customize checkout experience
-5. **Wishlist** - Add product wishlist functionality
-
-## Deployment
-
-### Vercel (Recommended) - Auto Deploy Enabled ✅
-
-This project is configured for automatic deployment to Vercel with GitHub integration.
-
-**Quick Deploy:**
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/odanree/shopify-ecommerce&env=SHOPIFY_STORE_DOMAIN,SHOPIFY_STOREFRONT_ACCESS_TOKEN&envDescription=Shopify%20API%20credentials%20required&project-name=shopify-headless-store)
-
-**Manual Setup with Auto-Deploy:**
-
-📖 **See [VERCEL_DEPLOYMENT.md](./docs/VERCEL_DEPLOYMENT.md) for complete step-by-step instructions**
-
-**Quick Overview:**
-1. Push your code to GitHub (already done ✅)
-2. Import project in [Vercel](https://vercel.com/new)
-3. Root directory is already set to repo root (no subdirectory needed!)
-4. Add environment variables:
-   - `SHOPIFY_STORE_DOMAIN`
-   - `SHOPIFY_STOREFRONT_ACCESS_TOKEN`
-5. Deploy!
-
-**Auto-Deploy Features:**
-- ✅ Every push to `main` branch deploys to production
-- ✅ Pull requests get automatic preview deployments
-- ✅ Instant rollback to previous versions
-- ✅ Built-in CI/CD pipeline
-
-### Other Platforms
-
-This Next.js app can be deployed to:
-- Netlify
-- AWS Amplify
-- Cloudflare Pages
-- Any Node.js hosting
-
-Make sure to set environment variables on your hosting platform.
-
-## Performance Optimization
-
-- **Image Optimization**: Uses Next.js Image component
-- **Caching**: API responses cached for 60 seconds
-- **Static Generation**: Product pages pre-rendered at build time
-- **Code Splitting**: Automatic code splitting with App Router
-
-## TypeScript
-
-The project is fully typed with TypeScript. Main types are in `types/shopify.ts`:
-- `ShopifyProduct` - Product data structure
-- `ShopifyVariant` - Product variant
-- `ShopifyCart` - Cart data structure
-- `ShopifyCartLine` - Cart line item
-
-## Troubleshooting
-
-### "Cannot connect to Shopify API"
-- Verify your `.env.local` file has correct credentials
-- Check your Storefront API token is valid
-- Ensure your store domain is correct (include `.myshopify.com`)
-
-### Images not loading
-- Verify `next.config.js` has Shopify CDN in `remotePatterns`
-- Check products have featured images in Shopify admin
-
-### Build errors
-- Run `npm install` to ensure all dependencies are installed
-- Delete `.next` folder and rebuild
-- Check Node.js version (18+ required)
-
-## Resources
-
-- [🤖 AI Chatbot Documentation](./docs/CHATBOT.md) - Architecture, integration, and customization
-- [Next.js Documentation](https://nextjs.org/docs)
-- [Shopify Storefront API](https://shopify.dev/api/storefront)
-- [TypeScript Documentation](https://www.typescriptlang.org/docs)
-- [Cypress Documentation](https://docs.cypress.io)
-- [CSS Modules Documentation](https://github.com/css-modules/css-modules)
-- [Vercel Deployment Guide](./docs/VERCEL_DEPLOYMENT.md)
-
-## Support
-
-For issues or questions:
-- Check [Shopify Dev Forums](https://community.shopify.com/c/shopify-apis-and-sdks/bd-p/shopify-apis-and-technology)
-- Review [Next.js Documentation](https://nextjs.org/docs)
-
-## License
-
-MIT License - feel free to use this for your projects!
-Wed Feb  4 11:44:51 PST 2026
+**Built with ❤️ for modern ecommerce. Production-ready. Portfolio-worthy.**

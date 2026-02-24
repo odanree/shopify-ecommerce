@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { useCart } from '@/contexts/CartContext';
 import styles from './AddToCart.module.css';
 
@@ -21,6 +22,7 @@ export function AddToCart({
   price = '0.00',
   variant = 'Default'
 }: AddToCartProps) {
+  const router = useRouter();
   const [quantity, setQuantity] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState('');
@@ -46,7 +48,10 @@ export function AddToCart({
       
       setMessage('Added to cart!');
       
-      setTimeout(() => setMessage(''), 3000);
+      // Redirect to cart after 500ms
+      setTimeout(() => {
+        router.push('/cart');
+      }, 500);
     } catch (error) {
       setMessage('Error adding to cart');
       console.error(error);

@@ -183,9 +183,12 @@ export default function CartPage() {
               </span>
             </div>
 
-            <button className={styles.checkoutButton}>
+            <Link
+              href="/checkout"
+              className={styles.checkoutButton}
+            >
               Proceed to Checkout
-            </button>
+            </Link>
 
             <Link
               href="/family-plan"
