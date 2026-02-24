@@ -81,47 +81,6 @@ async function checkOrderByPaymentIntentId(
 }
 
 /**
- * Tag order with payment intent ID for future idempotency checks
- */
-async function tagOrderWithPaymentIntent(
-  orderId: string,
-  paymentIntentId: string
-): Promise<void> {
-  try {
-    // Shopify expects tags as a comma-separated string
-    const tags = `payment_intent:${paymentIntentId}`;
-
-    const response = await fetch(
-      `https://${SHOPIFY_DOMAIN}/admin/api/2024-01/orders/${orderId}.json`,
-      {
-        method: 'PUT',
-        headers: {
-          'X-Shopify-Access-Token': ADMIN_TOKEN || '',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          order: {
-            id: orderId,
-            tags: tags,
-          },
-        }),
-      }
-    );
-
-    if (!response.ok) {
-      const error = await response.json();
-      console.error('Tag update error:', error);
-      throw new Error(`Failed to tag order: ${response.status}`);
-    }
-
-    console.log(`✅ Tagged order #${orderId} with payment intent: ${tags}`);
-  } catch (error) {
-    console.error('Error tagging order:', error);
-    throw error;
-  }
-}
-
-/**
  * Create order in Shopify Admin
  * - Idempotency check: Prevents duplicate orders from webhook retries
  * - Inventory: Uses 'decrement_ignoring_policy' to track stock in real-time
@@ -174,6 +133,9 @@ export async function createShopifyOrder(
             email: orderData.email,
             financial_status: 'paid',
             fulfillment_status: 'unfulfilled',
+            
+            // Tag with payment intent ID during creation (single API call)
+            tags: `Stripe-Payment, ${orderData.paymentIntentId}`,
 
             // Line items
             line_items: lineItemsPayload,
@@ -205,19 +167,7 @@ export async function createShopifyOrder(
 
     const { order } = await response.json();
 
-    // STEP 3: Tag order with payment intent for future idempotency checks
-    // Non-blocking: If tagging fails, the order still exists (which is the important part)
-    try {
-      await tagOrderWithPaymentIntent(order.id, orderData.paymentIntentId);
-    } catch (tagError) {
-      console.warn(
-        `⚠️  Warning: Failed to tag order, but order was created successfully. Manual tagging may be needed.`,
-        tagError
-      );
-      // Don't throw - the order exists, which is what matters
-    }
-
-    console.log(`✅ Order created: #${order.order_number} (ID: ${order.id})`);
+    console.log(`✅ Order created: #${order.order_number} (ID: ${order.id}) with tags: ${order.tags}`);
 
     return {
       id: order.id,
