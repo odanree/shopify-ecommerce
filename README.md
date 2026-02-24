@@ -65,6 +65,56 @@ Unlike basic Shopify integrations, this project implements a **Resilient Webhook
 - Direct link to `admin.shopify.com/store/{store}/orders/{shopifyOrderId}`
 - Recruiter/client can instantly verify the order exists in Shopify with correct customer data
 
+### The Complete Webhook Sequence
+
+```
+┌─────────┐              ┌────────┐              ┌──────────┐              ┌────────┐
+│  User   │              │ Stripe │              │ Your API │              │ Shopify│
+└────┬────┘              └───┬────┘              └────┬─────┘              └───┬────┘
+     │                       │                       │                         │
+     │ 1. Fill Address       │                       │                         │
+     ├──────────────────────>│                       │                         │
+     │                       │                       │                         │
+     │ 2. Click "Pay"        │                       │                         │
+     ├──────────────────────>│ Create Intent         │                         │
+     │                       │ (with metadata)       │                         │
+     │                       ├──────────────────────>│                         │
+     │                       │<─── Intent Created ───┤                         │
+     │                       │                       │                         │
+     │ 3. Verify Signature   │                       │                         │
+     │ (Elements.submit())   │                       │                         │
+     ├──────────────────────>│ Confirm Payment       │                         │
+     │                       ├──────────────────────>│                         │
+     │ (Waiting)             │                       │                         │
+     │                       │ ✅ Payment Success   │                         │
+     │                       │                       │                         │
+     │                       │ POST /webhook (signed)│                         │
+     │                       ├──────────────────────>│                         │
+     │                       │<────── 200 OK ────────┤ (return immediately)    │
+     │                       │                       │                         │
+     │ 4. Redirect           │                   [async background]            │
+     │ to Success            │                       ├──────Create Order─────>│
+     │ (polling starts)      │                       │                         │
+     │                       │                       │<─── Order Created ──────┤
+     │                       │                       │ (1-3 seconds)           │
+     │ 5. Poll for order     │                       │                         │
+     ├──────────────────────────────> GET /order-number                        │
+     │                       │                       ├─── return order # ─────>│
+     │                       │                       │                         │
+     │ "Order #1014 ✓"       │                       │                         │
+     │ [Click: View Admin]   │                       │                         │
+     ├─────────────────────────────────────────────────────────────────────────>│
+     │                       │                       │                         │
+     └───────────────────────────────────────────────────────────────────────────┘
+     
+KEY FEATURES OF THIS FLOW:
+• Phase A: Stripe Elements captures payment with cart metadata
+• Phase B: 200 OK returned to Stripe immediately (prevents timeout/retries)
+• Phase C: Async order creation happens in background
+• Phase D: Frontend polling bridges the gap between payment success and Shopify confirmation
+• Phase E: Direct Shopify Admin link proves order exists (portfolio demo gold!)
+```
+
 ---
 
 ## ✨ Key Features
