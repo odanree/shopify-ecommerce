@@ -11,16 +11,14 @@ function SuccessPageContent() {
   const searchParams = useSearchParams();
   const { clearCart } = useCart();
   const [mounted, setMounted] = useState(false);
-  const [orderNumber, setOrderNumber] = useState<number | null>(null);
-  const [orderId, setOrderId] = useState<string | null>(null);
+  const [order, setOrder] = useState<{ orderNumber: number; orderId: string } | null>(null);
   const [loading, setLoading] = useState(true);
 
   // Extract payment intent ID from URL (Stripe redirects here)
   const paymentIntentId = searchParams.get('payment_intent');
 
-  // Get Shopify store name from domain for admin link
-  // Format: "odanree.myshopify.com" → "odanree"
-  const shopifyStoreName = process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN?.split('.')[0] || '';
+  // Get Shopify store domain for admin link
+  const shopifyStoreDomain = process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN || '';
 
   // Fetch order data from cache (webhook already created the order)
   // Uses recursive polling with retry logic (up to 10 attempts, 2-second intervals)
@@ -42,8 +40,10 @@ function SuccessPageContent() {
         const response = await fetch(`/api/payment/order-number?paymentIntentId=${paymentIntentId}`);
         if (response.ok) {
           const data = await response.json();
-          setOrderNumber(data.orderNumber);
-          setOrderId(data.orderId);
+          setOrder({
+            orderNumber: data.orderNumber,
+            orderId: data.orderId,
+          });
           setLoading(false);
           console.log(`✅ Order #${data.orderNumber} found in cache`);
         } else if (response.status === 404) {
@@ -69,15 +69,15 @@ function SuccessPageContent() {
     return () => clearTimeout(timer);
   }, [paymentIntentId]);
 
-  // Clear cart only after order is confirmed (orderNumber received from webhook)
+  // Clear cart only after order is confirmed (order object populated)
   // This ensures items don't disappear if payment fails mid-checkout
   useEffect(() => {
-    if (orderNumber) {
+    if (order) {
       console.log('🧹 Order confirmed - clearing cart...');
       clearCart();
       console.log('✅ Cart cleared after order confirmation');
     }
-  }, [orderNumber]); // Note: clearCart dependency omitted to prevent unnecessary re-runs
+  }, [order, clearCart]);
 
   if (!mounted) {
     return null; // Avoid hydration mismatch
@@ -108,9 +108,9 @@ function SuccessPageContent() {
           <p className={styles.confirmationLabel}>Your Order Number</p>
           {loading ? (
             <div className={styles.orderNumberLoading} />
-          ) : orderNumber ? (
+          ) : order ? (
             <p className={styles.orderNumber}>
-              #{orderNumber}
+              #{order.orderNumber}
             </p>
           ) : (
             <p className={styles.orderNumberFallback}>
@@ -119,17 +119,17 @@ function SuccessPageContent() {
           )}
         </div>
 
-        {/* Developer Portal: View in Shopify Admin (dev mode only) */}
-        {process.env.NODE_ENV === 'development' && orderId && shopifyStoreName && (
+        {/* Developer Demo Link: View in Shopify Admin */}
+        {order && shopifyStoreDomain && (
           <div className={styles.devPortalBox}>
-            <p className={styles.devPortalLabel}>🧪 Developer Mode</p>
+            <p className={styles.devPortalLabel}>🧪 Developer Demo</p>
             <a
-              href={`https://admin.shopify.com/store/${shopifyStoreName}/orders/${orderId}`}
+              href={`https://admin.shopify.com/store/${shopifyStoreDomain.split('.')[0]}/orders/${order.orderId}`}
               target="_blank"
               rel="noopener noreferrer"
               className={styles.devPortalLink}
             >
-              View Order in Shopify Admin →
+              Open Order in Shopify Admin ↗
             </a>
           </div>
         )}
