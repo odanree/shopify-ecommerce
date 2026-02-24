@@ -22,7 +22,6 @@ export default function CheckoutPage() {
   const [address, setAddress] = useState({
     firstName: '',
     lastName: '',
-    email: '',
     address1: '',
     city: '',
     zip: '',
@@ -57,7 +56,7 @@ export default function CheckoutPage() {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             amount: total,
-            email: address.email || undefined, // Let Stripe extract email from payment method
+            // Email will be extracted from Stripe payment method, not form
             cartId: Math.random().toString(36),
             lineItems: cartItems.map((item) => ({
               variantId: item.variantId,
@@ -140,6 +139,7 @@ export default function CheckoutPage() {
                 Shipping Address
               </h2>
               <AddressStep
+                address={address}
                 onAddressChange={setAddress}
                 isLoading={isCreatingIntent}
               />

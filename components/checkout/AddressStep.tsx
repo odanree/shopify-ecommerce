@@ -6,11 +6,19 @@ import styles from './CheckoutComponents.module.css';
  * Address form component for shipping information
  */
 interface AddressStepProps {
+  address: {
+    firstName: string;
+    lastName: string;
+    address1: string;
+    city: string;
+    zip: string;
+    country: string;
+  };
   onAddressChange: (address: any) => void;
   isLoading?: boolean;
 }
 
-export function AddressStep({ onAddressChange, isLoading = false }: AddressStepProps) {
+export function AddressStep({ address, onAddressChange, isLoading = false }: AddressStepProps) {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     onAddressChange((prev: any) => ({
@@ -27,6 +35,7 @@ export function AddressStep({ onAddressChange, isLoading = false }: AddressStepP
           <input
             type="text"
             name="firstName"
+            value={address.firstName}
             onChange={handleChange}
             disabled={isLoading}
             className={styles.formInput}
@@ -38,6 +47,7 @@ export function AddressStep({ onAddressChange, isLoading = false }: AddressStepP
           <input
             type="text"
             name="lastName"
+            value={address.lastName}
             onChange={handleChange}
             disabled={isLoading}
             className={styles.formInput}
@@ -52,6 +62,7 @@ export function AddressStep({ onAddressChange, isLoading = false }: AddressStepP
           <input
             type="text"
             name="address1"
+            value={address.address1}
             onChange={handleChange}
             disabled={isLoading}
             className={styles.formInput}
@@ -66,6 +77,7 @@ export function AddressStep({ onAddressChange, isLoading = false }: AddressStepP
           <input
             type="text"
             name="city"
+            value={address.city}
             onChange={handleChange}
             disabled={isLoading}
             className={styles.formInput}
@@ -77,6 +89,7 @@ export function AddressStep({ onAddressChange, isLoading = false }: AddressStepP
           <input
             type="text"
             name="zip"
+            value={address.zip}
             onChange={handleChange}
             disabled={isLoading}
             className={styles.formInput}
@@ -90,10 +103,10 @@ export function AddressStep({ onAddressChange, isLoading = false }: AddressStepP
           <label className={styles.formLabel}>Country</label>
           <select
             name="country"
+            value={address.country}
             onChange={handleChange}
             disabled={isLoading}
             className={styles.formSelect}
-            defaultValue="US"
             required
           >
             <option value="US">United States</option>
