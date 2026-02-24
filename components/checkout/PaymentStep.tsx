@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements, PaymentElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { AlertCircle, Loader2 } from 'lucide-react';
+import styles from './CheckoutComponents.module.css';
 
 interface PaymentStepProps {
   clientSecret: string | null;
@@ -76,34 +77,36 @@ function PaymentForm({
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-4 w-full items-start">
+    <form onSubmit={handleSubmit} className={styles.paymentForm}>
       {error && (
-        <div className="w-full flex items-center gap-3 p-4 bg-red-50 border border-red-200 rounded-lg">
-          <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0" />
-          <p className="text-sm text-red-600">{error}</p>
+        <div className={styles.errorAlert}>
+          <AlertCircle className={styles.errorIcon} />
+          <p className={styles.errorMessage}>{error}</p>
         </div>
       )}
 
-      <div className="w-full bg-white p-6 border rounded-lg">
-        <label className="block text-sm font-medium text-gray-900 mb-3">
+      <div className={styles.paymentDetailsBox}>
+        <label className={styles.paymentDetailsLabel}>
           Payment Details
         </label>
-        {clientSecret ? (
-          <PaymentElement
-            options={{
-              layout: 'tabs',
-              wallets: {
-                applePay: 'auto',
-                googlePay: 'auto',
-              },
-            }}
-          />
-        ) : (
-          <div className="h-20 bg-gray-100 rounded animate-pulse flex items-center justify-center">
-            <span className="text-gray-500 text-sm">Loading payment form...</span>
-          </div>
-        )}
-        <p className="text-xs text-gray-400 mt-3 pt-3 border-t border-gray-100">
+        <div className={styles.paymentElementContainer}>
+          {clientSecret ? (
+            <PaymentElement
+              options={{
+                layout: 'tabs',
+                wallets: {
+                  applePay: 'auto',
+                  googlePay: 'auto',
+                },
+              }}
+            />
+          ) : (
+            <div className={styles.paymentLoadingPlaceholder}>
+              <span className={styles.paymentLoadingText}>Loading payment form...</span>
+            </div>
+          )}
+        </div>
+        <p className={styles.testCardInfo}>
           💳 Test: 4242 4242 4242 4242
         </p>
       </div>
@@ -111,11 +114,11 @@ function PaymentForm({
       <button
         type="submit"
         disabled={submitting || !stripe || !elements || !clientSecret || isLoading}
-        className="w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-bold rounded-lg transition flex items-center justify-center gap-2 text-base"
+        className={styles.completeButton}
       >
         {submitting ? (
           <>
-            <Loader2 className="w-5 h-5 animate-spin" />
+            <Loader2 className={styles.spinnerIcon} />
             Securely processing payment...
           </>
         ) : (
@@ -135,14 +138,14 @@ export function PaymentStep(props: PaymentStepProps) {
 
   if (!mounted) {
     return (
-      <div className="h-80 bg-gray-100 rounded animate-pulse" />
+      <div className={styles.paymentLoadingPlaceholder} style={{ height: '20rem' }} />
     );
   }
 
   if (!props.clientSecret) {
     return (
-      <div className="h-80 bg-gray-100 rounded animate-pulse flex items-center justify-center">
-        <Loader2 className="w-8 h-8 animate-spin text-gray-400" />
+      <div className={styles.paymentLoadingPlaceholder} style={{ height: '20rem' }}>
+        <Loader2 className={styles.spinnerIcon} />
       </div>
     );
   }
