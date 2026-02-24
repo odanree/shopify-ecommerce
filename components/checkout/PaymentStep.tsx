@@ -76,15 +76,15 @@ function PaymentForm({
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form onSubmit={handleSubmit} className="flex flex-col items-start gap-4 w-full">
       {error && (
-        <div className="flex items-center gap-3 p-4 bg-red-50 border border-red-200 rounded-lg">
+        <div className="w-full flex items-center gap-3 p-4 bg-red-50 border border-red-200 rounded-lg">
           <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0" />
           <p className="text-sm text-red-600">{error}</p>
         </div>
       )}
 
-      <div className="bg-white p-6 border rounded-lg">
+      <div className="w-full bg-white p-6 border rounded-lg">
         <label className="block text-sm font-medium text-gray-900 mb-3">
           Payment Details
         </label>
@@ -105,22 +105,24 @@ function PaymentForm({
         )}
       </div>
 
-      <button
-        type="submit"
-        disabled={submitting || !stripe || !elements || !clientSecret || isLoading}
-        className="w-full h-fit py-2.5 px-4 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-semibold rounded-lg transition flex items-center justify-center gap-2"
-      >
-        {submitting ? (
-          <>
-            <Loader2 className="w-4 h-4 animate-spin" />
-            Securely processing payment...
-          </>
-        ) : (
-          'Complete Purchase'
-        )}
-      </button>
+      <div className="w-full h-fit">
+        <button
+          type="submit"
+          disabled={submitting || !stripe || !elements || !clientSecret || isLoading}
+          className="w-full py-2.5 px-4 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-semibold rounded-lg transition flex items-center justify-center gap-2"
+        >
+          {submitting ? (
+            <>
+              <Loader2 className="w-4 h-4 animate-spin" />
+              Securely processing payment...
+            </>
+          ) : (
+            'Complete Purchase'
+          )}
+        </button>
+      </div>
 
-      <p className="text-xs text-gray-500 text-center leading-relaxed">
+      <p className="text-xs text-gray-500 text-center leading-relaxed w-full">
         💳 Test card: 4242 4242 4242 4242 (any future date, any 3-digit CVC)
       </p>
     </form>
