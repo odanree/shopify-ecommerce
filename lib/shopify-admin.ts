@@ -88,29 +88,10 @@ async function tagOrderWithPaymentIntent(
   paymentIntentId: string
 ): Promise<void> {
   try {
-    // Get current tags first (to preserve existing tags)
-    const getResponse = await fetch(
-      `https://${SHOPIFY_DOMAIN}/admin/api/2024-01/orders/${orderId}.json`,
-      {
-        headers: {
-          'X-Shopify-Access-Token': ADMIN_TOKEN || '',
-          'Content-Type': 'application/json',
-        },
-      }
-    );
+    // Shopify expects tags as a comma-separated string
+    const tags = `payment_intent:${paymentIntentId}`;
 
-    if (!getResponse.ok) {
-      throw new Error(`Failed to fetch order: ${getResponse.status}`);
-    }
-
-    const { order: existingOrder } = await getResponse.json();
-    const existingTags = existingOrder.tags || '';
-    
-    // Append new tag to existing tags (comma-separated)
-    const newTag = `payment_intent:${paymentIntentId}`;
-    const allTags = existingTags ? `${existingTags}, ${newTag}` : newTag;
-
-    const updateResponse = await fetch(
+    const response = await fetch(
       `https://${SHOPIFY_DOMAIN}/admin/api/2024-01/orders/${orderId}.json`,
       {
         method: 'PUT',
@@ -120,19 +101,20 @@ async function tagOrderWithPaymentIntent(
         },
         body: JSON.stringify({
           order: {
-            tags: allTags,
+            id: orderId,
+            tags: tags,
           },
         }),
       }
     );
 
-    if (!updateResponse.ok) {
-      const error = await updateResponse.json();
+    if (!response.ok) {
+      const error = await response.json();
       console.error('Tag update error:', error);
-      throw new Error(`Failed to tag order: ${updateResponse.status}`);
+      throw new Error(`Failed to tag order: ${response.status}`);
     }
 
-    console.log(`✅ Tagged order #${orderId} with payment intent`);
+    console.log(`✅ Tagged order #${orderId} with payment intent: ${tags}`);
   } catch (error) {
     console.error('Error tagging order:', error);
     throw error;
