@@ -1,13 +1,13 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useCart } from '@/contexts/CartContext';
 import Link from 'next/link';
 import { CheckCircle2, Home, ShoppingBag } from 'lucide-react';
 import styles from './SuccessPage.module.css';
 
-export default function CheckoutSuccessPage() {
+function SuccessPageContent() {
   const searchParams = useSearchParams();
   const { clearCart } = useCart();
   const [mounted, setMounted] = useState(false);
@@ -26,21 +26,22 @@ export default function CheckoutSuccessPage() {
     console.log('✅ Cart cleared on success page');
 
     // Fetch order number from cache
-    if (paymentIntentId) {
-      async function fetchOrderNumber() {
-        try {
-          const response = await fetch(`/api/payment/order-number?paymentIntentId=${paymentIntentId}`);
-          if (response.ok) {
-            const data = await response.json();
-            setOrderNumber(data.orderNumber);
-            console.log(`📦 Order #${data.orderNumber} found in cache`);
-          }
-        } catch (error) {
-          console.error('Failed to fetch order number:', error);
-        } finally {
-          setLoading(false);
+    const fetchOrderNumber = async () => {
+      try {
+        const response = await fetch(`/api/payment/order-number?paymentIntentId=${paymentIntentId}`);
+        if (response.ok) {
+          const data = await response.json();
+          setOrderNumber(data.orderNumber);
+          console.log(`📦 Order #${data.orderNumber} found in cache`);
         }
+      } catch (error) {
+        console.error('Failed to fetch order number:', error);
+      } finally {
+        setLoading(false);
       }
+    };
+
+    if (paymentIntentId) {
       fetchOrderNumber();
     } else {
       setLoading(false);
@@ -133,5 +134,13 @@ export default function CheckoutSuccessPage() {
         </p>
       </div>
     </div>
+  );
+}
+
+export default function CheckoutSuccessPage() {
+  return (
+    <Suspense fallback={<div style={{ minHeight: '100vh' }} />}>
+      <SuccessPageContent />
+    </Suspense>
   );
 }

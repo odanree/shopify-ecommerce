@@ -51,21 +51,20 @@ function PaymentForm({
       }
 
       // Step 2: Now safely confirm payment with Stripe
-      const { error: stripeError, paymentIntent } =
-        await stripe.confirmPayment({
-          elements,
-          confirmParams: {
-            return_url: `${window.location.origin}/checkout/success`,
-          },
-        });
+      const result = await stripe.confirmPayment({
+        elements,
+        confirmParams: {
+          return_url: `${window.location.origin}/checkout/success`,
+        },
+      });
 
-      if (stripeError) {
-        setError(stripeError.message || 'Payment failed');
-        onError?.(stripeError.message || 'Payment failed');
-      } else if (paymentIntent?.status === 'succeeded') {
-        // Don't clear cart here - success page will handle it
-        // This prevents race condition with Stripe redirect
-        onSuccess?.(paymentIntent.id);
+      if (result.error) {
+        setError(result.error.message || 'Payment failed');
+        onError?.(result.error.message || 'Payment failed');
+      } else {
+        // confirmPayment redirects to success URL on success, so this may not always execute
+        // But we handle it just in case
+        onSuccess?.((result as any).paymentIntent?.id || 'payment-success');
       }
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Unknown error';
