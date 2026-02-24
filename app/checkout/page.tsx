@@ -13,7 +13,7 @@ import styles from './CheckoutPage.module.css';
 
 export default function CheckoutPage() {
   const router = useRouter();
-  const { items: cartItems } = useCart();
+  const { items: cartItems, isHydrated } = useCart();
 
   const [clientSecret, setClientSecret] = useState<string | null>(null);
   const [status, setStatus] = useState<CheckoutStatusType>(null);
@@ -38,6 +38,11 @@ export default function CheckoutPage() {
   // Create Payment Intent on mount
   useEffect(() => {
     async function createPaymentIntent() {
+      // Don't redirect until cart is hydrated from localStorage
+      if (!isHydrated) {
+        return;
+      }
+
       if (cartItems.length === 0) {
         router.push('/cart');
         return;
@@ -82,7 +87,12 @@ export default function CheckoutPage() {
     }
 
     createPaymentIntent();
-  }, []); // Only run once on mount
+  }, [isHydrated, cartItems, router]);
+
+  if (!isHydrated) {
+    // Wait for cart to hydrate from localStorage
+    return null;
+  }
 
   if (cartItems.length === 0) {
     return (
