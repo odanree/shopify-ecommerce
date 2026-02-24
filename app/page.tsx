@@ -22,14 +22,14 @@ export const dynamic = 'force-dynamic';
 const heroImages = [
   {
     id: 1,
-    src: 'https://picsum.photos/1200/600?random=1',
+    src: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=1200&h=600&fit=crop',
     alt: 'Premium Tech Apparel',
     title: 'Premium Tech Collection',
     description: 'High-quality t-shirts designed for tech enthusiasts',
   },
   {
     id: 2,
-    src: 'https://picsum.photos/1200/600?random=2',
+    src: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=1200&h=600&fit=crop',
     alt: 'Latest Innovation',
     title: 'Latest Innovation',
     description: 'Discover our newest designs and exclusive releases',
