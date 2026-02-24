@@ -4,13 +4,12 @@ import { createShopifyOrder } from '@/lib/shopify-admin';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '');
 
-const webhookSecret = (process.env.VERCEL_ENV === 'production' 
-  ? process.env.STRIPE_WEBHOOK_SECRET_PROD 
-  : process.env.STRIPE_WEBHOOK_SECRET) || '';
-
-if (!webhookSecret) {
-  throw new Error('STRIPE_WEBHOOK_SECRET is not defined in environment variables');
-}
+// Get webhook secret from environment (prefer production secret if available)
+const getWebhookSecret = () => {
+  return process.env.VERCEL_ENV === 'production' 
+    ? process.env.STRIPE_WEBHOOK_SECRET_PROD 
+    : process.env.STRIPE_WEBHOOK_SECRET;
+};
 /**
  * Background task: Create Shopify order asynchronously
  * Separated from webhook response to allow immediate 200 OK acknowledgment
@@ -111,13 +110,16 @@ async function processOrderAsync(
 export async function POST(request: NextRequest) {
   try {
     const signature = request.headers.get('stripe-signature');
+    const webhookSecret = getWebhookSecret();
 
-    // 🕵️ DEBUG LOGS
-    console.log('--- WEBHOOK DEBUG START ---');
-    console.log('Signature Header Exists:', !!signature);
-    console.log('Webhook Secret Defined:', !!process.env.STRIPE_WEBHOOK_SECRET);
-    console.log('Webhook Secret Start:', webhookSecret?.substring(0, 10));
-    console.log('--- WEBHOOK DEBUG END ---');
+    // Validate webhook secret is configured
+    if (!webhookSecret) {
+      console.error('❌ STRIPE_WEBHOOK_SECRET is not configured in environment variables');
+      return NextResponse.json(
+        { error: 'Webhook secret not configured' },
+        { status: 500 }
+      );
+    }
 
     const body = await request.text();
 
