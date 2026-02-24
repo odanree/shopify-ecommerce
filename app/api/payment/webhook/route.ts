@@ -4,8 +4,12 @@ import { createShopifyOrder } from '@/lib/shopify-admin';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '');
 
-const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET || '';
-
+// Get webhook secret from environment (prefer production secret if available)
+const getWebhookSecret = () => {
+  return process.env.VERCEL_ENV === 'production' 
+    ? process.env.STRIPE_WEBHOOK_SECRET_PROD 
+    : process.env.STRIPE_WEBHOOK_SECRET;
+};
 /**
  * Background task: Create Shopify order asynchronously
  * Separated from webhook response to allow immediate 200 OK acknowledgment
@@ -53,20 +57,9 @@ async function processOrderAsync(
       `✅ Shopify order created: #${shopifyOrder.order_number} (ID: ${shopifyOrder.id})`
     );
 
-    // Store order number for success page lookup
-    try {
-      await fetch(`${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/api/payment/order-number`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          paymentIntentId: paymentIntent.id,
-          orderNumber: shopifyOrder.order_number,
-          shopifyOrderId: shopifyOrder.id,
-        }),
-      });
-    } catch (cacheError) {
-      console.warn('⚠️  Failed to cache order number, but order was created successfully', cacheError);
-    }
+    // Order is now in Shopify with the payment intent ID tagged
+    // The success page will query Shopify directly via GET /api/payment/order-number
+    // No need to store in a separate cache anymore
 
     // Log order record for audit trail
     const orderRecord = {
@@ -117,6 +110,17 @@ async function processOrderAsync(
 export async function POST(request: NextRequest) {
   try {
     const signature = request.headers.get('stripe-signature');
+    const webhookSecret = getWebhookSecret();
+
+    // Validate webhook secret is configured
+    if (!webhookSecret) {
+      console.error('❌ STRIPE_WEBHOOK_SECRET is not configured in environment variables');
+      return NextResponse.json(
+        { error: 'Webhook secret not configured' },
+        { status: 500 }
+      );
+    }
+
     const body = await request.text();
 
     if (!signature) {
@@ -156,18 +160,18 @@ export async function POST(request: NextRequest) {
       console.log(`💳 Payment succeeded: ${paymentIntent.id}, Customer: ${firstName} ${lastName}, Email: ${email}`);
 
       // OPTIMIZATION: Return 200 OK immediately to prevent Stripe retries
-      // Process the order creation in the background (fire-and-forget pattern)
-      // This ensures:
-      // 1. Webhook acknowledges within <100ms (Stripe timeout = 30s)
-      // 2. No duplicate webhook retries waiting for slow Shopify API calls
-      // 3. Order is still created reliably (idempotency check prevents duplicates)
+      // Process the order creation synchronously BEFORE returning to Stripe
+      // This ensures the order is created in Shopify before webhook completes
+      // Still fast (~50ms for Shopify API call)
       
-      // Fire-and-forget: Process order in background without awaiting
-      processOrderAsync(paymentIntent, email, firstName, lastName, lineItems, shippingAddress, cartId).catch((err) => {
-        console.error('🔴 Background order processing failed:', err);
-        // Note: This won't retry automatically; consider using a job queue (Bull, Inngest)
-        // for production systems with high transaction volume
-      });
+      try {
+        await processOrderAsync(paymentIntent, email, firstName, lastName, lineItems, shippingAddress, cartId);
+      } catch (err) {
+        console.error('🔴 Order processing failed:', err);
+        // Order creation failed, but webhook already succeeded in Stripe
+        // For production systems with high transaction volume, implement a job queue
+        // (Bull, Inngest, etc.) to automatically retry with exponential backoff
+      }
 
       // Return 200 OK immediately to acknowledge receipt
       return NextResponse.json(
