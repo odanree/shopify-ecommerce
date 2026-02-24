@@ -18,7 +18,8 @@ export default function CheckoutSuccessPage() {
 
   useEffect(() => {
     setMounted(true);
-    // Clear cart on success
+
+    // Immediately clear cart (no dependencies, just do it)
     clearCart();
 
     // Fetch order number from cache
@@ -40,7 +41,7 @@ export default function CheckoutSuccessPage() {
     } else {
       setLoading(false);
     }
-  }, [clearCart, paymentIntentId]);
+  }, []);
 
   if (!mounted) {
     return null; // Avoid hydration mismatch

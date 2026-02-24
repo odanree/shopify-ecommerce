@@ -10,7 +10,6 @@ interface PaymentStepProps {
   isLoading?: boolean;
   onSuccess?: (paymentIntentId: string) => void;
   onError?: (error: string) => void;
-  onClearCart?: () => void;
 }
 
 const stripePromise = loadStripe(
@@ -22,7 +21,6 @@ function PaymentForm({
   isLoading,
   onSuccess,
   onError,
-  onClearCart,
 }: PaymentStepProps) {
   const stripe = useStripe();
   const elements = useElements();
@@ -64,8 +62,8 @@ function PaymentForm({
         setError(stripeError.message || 'Payment failed');
         onError?.(stripeError.message || 'Payment failed');
       } else if (paymentIntent?.status === 'succeeded') {
-        // Clear cart and call success callback
-        onClearCart?.();
+        // Don't clear cart here - success page will handle it
+        // This prevents race condition with Stripe redirect
         onSuccess?.(paymentIntent.id);
       }
     } catch (err) {
