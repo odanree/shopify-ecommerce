@@ -4,7 +4,9 @@ import { createShopifyOrder } from '@/lib/shopify-admin';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '');
 
-const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET || '';
+const webhookSecret = process.env.VERCEL_ENV === 'production' 
+  ? process.env.STRIPE_WEBHOOK_SECRET_PROD 
+  : process.env.STRIPE_WEBHOOK_SECRET;
 
 /**
  * Background task: Create Shopify order asynchronously
@@ -111,7 +113,7 @@ export async function POST(request: NextRequest) {
     console.log('--- WEBHOOK DEBUG START ---');
     console.log('Signature Header Exists:', !!signature);
     console.log('Webhook Secret Defined:', !!process.env.STRIPE_WEBHOOK_SECRET);
-    console.log('Webhook Secret Start:', process.env.STRIPE_WEBHOOK_SECRET?.substring(0, 10));
+    console.log('Webhook Secret Start:', webhookSecret?.substring(0, 10));
     console.log('--- WEBHOOK DEBUG END ---');
 
     const body = await request.text();
