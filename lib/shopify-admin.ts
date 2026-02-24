@@ -6,10 +6,15 @@
 const SHOPIFY_DOMAIN = process.env.SHOPIFY_STORE_DOMAIN;
 const ADMIN_TOKEN = process.env.SHOPIFY_ADMIN_ACCESS_TOKEN;
 
-if (!SHOPIFY_DOMAIN || !ADMIN_TOKEN) {
-  console.warn(
-    'Warning: SHOPIFY_STORE_DOMAIN or SHOPIFY_ADMIN_ACCESS_TOKEN not set'
-  );
+// Log configuration at startup
+if (!SHOPIFY_DOMAIN) {
+  console.error('❌ ERROR: SHOPIFY_STORE_DOMAIN not set in .env.local');
+}
+if (!ADMIN_TOKEN) {
+  console.error('❌ ERROR: SHOPIFY_ADMIN_ACCESS_TOKEN not set in .env.local');
+}
+if (SHOPIFY_DOMAIN && ADMIN_TOKEN) {
+  console.log(`✅ Shopify Admin configured for: ${SHOPIFY_DOMAIN}`);
 }
 
 export interface LineItem {
@@ -138,6 +143,18 @@ export async function createShopifyOrder(
     }
 
     // STEP 2: Create new order with inventory tracking
+    const lineItemsPayload = orderData.lineItems.map((item) => {
+      console.log(`📦 Line item: variantId=${item.variantId}, quantity=${item.quantity}`);
+      return {
+        variant_id: item.variantId,
+        quantity: item.quantity,
+        title: item.title,
+        price: item.price,
+      };
+    });
+
+    console.log('📋 Line items payload:', JSON.stringify(lineItemsPayload, null, 2));
+
     const response = await fetch(
       `https://${SHOPIFY_DOMAIN}/admin/api/2024-01/orders.json`,
       {
@@ -153,12 +170,7 @@ export async function createShopifyOrder(
             fulfillment_status: 'unfulfilled',
 
             // Line items
-            line_items: orderData.lineItems.map((item) => ({
-              variant_id: item.variantId,
-              quantity: item.quantity,
-              title: item.title,
-              price: item.price,
-            })),
+            line_items: lineItemsPayload,
 
             // Shipping address
             shipping_address: {

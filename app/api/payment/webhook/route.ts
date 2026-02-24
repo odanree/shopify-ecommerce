@@ -54,13 +54,23 @@ export async function POST(request: NextRequest) {
       try {
         // Parse metadata
         const parsedLineItems = lineItems ? JSON.parse(lineItems) : [];
+        
+        // Convert GraphQL IDs to REST API IDs
+        // GraphQL: gid://shopify/ProductVariant/12345 → REST: 12345
+        const convertedLineItems = parsedLineItems.map((item: any) => ({
+          ...item,
+          variantId: item.variantId.includes('gid://') 
+            ? item.variantId.split('/').pop() 
+            : item.variantId,
+        }));
+        
         const parsedShippingAddress = shippingAddress ? JSON.parse(shippingAddress) : {};
 
         // STEP 3: Create order in Shopify
         // This function includes idempotency check to prevent duplicates
         const shopifyOrder = await createShopifyOrder({
           email,
-          lineItems: parsedLineItems,
+          lineItems: convertedLineItems,
           shippingAddress: parsedShippingAddress,
           paymentIntentId: paymentIntent.id,
           cartId,
