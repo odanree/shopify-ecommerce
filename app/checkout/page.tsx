@@ -9,6 +9,7 @@ import { OrderSummary } from '@/components/checkout/OrderSummary';
 import { CheckoutStatus, type CheckoutStatusType } from '@/components/checkout/CheckoutStatus';
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
+import styles from './CheckoutPage.module.css';
 
 export default function CheckoutPage() {
   const router = useRouter();
@@ -85,11 +86,12 @@ export default function CheckoutPage() {
 
   if (cartItems.length === 0) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">Your Cart is Empty</h1>
-          <p className="text-gray-600 mb-6">Please add items before checking out.</p>
-          <Link href="/cart" className="text-blue-600 hover:underline">
+      <div className={styles.emptyCheckoutScreen}>
+        <div className={styles.emptyCheckoutContent}>
+          <h1 className={styles.emptyCheckoutTitle}>Your Cart is Empty</h1>
+          <p className={styles.emptyCheckoutMessage}>Please add items before checking out.</p>
+          <Link href="/cart" className={styles.emptyCheckoutLink}>
+            <ArrowLeft className="w-4 h-4" />
             Back to Cart
           </Link>
         </div>
@@ -98,31 +100,33 @@ export default function CheckoutPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className={styles.checkoutScreen}>
       {/* Header */}
-      <div className="bg-white border-b">
-        <div className="max-w-6xl mx-auto px-4 py-6">
-          <Link href="/cart" className="flex items-center gap-2 text-blue-600 hover:underline mb-4">
+      <div className={styles.checkoutHeader}>
+        <div className={styles.checkoutHeaderContainer}>
+          <Link href="/cart" className={styles.backLink}>
             <ArrowLeft className="w-4 h-4" />
             Back to Cart
           </Link>
-          <h1 className="text-3xl font-bold text-gray-900">Checkout</h1>
+          <h1 className={styles.checkoutTitle}>Checkout</h1>
         </div>
       </div>
 
       {/* Main Content */}
-      <div className="max-w-6xl mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className={styles.checkoutContent}>
+        <div className={styles.checkoutGrid}>
           {/* Left Column: Checkout Form */}
-          <div className="lg:col-span-2 space-y-8">
+          <div className={styles.formColumn}>
             {/* Status Messages */}
             {status && (
-              <CheckoutStatus status={status} message={statusMessage} />
+              <div className={styles.statusContainer}>
+                <CheckoutStatus status={status} message={statusMessage} />
+              </div>
             )}
 
             {/* Address Section */}
-            <div className="bg-white p-6 rounded-lg shadow-sm">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">
+            <div className={styles.formSection}>
+              <h2 className={styles.sectionTitle}>
                 Shipping Address
               </h2>
               <AddressStep
@@ -132,8 +136,8 @@ export default function CheckoutPage() {
             </div>
 
             {/* Payment Section */}
-            <div className="bg-white p-6 rounded-lg shadow-sm">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">
+            <div className={styles.formSection}>
+              <h2 className={styles.sectionTitle}>
                 Payment Method
               </h2>
               <PaymentStep
@@ -153,14 +157,16 @@ export default function CheckoutPage() {
           </div>
 
           {/* Right Column: Order Summary (Sticky) */}
-          <div>
-            <OrderSummary
-              items={cartItems}
-              subtotal={subtotal}
-              tax={tax}
-              shipping={shipping}
-              total={total}
-            />
+          <div className={styles.summaryColumn}>
+            <div className={styles.orderSummaryBox}>
+              <OrderSummary
+                items={cartItems}
+                subtotal={subtotal}
+                tax={tax}
+                shipping={shipping}
+                total={total}
+              />
+            </div>
           </div>
         </div>
       </div>

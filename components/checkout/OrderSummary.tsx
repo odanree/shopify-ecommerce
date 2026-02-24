@@ -1,6 +1,7 @@
 'use client';
 
 import { CartItem } from '@/contexts/CartContext';
+import styles from './CheckoutComponents.module.css';
 
 interface OrderSummaryProps {
   items: CartItem[];
@@ -18,18 +19,18 @@ export function OrderSummary({
   total,
 }: OrderSummaryProps) {
   return (
-    <div className="bg-gray-50 rounded-lg p-6 sticky top-20">
-      <h2 className="text-lg font-semibold text-gray-900 mb-4">Order Summary</h2>
+    <div className={styles.orderSummaryBox}>
+      <h2 className={styles.orderSummaryTitle}>Order Summary</h2>
 
       {/* Items List */}
-      <div className="space-y-3 mb-4 pb-4 border-b">
+      <div className={styles.itemsList}>
         {items.map((item) => (
-          <div key={item.id} className="flex justify-between text-sm">
-            <div>
-              <p className="font-medium text-gray-900">{item.title}</p>
-              <p className="text-gray-600">Qty: {item.quantity}</p>
+          <div key={item.id} className={styles.itemRow}>
+            <div className={styles.itemLeftCol}>
+              <p className={styles.itemTitle}>{item.title}</p>
+              <p className={styles.itemQuantity}>Qty: {item.quantity}</p>
             </div>
-            <p className="font-medium text-gray-900">
+            <p className={styles.itemPrice}>
               ${(item.price * item.quantity).toFixed(2)}
             </p>
           </div>
@@ -37,43 +38,43 @@ export function OrderSummary({
       </div>
 
       {/* Totals */}
-      <div className="space-y-2 mb-4">
-        <div className="flex justify-between text-sm text-gray-600">
-          <span>Subtotal</span>
-          <span>${subtotal.toFixed(2)}</span>
+      <div className={styles.totalsSection}>
+        <div className={styles.totalRow}>
+          <span className={styles.totalRowLabel}>Subtotal</span>
+          <span className={styles.totalRowValue}>${subtotal.toFixed(2)}</span>
         </div>
-        <div className="flex justify-between text-sm text-gray-600">
-          <span>Shipping</span>
-          <span className="text-green-600 font-medium">
+        <div className={styles.totalRow}>
+          <span className={styles.totalRowLabel}>Shipping</span>
+          <span className={`${styles.totalRowValue} ${shipping === 0 ? styles.shippingFree : ''}`}>
             {shipping === 0 ? 'FREE' : `$${shipping.toFixed(2)}`}
           </span>
         </div>
-        <div className="flex justify-between text-sm text-gray-600">
-          <span>Tax (Estimated)</span>
-          <span>${tax.toFixed(2)}</span>
+        <div className={styles.totalRow}>
+          <span className={styles.totalRowLabel}>Tax (Estimated)</span>
+          <span className={styles.totalRowValue}>${tax.toFixed(2)}</span>
         </div>
       </div>
 
       {/* Total */}
-      <div className="flex justify-between items-center pt-4 border-t-2 border-gray-200">
-        <span className="font-semibold text-gray-900">Total</span>
-        <span className="text-2xl font-bold text-gray-900">
+      <div className={styles.totalSection}>
+        <span className={styles.totalLabel}>Total</span>
+        <span className={styles.totalAmount}>
           ${total.toFixed(2)}
         </span>
       </div>
 
       {/* Security badges */}
-      <div className="mt-6 space-y-2 pt-6 border-t">
-        <div className="flex items-center gap-2 text-xs text-green-700">
-          <span>✓</span>
+      <div className={styles.badges}>
+        <div className={styles.badge}>
+          <span className={styles.badgeCheck}>✓</span>
           <span>Secure checkout with Stripe</span>
         </div>
-        <div className="flex items-center gap-2 text-xs text-green-700">
-          <span>✓</span>
+        <div className={styles.badge}>
+          <span className={styles.badgeCheck}>✓</span>
           <span>30-day money-back guarantee</span>
         </div>
-        <div className="flex items-center gap-2 text-xs text-green-700">
-          <span>✓</span>
+        <div className={styles.badge}>
+          <span className={styles.badgeCheck}>✓</span>
           <span>Free shipping on all orders</span>
         </div>
       </div>

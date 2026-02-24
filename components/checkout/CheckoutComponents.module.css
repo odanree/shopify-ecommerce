@@ -1,0 +1,212 @@
+/* Checkout Components Styling */
+
+/* Order Summary */
+.orderSummaryBox {
+  background: white;
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.orderSummaryTitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #111;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid #f3f4f6;
+}
+
+.itemsList {
+  space-y: 0.75rem;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.itemRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.itemLeftCol {
+  flex: 1;
+  min-width: 0;
+}
+
+.itemTitle {
+  font-weight: 600;
+  color: #111;
+  font-size: 0.95rem;
+  margin-bottom: 0.25rem;
+}
+
+.itemQuantity {
+  color: #666;
+  font-size: 0.875rem;
+}
+
+.itemPrice {
+  font-weight: 600;
+  color: #111;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.totalsSection {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.totalRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.875rem;
+  color: #666;
+}
+
+.totalRowLabel {
+  font-size: 0.875rem;
+  color: #666;
+}
+
+.totalRowValue {
+  font-weight: 500;
+  color: #111;
+}
+
+.shippingFree {
+  color: #10b981 !important;
+  font-weight: 600;
+}
+
+.totalSection {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 1rem;
+  border-top: 2px solid #e5e7eb;
+}
+
+.totalLabel {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #111;
+}
+
+.totalAmount {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #0284c7;
+}
+
+.badges {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.badge {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  color: #059669;
+  line-height: 1.4;
+}
+
+.badgeCheck {
+  flex-shrink: 0;
+  font-weight: bold;
+}
+
+/* Address Step Form */
+.addressForm {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.formRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+@media (max-width: 640px) {
+  .formRow {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}
+
+.formRowFull {
+  grid-column: 1 / -1;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.formLabel {
+  font-weight: 500;
+  color: #111;
+  font-size: 0.9375rem;
+}
+
+.formInput {
+  padding: 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+  background-color: white;
+  color: #111;
+}
+
+.formInput:focus {
+  outline: none;
+  border-color: #0284c7;
+  box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.1);
+  background-color: #f0f9ff;
+}
+
+.formInput:disabled {
+  background-color: #f3f4f6;
+  color: #999;
+  cursor: not-allowed;
+}
+
+.formSelect {
+  padding: 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+  background-color: white;
+  color: #111;
+  cursor: pointer;
+}
+
+.formSelect:focus {
+  outline: none;
+  border-color: #0284c7;
+  box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.1);
+}
+
+.formSelect:disabled {
+  background-color: #f3f4f6;
+  color: #999;
+  cursor: not-allowed;
+}
