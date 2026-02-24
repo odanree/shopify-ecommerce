@@ -137,6 +137,13 @@ export async function createShopifyOrder(
             // Tag with payment intent ID during creation (single API call)
             tags: `Stripe-Payment, ${orderData.paymentIntentId}`,
 
+            // Customer data with name and address
+            customer: {
+              first_name: orderData.shippingAddress.firstName,
+              last_name: orderData.shippingAddress.lastName,
+              email: orderData.email,
+            },
+
             // Line items
             line_items: lineItemsPayload,
 

@@ -93,7 +93,7 @@ function SuccessPageContent() {
             </p>
           ) : (
             <p className={styles.orderNumberFallback}>
-              {paymentIntentId}
+              Processing order...
             </p>
           )}
         </div>
