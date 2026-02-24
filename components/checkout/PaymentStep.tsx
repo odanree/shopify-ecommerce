@@ -76,7 +76,7 @@ function PaymentForm({
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col items-start gap-4 w-full">
+    <form onSubmit={handleSubmit} className="flex flex-col gap-4 w-full">
       {error && (
         <div className="w-full flex items-center gap-3 p-4 bg-red-50 border border-red-200 rounded-lg">
           <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0" />
@@ -108,22 +108,20 @@ function PaymentForm({
         </p>
       </div>
 
-      <div className="w-full">
-        <button
-          type="submit"
-          disabled={submitting || !stripe || !elements || !clientSecret || isLoading}
-          className="w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-bold rounded-lg transition flex items-center justify-center gap-2 text-base"
-        >
-          {submitting ? (
-            <>
-              <Loader2 className="w-5 h-5 animate-spin" />
-              Securely processing payment...
-            </>
-          ) : (
-            'Complete Purchase'
-          )}
-        </button>
-      </div>
+      <button
+        type="submit"
+        disabled={submitting || !stripe || !elements || !clientSecret || isLoading}
+        className="w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-bold rounded-lg transition flex items-center justify-center gap-2 text-base"
+      >
+        {submitting ? (
+          <>
+            <Loader2 className="w-5 h-5 animate-spin" />
+            Securely processing payment...
+          </>
+        ) : (
+          'Complete Purchase'
+        )}
+      </button>
     </form>
   );
 }
