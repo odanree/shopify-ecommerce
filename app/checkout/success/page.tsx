@@ -19,7 +19,8 @@ function SuccessPageContent() {
   const paymentIntentId = searchParams.get('payment_intent');
 
   // Get Shopify store name from domain for admin link
-  const shopifyStoreName = process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN?.replace('.myshopify.com', '') || '';
+  // Format: "odanree.myshopify.com" → "odanree"
+  const shopifyStoreName = process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN?.split('.')[0] || '';
 
   // Fetch order data from cache (webhook already created the order)
   // Uses recursive polling with retry logic (up to 10 attempts, 2-second intervals)
