@@ -35,49 +35,31 @@ test.describe('Checkout Flow: Stripe Redirect Loop', () => {
     await page.waitForLoadState('networkidle');
     console.log('✅ Product page loaded');
 
-    // Step 4: Find and click add to cart button
-    const addButton = page
-      .locator('[data-testid="add-to-cart-button"], button')
-      .filter({ hasText: /[Aa]dd.*[Cc]art|Add to Bag/i })
-      .first();
+    // Step 4: Robust Add to Cart
+    // Using getByTestId ensures we hit the actual interactable element
+    // expect().toBeVisible() polls the DOM until button appears (handles slow renders)
+    const addButton = page.getByTestId('add-to-cart-button');
+    await expect(addButton).toBeVisible({ timeout: 10000 });
+    await addButton.click();
+    console.log('✅ Add to cart clicked');
 
-    if (await addButton.isVisible({ timeout: 5000 }).catch(() => false)) {
-      await addButton.click();
-      console.log('✅ Add to cart clicked');
-      await page.waitForURL('/cart', { timeout: 10000 });
-      
-      // Use resilience pattern: expect().toBeVisible() retries automatically
-      // This gives CartContext time to hydrate from localStorage
-      // Playwright retries for ~5 seconds (configurable timeout) before failing
-      await expect(page.locator('[data-testid="cart-item"]').first()).toBeVisible({ timeout: 15000 });
-      const cartItemCount = await page.locator('[data-testid="cart-item"]').count();
-      console.log(`✅ Cart loaded with ${cartItemCount} item(s)`);
-    } else {
-      console.log('⚠️  Add to cart button not found, navigating to cart directly');
-      await page.goto('/cart');
-    }
+    // Step 5: Wait for the Cart to "Wake Up"
+    // We expect the URL to change to /cart AND at least one item to appear
+    // Playwright will poll this until it passes or hits the timeout
+    await expect(page).toHaveURL(/\/cart/, { timeout: 10000 });
+    const cartItem = page.getByTestId('cart-item').first();
+    await expect(cartItem).toBeVisible({ timeout: 15000 });
+    console.log('✅ Cart successfully hydrated with items');
 
-    await page.waitForLoadState('networkidle');
-
-    // Step 5: Verify cart has items (resilience - expect retries automatically)
-    const cartItems = await page.locator('[data-testid="cart-item"]').count();
-    expect(cartItems).toBeGreaterThan(0);
-    console.log(`✅ Final verification: ${cartItems} item(s) in cart`);
-
-    // Step 6: Click checkout button
-    const checkoutButton = page.locator('[data-testid="checkout-btn"]');
-    if (await checkoutButton.isVisible({ timeout: 5000 }).catch(() => false)) {
-      await checkoutButton.click();
-    } else {
-      const checkoutBtn = page.locator('button').filter({ hasText: /[Cc]heckout|Proceed/i }).first();
-      await checkoutBtn.click();
-    }
-
-    await page.waitForURL('/checkout', { timeout: 10000 });
-    await page.waitForLoadState('networkidle');
+    // Step 6: Checkout Navigation
+    // toBeEnabled() ensures JavaScript has attached event listeners before we click
+    const checkoutBtn = page.getByTestId('checkout-btn');
+    await expect(checkoutBtn).toBeEnabled();
+    await checkoutBtn.click();
+    await expect(page).toHaveURL(/\/checkout/, { timeout: 10000 });
     console.log('✅ Checkout page loaded');
 
-    // Step 7: Fill shipping info (optional)
+    // Step 7: Fill shipping info (optional, fields may not exist)
     try {
       await fillShippingInfo(page, {
         email: 'test@example.com',
@@ -92,22 +74,25 @@ test.describe('Checkout Flow: Stripe Redirect Loop', () => {
       console.log('⚠️  Shipping form fields not found');
     }
 
-    // Step 8: Fill payment details in Stripe iframe (optional)
+    // Step 8: Fill payment details in Stripe iframe with better locator strategy
     try {
-      const frameLocator = page.frameLocator('iframe[title*="Stripe"]').first();
-      await frameLocator.locator('input[placeholder*="Card" i]').fill('4242424242424242', {
-        timeout: 5000,
-      });
-      await frameLocator.locator('input[placeholder*="MM" i]').fill('12/25', { timeout: 5000 });
-      await frameLocator.locator('input[placeholder*="CVC" i]').fill('123', { timeout: 5000 });
+      // Better Stripe iframe locator that handles dynamic names
+      const stripeFrame = page
+        .frameLocator('iframe[title*="Secure payment window"], iframe[src*="stripe.com"]')
+        .first();
+      await stripeFrame.getByLabel(/Card number/i).fill('4242424242424242', { timeout: 5000 });
+      await stripeFrame.getByLabel(/Expiration date/i).fill('12/25', { timeout: 5000 });
+      await stripeFrame.getByLabel(/CVC/i).fill('123', { timeout: 5000 });
       console.log('✅ Payment details filled');
     } catch (e) {
-      console.log('⚠️  Stripe iframe not ready');
+      console.log('⚠️  Stripe iframe not ready or payment element in use');
     }
 
     // Step 9: Click complete purchase
-    const completeButton = page.locator('[data-testid="complete-purchase-btn"]');
-    if (await completeButton.isVisible({ timeout: 5000 }).catch(() => false)) {
+    const completeButton = page.getByTestId('complete-purchase-btn');
+    try {
+      await expect(completeButton).toBeVisible({ timeout: 5000 });
+      await expect(completeButton).toBeEnabled();
       await completeButton.click();
       console.log('✅ Complete purchase clicked');
 
@@ -115,10 +100,10 @@ test.describe('Checkout Flow: Stripe Redirect Loop', () => {
         const orderNumber = await waitForSuccessPage(page);
         console.log(`✅ Order confirmed: ${orderNumber}`);
       } catch (e) {
-        console.log('⚠️  Success page not reached - expected in test environment');
+        console.log('⚠️  Success page not reached - expected in test environment with redirects');
       }
-    } else {
-      console.log('⚠️  Complete purchase button not found');
+    } catch (e) {
+      console.log('⚠️  Complete purchase button not ready');
     }
   });
 
