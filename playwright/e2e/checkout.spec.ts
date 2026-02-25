@@ -45,6 +45,9 @@ test.describe('Checkout Flow: Stripe Redirect Loop', () => {
       await addButton.click();
       console.log('✅ Add to cart clicked');
       await page.waitForURL('/cart', { timeout: 10000 });
+      
+      // Wait for cart items to appear in DOM (hydration + localStorage sync)
+      await page.locator('[data-testid="cart-item"]').first().waitFor({ state: 'visible', timeout: 10000 });
     } else {
       console.log('⚠️  Add to cart button not found, navigating to cart directly');
       await page.goto('/cart');
