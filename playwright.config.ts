@@ -14,9 +14,11 @@ export default defineConfig({
       SHOPIFY_STOREFRONT_ACCESS_TOKEN: process.env.SHOPIFY_STOREFRONT_ACCESS_TOKEN!,
     },
   },
+  retries: process.env.CI ? 2 : 0,
   use: {
     baseURL: 'http://localhost:3000',
     trace: 'on-first-retry',
+    video: 'on-first-retry',
     screenshot: 'only-on-failure',
   },
   projects: [
