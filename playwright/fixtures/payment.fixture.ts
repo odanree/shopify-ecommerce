@@ -17,7 +17,7 @@ export const test = base.extend<{
       amount: 1000, // $10.00
       currency: 'usd',
       automatic_payment_methods: { enabled: true },
-      metadata: { test: true },
+      metadata: { test: 'true' }, // Metadata must be strings
     });
     await use(intent.id);
     // Cleanup: cancel intent after test
