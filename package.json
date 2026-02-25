@@ -21,10 +21,11 @@
     "cypress:headless": "cypress run",
     "test:e2e": "start-server-and-test dev http://localhost:3000 cypress:headless",
     "test:e2e:ci": "start-server-and-test start http://localhost:3000 cypress:headless",
-    "playwright": "playwright test",
-    "playwright:ui": "playwright test --ui",
-    "playwright:debug": "playwright test --debug",
-    "playwright:report": "playwright show-report"
+    "playwright": "dotenv -e .env.local -- playwright test",
+    "playwright:ui": "dotenv -e .env.local -- playwright test --ui",
+    "playwright:debug": "dotenv -e .env.local -- playwright test --debug",
+    "playwright:report": "playwright show-report",
+    "playwright:list": "dotenv -e .env.local -- playwright test --list"
   },
   "dependencies": {
     "@stripe/react-stripe-js": "^2.4.0",
