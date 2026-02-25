@@ -38,4 +38,5 @@ export default defineConfig({
   expect: {
     timeout: 10 * 1000,
   },
+  reporter: process.env.CI ? 'blob' : 'html',
 });
