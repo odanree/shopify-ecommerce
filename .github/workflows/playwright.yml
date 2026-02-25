@@ -6,45 +6,21 @@ on:
     branches: [ main, master ]
 jobs:
   test:
+    timeout-minutes: 60
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # This splits your 72 tests into 3 groups running in parallel
+        shardIndex: [1, 2, 3]
+        shardTotal: [3]
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: 'npm' # Caches your node_modules
-
-      - name: Install dependencies
-        run: npm ci # Faster than 'npm install' for CI
-
-      # --- START CACHING LOGIC ---
-      - name: Get Playwright version
-        id: playwright-version
-        run: echo "version=$(npx playwright --version)" >> $GITHUB_OUTPUT
-
-      - name: Cache Playwright Browsers
-        id: playwright-cache
-        uses: actions/cache@v4
-        with:
-          path: ~/.cache/ms-playwright
-          key: ${{ runner.os }}-playwright-${{ steps.playwright-version.outputs.version }}
-          restore-keys: |
-            ${{ runner.os }}-playwright-
-
-      - name: Install Playwright Browsers
-        # Only install if the cache was NOT found
-        if: steps.playwright-cache.outputs.cache-hit != 'true'
-        run: npx playwright install --with-deps
-      
-      - name: Install Playwright system dependencies
-        # Always run this (it's fast) to ensure Linux libs are present
-        if: steps.playwright-cache.outputs.cache-hit == 'true'
-        run: npx playwright install-deps
-      # --- END CACHING LOGIC ---
+      # ... (setup node and cache steps as before) ...
 
       - name: Run Playwright tests
-        run: npx playwright test
-env:
+        run: npx playwright test --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }}
+        env:
           # Frontend Keys
           SHOPIFY_STORE_DOMAIN: ${{ secrets.SHOPIFY_STORE_DOMAIN }}
           SHOPIFY_STOREFRONT_ACCESS_TOKEN: ${{ secrets.SHOPIFY_STOREFRONT_ACCESS_TOKEN }}
