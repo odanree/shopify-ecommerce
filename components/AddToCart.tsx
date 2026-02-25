@@ -89,6 +89,7 @@ export function AddToCart({
       </div>
 
       <button
+        data-testid="add-to-cart-button"
         onClick={handleAddToCart}
         disabled={isLoading}
         className={`${styles.button} ${styles.primaryButton}`}

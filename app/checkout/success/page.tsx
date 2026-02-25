@@ -112,7 +112,7 @@ console.log("Domain Var:", process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN);
           {loading ? (
             <div className={styles.orderNumberLoading} />
           ) : order ? (
-            <p className={styles.orderNumber}>
+            <p data-testid="order-number" className={styles.orderNumber}>
               #{order.orderNumber}
             </p>
           ) : (

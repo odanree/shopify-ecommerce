@@ -29,7 +29,7 @@ export default function CartPage() {
 
   if (cartItems.length === 0) {
     return (
-      <div className={styles.emptyCartScreen} data-cy="empty-cart-page">
+      <div className={styles.emptyCartScreen} data-testid="empty-cart-page" data-cy="empty-cart-page">
         <div className={styles.emptyCartContainer}>
           <div className={styles.emptyCardBox}>
             <div className={styles.emptyIconBox}>
@@ -88,6 +88,7 @@ export default function CartPage() {
               <div
                 key={item.id}
                 className={styles.cartItem}
+                data-testid="cart-item"
                 data-cy="cart-item"
               >
                 {/* Product Image */}
@@ -186,6 +187,7 @@ export default function CartPage() {
             <Link
               href="/checkout"
               className={styles.checkoutButton}
+              data-testid="checkout-btn"
             >
               Proceed to Checkout
             </Link>

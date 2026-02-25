@@ -112,6 +112,7 @@ function PaymentForm({
 
       <button
         type="submit"
+        data-testid="complete-purchase-btn"
         disabled={submitting || !stripe || !elements || !clientSecret || isLoading}
         className={styles.completeButton}
       >
