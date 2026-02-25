@@ -150,37 +150,25 @@ test.describe('Checkout Flow: Stripe Redirect Loop', () => {
       console.log('⚠️  Shipping form fields not found');
     }
 
-    // Step 8: Fill payment details in Stripe iframe with better locator strategy
-    try {
-      // Better Stripe iframe locator that handles dynamic names
-      const stripeFrame = page
-        .frameLocator('iframe[title*="Secure payment window"], iframe[src*="stripe.com"]')
-        .first();
-      await stripeFrame.getByLabel(/Card number/i).fill('4242424242424242', { timeout: 5000 });
-      await stripeFrame.getByLabel(/Expiration date/i).fill('12/25', { timeout: 5000 });
-      await stripeFrame.getByLabel(/CVC/i).fill('123', { timeout: 5000 });
-      console.log('✅ Payment details filled');
-    } catch (e) {
-      console.log('⚠️  Stripe iframe not ready or payment element in use');
-    }
+  // Step 8 & 9: Unified Payment Logic
+  const stripeFrame = page.frameLocator('iframe[title*="Secure payment window"]').first();
 
-    // Step 9: Click complete purchase
-    const completeButton = page.getByTestId('complete-purchase-btn');
-    try {
-      await expect(completeButton).toBeVisible({ timeout: 5000 });
-      await expect(completeButton).toBeEnabled();
-      await completeButton.click();
-      console.log('✅ Complete purchase clicked');
+  // Use a strict expectation here—if Stripe doesn't load, the test SHOULD fail.
+  await expect(stripeFrame.locator('input[name="cardnumber"]')).toBeVisible({ timeout: 15000 });
 
-      try {
-        const orderNumber = await waitForSuccessPage(page);
-        console.log(`✅ Order confirmed: ${orderNumber}`);
-      } catch (e) {
-        console.log('⚠️  Success page not reached - expected in test environment with redirects');
-      }
-    } catch (e) {
-      console.log('⚠️  Complete purchase button not ready');
-    }
+  await stripeFrame.getByLabel(/Card number/i).fill('4242424242424242');
+  await stripeFrame.getByLabel(/Expiration date/i).fill('12/25');
+  await stripeFrame.getByLabel(/CVC/i).fill('123');
+  console.log('✅ Payment details filled');
+
+  // Step 9: Click complete purchase ONLY after payment is filled
+  const completeButton = page.getByTestId('complete-purchase-btn');
+  await expect(completeButton).toBeEnabled();
+  await completeButton.click();
+  console.log('✅ Complete purchase clicked');
+
+  const orderNumber = await waitForSuccessPage(page);
+  console.log(`✅ Order confirmed: ${orderNumber}`);
   });
 
   test('cart is empty when accessed directly (without items)', async ({ page }) => {
