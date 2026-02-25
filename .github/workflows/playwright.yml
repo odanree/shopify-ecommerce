@@ -105,14 +105,24 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
+      
+      # 1. Explicitly create the directory to avoid "Path does not exist"
+      - name: Create reports directory
+        run: mkdir -p all-blob-reports
 
+      # 2. Download and flatten all reports into that folder
       - name: Download all blob reports
         uses: actions/download-artifact@v4
         with:
-          path: all-blob-reports
           pattern: blob-report-*
-          merge-multiple: true # 👈 This flattens all files into the 'all-blob-reports' folder
+          path: all-blob-reports
+          merge-multiple: true
 
+      # 3. List the files so you can see if the .blob files are actually there
+      - name: List received blobs
+        run: ls -R all-blob-reports
+
+      # 4. Run the merge
       - name: Merge into HTML Report
         run: npx playwright merge-reports --reporter html ./all-blob-reports
 
