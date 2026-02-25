@@ -16,11 +16,6 @@ export default function CartPage() {
   const tax = subtotal * 0.08; // Example 8% tax
   const total = subtotal + shipping + tax;
 
-  if (!isHydrated) {
-    // Wait for cart to hydrate from localStorage
-    return null;
-  }
-
   if (isLoading) {
     return (
       <div className={styles.loadingScreen}>
@@ -32,6 +27,7 @@ export default function CartPage() {
     );
   }
 
+  // Show empty cart page even during hydration (fresh carts are empty)
   if (cartItems.length === 0) {
     return (
       <div className={styles.emptyCartScreen} data-testid="empty-cart-page" data-cy="empty-cart-page">
