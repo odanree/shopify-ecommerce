@@ -4,7 +4,7 @@ import { Page } from '@playwright/test';
  * Wait for cart to be added and navigate to cart page
  */
 export async function addToCartAndNavigate(page: Page): Promise<void> {
-  const addButton = page.locator('[data-cy="add-to-cart-btn"]').first();
+  const addButton = page.locator('[data-testid="add-to-cart-button"]').first();
   if (await addButton.isVisible({ timeout: 5000 })) {
     await addButton.click();
     await page.waitForURL('/cart', { timeout: 10000 });
@@ -27,12 +27,12 @@ export async function fillShippingInfo(
     zip: string;
   }
 ): Promise<void> {
-  await page.fill('[data-cy="shipping-email"]', data.email);
-  await page.fill('[data-cy="shipping-name"]', data.name);
-  await page.fill('[data-cy="shipping-address"]', data.address);
-  await page.fill('[data-cy="shipping-city"]', data.city);
-  await page.fill('[data-cy="shipping-state"]', data.state);
-  await page.fill('[data-cy="shipping-zip"]', data.zip);
+  await page.fill('[data-testid="shipping-email"]', data.email);
+  await page.fill('[data-testid="shipping-name"]', data.name);
+  await page.fill('[data-testid="shipping-address"]', data.address);
+  await page.fill('[data-testid="shipping-city"]', data.city);
+  await page.fill('[data-testid="shipping-state"]', data.state);
+  await page.fill('[data-testid="shipping-zip"]', data.zip);
 }
 
 /**
@@ -56,11 +56,11 @@ export async function fillStripeCard(
  */
 export async function verifyElementVisible(
   page: Page,
-  selector: string,
+  testid: string,
   timeoutMs: number = 10000
 ): Promise<boolean> {
   try {
-    await page.locator(selector).waitFor({ state: 'visible', timeout: timeoutMs });
+    await page.locator(`[data-testid="${testid}"]`).waitFor({ state: 'visible', timeout: timeoutMs });
     return true;
   } catch {
     return false;
@@ -74,6 +74,7 @@ export async function waitForSuccessPage(page: Page): Promise<string | null> {
   await page.waitForURL('/checkout/success', { timeout: 15000 });
   await page.waitForLoadState('networkidle');
 
-  const orderNumber = await page.locator('[data-cy="order-number"]').textContent();
+  const orderNumber = await page.locator('[data-testid="order-number"]').textContent();
   return orderNumber || null;
 }
+

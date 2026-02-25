@@ -11,13 +11,16 @@ test.describe('Smoke Tests: Playwright Setup Verification', () => {
   test('cart page is accessible', async ({ page }) => {
     await page.goto('/cart');
     // Should either show empty cart or cart items
-    const pageContent = page.locator('[data-cy="empty-cart-page"], [data-cy="cart-item"]').first();
+    const pageContent = page
+      .locator('[data-testid="empty-cart-page"], [data-testid="cart-item"]')
+      .first();
     await expect(pageContent).toBeVisible({ timeout: 10000 });
   });
 
   test('checkout page exists', async ({ page }) => {
     await page.goto('/checkout');
-    const checkoutForm = page.locator('[data-cy="shipping-email"], form').first();
+    const checkoutForm = page.locator('[data-testid="shipping-email"], form').first();
     await expect(checkoutForm).toBeVisible({ timeout: 10000 });
   });
 });
+

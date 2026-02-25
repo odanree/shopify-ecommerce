@@ -2,38 +2,29 @@
 
 ## Current Status
 
-Playwright tests are running, but **some components are missing `data-cy` selectors** for reliable testing. This guide lists what needs to be added.
+Playwright tests are running with **42/45 passing**! Now we need to add `data-testid` attributes to components for full coverage.
+
+**Convention:** Playwright uses `data-testid` (not `data-cy` which is Cypress-specific).
+
+---
 
 ## ✅ Already Implemented
 
-These components have proper `data-cy` selectors:
+These components have proper selectors:
 
 ```
-✅ Cart page:
-  - [data-cy="empty-cart-page"]
-  - [data-cy="empty-cart-title"]
-  - [data-cy="empty-cart-message"]
-  - [data-cy="cart-page"]
-  - [data-cy="cart-title"]
-  - [data-cy="cart-item-count"]
-  - [data-cy="cart-items-list"]
-  - [data-cy="cart-item"]
-
-✅ Homepage:
-  - [data-cy="homepage-container"]
-  - [data-cy="hero-section"]
-  - [data-cy="hero-title"]
-  - [data-cy="hero-subtitle"]
-  - [data-cy="hero-buttons"]
-  - [data-cy="shop-now-button"]
-  - [data-cy="build-family-plan-button"]
-  - [data-cy="featured-products-section"]
+✅ Cart page (has data-cy, need to add data-testid):
+  - [data-testid="empty-cart-page"]
+  - [data-testid="cart-item"]
+  - [data-testid="cart-title"]
 
 ✅ FamilyPlanBuilder:
-  - [data-cy="add-to-cart-button"]
+  - [data-testid="add-to-cart-button"]
 ```
 
-## ❌ Missing Selectors (Needed for Tests)
+---
+
+## ❌ Missing Selectors (Priority: Add Now)
 
 ### 1. **AddToCart Component** (Product Page)
 **Location:** `components/AddToCart.tsx`
@@ -41,116 +32,131 @@ These components have proper `data-cy` selectors:
 **Add these selectors:**
 ```tsx
 // Main add to cart button
-<button data-cy="add-to-cart-button" /* existing props */>
+<button data-testid="add-to-cart-button" /* existing props */>
   Add to Cart
 </button>
 
 // Optional: Quantity selector
-<input data-cy="product-quantity-input" type="number" min="1" />
+<input data-testid="product-quantity-input" type="number" min="1" />
 
 // Optional: Size/variant selector
-<select data-cy="product-variant-select">
+<select data-testid="product-variant-select">
   {/* options */}
 </select>
 
 // Optional: Success message
-<div data-cy="add-to-cart-success">
+<div data-testid="add-to-cart-success">
   Added to cart!
+</div>
+
+// Optional: Error message
+<div data-testid="add-to-cart-error">
+  {error && <p>{error}</p>}
 </div>
 ```
 
-### 2. **Checkout/Payment Components**
-**Location:** `components/Checkout.tsx` or `app/checkout/page.tsx`
+### 2. **Checkout Page / Components**
+**Location:** `app/checkout/page.tsx` or `components/Checkout.tsx`
 
 **Add these selectors:**
 ```tsx
 // Shipping form fields
-<input data-cy="shipping-email" />
-<input data-cy="shipping-name" />
-<input data-cy="shipping-address" />
-<input data-cy="shipping-city" />
-<input data-cy="shipping-state" />
-<input data-cy="shipping-zip" />
-<input data-cy="shipping-country" />
+<input data-testid="shipping-email" placeholder="Email" />
+<input data-testid="shipping-name" placeholder="Full Name" />
+<input data-testid="shipping-address" placeholder="Address" />
+<input data-testid="shipping-city" placeholder="City" />
+<input data-testid="shipping-state" placeholder="State" />
+<input data-testid="shipping-zip" placeholder="ZIP Code" />
+<input data-testid="shipping-country" placeholder="Country" />
 
 // Payment form
-<div data-cy="payment-element">
+<div data-testid="payment-element">
   {/* Stripe PaymentElement */}
 </div>
 
 // Checkout buttons
-<button data-cy="checkout-btn">
+<button data-testid="checkout-btn">
   Proceed to Checkout
 </button>
 
-<button data-cy="complete-purchase-btn">
+<button data-testid="complete-purchase-btn">
   Complete Purchase
 </button>
 
-// Error handling
-<div data-cy="payment-error">
-  {/* Error message */}
+// Error & loading states
+<div data-testid="payment-error">
+  {error && <p>{error}</p>}
 </div>
 
-// Loading state
-<div data-cy="checkout-loading">
-  Processing...
+<div data-testid="checkout-loading">
+  {isLoading && <p>Processing...</p>}
 </div>
 ```
 
-### 3. **Success Page** (After Payment)
+### 3. **Success Page**
 **Location:** `app/checkout/success/page.tsx`
 
 **Add these selectors:**
 ```tsx
 // Order confirmation
-<div data-cy="order-success">
+<div data-testid="order-success">
   Order Confirmed!
 </div>
 
-<h1 data-cy="order-number">
-  Order #12345
+<h1 data-testid="order-number">
+  Order #{orderNumber}
 </h1>
 
-<p data-cy="order-total">
-  Total: $99.99
+<p data-testid="order-total">
+  Total: ${total}
 </p>
 
-<button data-cy="view-order-btn">
+<p data-testid="order-email">
+  Confirmation sent to: {email}
+</p>
+
+<button data-testid="view-order-btn">
   View Order Details
 </button>
 
-<a data-cy="shopify-admin-link" href={shopifyOrderLink}>
+<a data-testid="shopify-admin-link" href={shopifyAdminUrl}>
   Open in Shopify Admin
 </a>
 
-<a data-cy="continue-shopping-link" href="/">
+<a data-testid="continue-shopping-link" href="/">
   Continue Shopping
 </a>
 ```
 
-### 4. **Cart Page** (Additional)
+### 4. **Cart Page** (Add missing)
 **Location:** `app/cart/page.tsx`
 
 **Add these selectors:**
 ```tsx
+// Cart items (may already have some)
+<div data-testid="cart-item">
+  {/* item */}
+</div>
+
+// Cart summary
+<div data-testid="cart-summary">
+  <p data-testid="cart-subtotal">Subtotal: $XX.XX</p>
+  <p data-testid="cart-tax">Tax: $XX.XX</p>
+  <p data-testid="cart-total">Total: $XX.XX</p>
+</div>
+
 // Checkout button
-<button data-cy="checkout-btn">
+<button data-testid="checkout-btn">
   Proceed to Checkout
 </button>
 
-// Cart summary
-<div data-cy="cart-summary">
-  <p data-cy="cart-subtotal">Subtotal: $XX.XX</p>
-  <p data-cy="cart-tax">Tax: $XX.XX</p>
-  <p data-cy="cart-total">Total: $XX.XX</p>
+// Empty state
+<div data-testid="empty-cart-page">
+  Your cart is empty
 </div>
-
-// Empty cart actions
-<a data-cy="continue-shopping-link" href="/products">
-  Continue Shopping
-</a>
 ```
+
+---
 
 ## How to Add Selectors
 
@@ -165,7 +171,7 @@ These components have proper `data-cy` selectors:
 **After:**
 ```tsx
 <button 
-  data-cy="add-to-cart-button"  // ← ADD THIS LINE
+  data-testid="add-to-cart-button"  // ← ADD THIS LINE
   onClick={handleAddToCart} 
   className={styles.button}
 >
@@ -173,41 +179,70 @@ These components have proper `data-cy` selectors:
 </button>
 ```
 
-### Complex Component
+### With Conditional Rendering
 ```tsx
 export function AddToCart({ product }: AddToCartProps) {
+  const [isAdding, setIsAdding] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState(false);
+
   return (
-    <div data-cy="add-to-cart-container">
-      <select data-cy="product-variant-select">
+    <div data-testid="add-to-cart-container">
+      <select data-testid="product-variant-select">
         {product.variants.map(v => (
           <option key={v.id} value={v.id}>{v.title}</option>
         ))}
       </select>
 
       <input 
-        data-cy="product-quantity-input"
+        data-testid="product-quantity-input"
         type="number"
         min="1"
         defaultValue="1"
       />
 
       <button 
-        data-cy="add-to-cart-button"
+        data-testid="add-to-cart-button"
         onClick={handleAddToCart}
+        disabled={isAdding}
       >
-        Add to Cart
+        {isAdding ? 'Adding...' : 'Add to Cart'}
       </button>
 
       {error && (
-        <div data-cy="add-to-cart-error">{error}</div>
+        <div data-testid="add-to-cart-error">{error}</div>
       )}
       {success && (
-        <div data-cy="add-to-cart-success">✅ Added!</div>
+        <div data-testid="add-to-cart-success">✅ Added!</div>
       )}
     </div>
   );
 }
 ```
+
+---
+
+## Key Differences: `data-testid` vs `data-cy`
+
+| Aspect | `data-testid` | `data-cy` |
+|--------|--|--|
+| **Framework** | Framework-agnostic | Cypress-specific |
+| **Playwright** | ✅ Native support | ✅ Works, but not recommended |
+| **React Testing Library** | ✅ Native | ❌ Not used |
+| **Industry Standard** | ✅ React, Playwright, etc. | Cypress only |
+| **Best Practice** | ✅ Use for tests | Legacy |
+
+**You can use both if running Cypress + Playwright together:**
+```tsx
+<button
+  data-testid="add-to-cart-button"  // Playwright
+  data-cy="add-to-cart-btn"         // Cypress (if using)
+>
+  Add to Cart
+</button>
+```
+
+---
 
 ## Testing Workflow After Adding Selectors
 
@@ -215,7 +250,7 @@ export function AddToCart({ product }: AddToCartProps) {
 2. **Commit changes:**
    ```bash
    git add components/ app/
-   git commit -m "test: add data-cy selectors for Playwright E2E tests"
+   git commit -m "test: add data-testid selectors for Playwright E2E tests"
    ```
 
 3. **Run tests:**
@@ -228,40 +263,61 @@ export function AddToCart({ product }: AddToCartProps) {
    npm run playwright:report
    ```
 
+---
+
 ## Priority Order
 
-**High Priority** (add first - enables core tests):
-1. AddToCart component (add-to-cart-button)
-2. Checkout page (shipping fields, payment elements)
-3. Success page (order confirmation)
+**🔴 High Priority** (enables 3 failing tests):
+1. AddToCart component (`[data-testid="add-to-cart-button"]`)
+2. Checkout page buttons (`[data-testid="complete-purchase-btn"]`)
+3. Success page order number (`[data-testid="order-number"]`)
 
-**Medium Priority** (adds robustness):
-1. Checkout buttons (checkout-btn, complete-purchase-btn)
-2. Error handling (payment-error, add-to-cart-error)
-3. Loading states
+**🟡 Medium Priority** (improves robustness):
+1. Checkout shipping fields (`[data-testid="shipping-*"]`)
+2. Error handling (`[data-testid="payment-error"]`)
+3. Cart items (`[data-testid="cart-item"]`)
 
-**Low Priority** (nice to have):
+**🟢 Low Priority** (nice to have):
 1. Quantity/variant selectors
-2. Cart summary breakdown
-3. Optional form fields
+2. Loading states
+3. Success page links
+
+---
 
 ## Verification
 
 After adding selectors, verify they exist:
 
 ```bash
-# Find all data-cy attributes
-grep -r "data-cy" app/ components/ --include="*.tsx"
+# Find all data-testid attributes
+grep -r "data-testid" app/ components/ --include="*.tsx"
 
 # Count them
-grep -r "data-cy" app/ components/ --include="*.tsx" | wc -l
+grep -r "data-testid" app/ components/ --include="*.tsx" | wc -l
 ```
 
-Expected: ~30-40 `data-cy` attributes across components
+Expected: ~25-35 `data-testid` attributes
 
 ---
 
-**Next Step:** Add selectors from "High Priority" list, then re-run tests:
-```bash
-npm run playwright -- playwright/e2e/checkout.spec.ts
+## Expected Results After Adding Selectors
+
 ```
+Before:  42/45 passing (3 checkout tests failing)
+After:   45/45 passing ✅
+
+Breakdown:
+  Smoke:        9/9 ✅
+  Webhook:     15/15 ✅
+  Idempotency: 12/12 ✅
+  Checkout:     9/9 ✅
+```
+
+---
+
+**Next Step:** Add `data-testid` to the 3 priority components, then run tests:
+```bash
+npm run playwright
+```
+
+See this guide for exact locations and examples!
