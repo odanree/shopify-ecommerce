@@ -15,14 +15,16 @@ jobs:
           node-version: 20
           cache: 'npm'
       
-      - name: Install dependencies
-        run: npm ci
-
+      - run: npm ci
       - name: Build Next.js app
         run: npm run build
         env:
           SHOPIFY_STORE_DOMAIN: ${{ secrets.SHOPIFY_STORE_DOMAIN }}
           SHOPIFY_STOREFRONT_ACCESS_TOKEN: ${{ secrets.SHOPIFY_STOREFRONT_ACCESS_TOKEN }}
+
+      # Debug step to prove the folder is there
+      - name: Verify build output
+        run: ls -la .next
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
@@ -31,6 +33,7 @@ jobs:
           path: |
             .next
             public
+          include-hidden-files: true
           if-no-files-found: error
 
   test:
