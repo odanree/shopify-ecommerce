@@ -15,16 +15,17 @@ jobs:
           node-version: 20
           cache: 'npm'
       
-      - run: npm ci
+      - name: Install dependencies
+        run: npm ci
+
       - name: Build Next.js app
         run: npm run build
         env:
+          # 🚨 MOVE THIS HERE 🚨
+          # Next.js needs this key DURING 'npm run build' to inject it into the JS bundles
+          NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY }}
           SHOPIFY_STORE_DOMAIN: ${{ secrets.SHOPIFY_STORE_DOMAIN }}
           SHOPIFY_STOREFRONT_ACCESS_TOKEN: ${{ secrets.SHOPIFY_STOREFRONT_ACCESS_TOKEN }}
-
-      # Debug step to prove the folder is there
-      - name: Verify build output
-        run: ls -la .next
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
@@ -34,7 +35,6 @@ jobs:
             .next
             public
           include-hidden-files: true
-          if-no-files-found: error
 
   test:
     needs: build
