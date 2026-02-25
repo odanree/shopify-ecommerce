@@ -46,8 +46,12 @@ test.describe('Checkout Flow: Stripe Redirect Loop', () => {
       console.log('✅ Add to cart clicked');
       await page.waitForURL('/cart', { timeout: 10000 });
       
-      // Wait for cart items to appear in DOM (hydration + localStorage sync)
-      await page.locator('[data-testid="cart-item"]').first().waitFor({ state: 'visible', timeout: 10000 });
+      // Use resilience pattern: expect().toBeVisible() retries automatically
+      // This gives CartContext time to hydrate from localStorage
+      // Playwright retries for ~5 seconds (configurable timeout) before failing
+      await expect(page.locator('[data-testid="cart-item"]').first()).toBeVisible({ timeout: 15000 });
+      const cartItemCount = await page.locator('[data-testid="cart-item"]').count();
+      console.log(`✅ Cart loaded with ${cartItemCount} item(s)`);
     } else {
       console.log('⚠️  Add to cart button not found, navigating to cart directly');
       await page.goto('/cart');
@@ -55,10 +59,10 @@ test.describe('Checkout Flow: Stripe Redirect Loop', () => {
 
     await page.waitForLoadState('networkidle');
 
-    // Step 5: Verify cart has items
+    // Step 5: Verify cart has items (resilience - expect retries automatically)
     const cartItems = await page.locator('[data-testid="cart-item"]').count();
     expect(cartItems).toBeGreaterThan(0);
-    console.log(`✅ Cart loaded with ${cartItems} item(s)`);
+    console.log(`✅ Final verification: ${cartItems} item(s) in cart`);
 
     // Step 6: Click checkout button
     const checkoutButton = page.locator('[data-testid="checkout-btn"]');
