@@ -8,6 +8,11 @@ export default defineConfig({
     url: 'http://localhost:3000',
     reuseExistingServer: !process.env.CI,
     timeout: 120 * 1000,
+    env: {
+      // This ensures the webServer process inherits the env vars
+      SHOPIFY_STORE_DOMAIN: process.env.SHOPIFY_STORE_DOMAIN!,
+      SHOPIFY_STOREFRONT_ACCESS_TOKEN: process.env.SHOPIFY_STOREFRONT_ACCESS_TOKEN!,
+    },
   },
   use: {
     baseURL: 'http://localhost:3000',
