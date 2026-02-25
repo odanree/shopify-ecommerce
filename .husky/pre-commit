@@ -1,0 +1,5 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo "🛡️ Running critical checkout smoke test before commit..."
+dotenv -e .env.local -- npx playwright test playwright/e2e/checkout.spec.ts --project=chromium

@@ -55,3 +55,11 @@ next-env.d.ts
 .cache/
 cypress/screenshots/
 cypress/videos/
+
+# Playwright
+/playwright-report/
+/blob-report/
+/playwright/.auth/
+test-results/
+.traceviewer-state.json
+

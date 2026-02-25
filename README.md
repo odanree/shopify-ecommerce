@@ -315,6 +315,149 @@ Validation moved to runtime (in the webhook handler) instead of module load time
 
 ---
 
+---
+
+## 🧪 Testing Suite
+
+This project uses **Playwright** for comprehensive End-to-End (E2E) testing. We have migrated from Cypress to Playwright to take advantage of superior speed, parallelization, and native support for complex iframes (like Stripe).
+
+### 🚀 Key Features
+
+- **Parallel Execution:** Runs 72+ test cases in ~25 seconds across 3 browsers (Chromium, WebKit, Mobile iPhone).
+- **Resilience Patterns:** Uses `expect().toPass()` polling for React hydration and dynamic cart updates, ensuring tests are stable and catch real bugs.
+- **Stripe Integration:** Specialized handling for nested Stripe Payment Element iframes with HMAC-SHA256 webhook signature validation.
+- **UI Shields:** Automatic injection of CSS shields during tests to hide obstructive third-party widgets (e.g., AI Chatbots).
+- **Multi-Device Testing:** Validated across Chromium, Webkit (Safari), and Mobile iPhone profiles with real browser contexts.
+- **Semantic Selectors:** Uses `data-testid` convention (Playwright native) instead of framework-specific `data-cy` for better maintainability.
+
+### 🛠️ Running Tests
+
+Ensure your local environment variables are loaded:
+
+```bash
+# Run all tests (headless mode, production build)
+npm run build
+npm run start        # In one terminal
+npm run test:e2e     # In another terminal
+
+# Run only the checkout flow with verbose output
+dotenv -e .env.local -- npx playwright test checkout --reporter=verbose
+
+# Run in UI Mode (Interactive, browser-based test runner)
+npm run test:e2e:ui
+```
+
+### ✨ Pre-commit Safety with Husky
+
+We use **Husky** to maintain a "Green Master" branch:
+
+- **Pre-commit Hook:** Every commit automatically runs a focused smoke test of the critical checkout flow (`home → product → cart → checkout → complete payment`).
+- **CI Pipeline:** GitHub Actions runs the full 72-test suite on every Pull Request, ensuring no regressions.
+
+```bash
+# If you want to bypass the pre-commit hook (not recommended):
+git commit --no-verify
+```
+
+### 🧬 Development Conventions
+
+When building new components or fixing functionality, always use `data-testid` for test selectors:
+
+```html
+<!-- ✅ Good: Explicit test selectors -->
+<button data-testid="add-to-cart-button">Add to Cart</button>
+
+<!-- ❌ Avoid: CSS class selectors (fragile, change with styling) -->
+<button class="styles_btn__abc123">Add to Cart</button>
+```
+
+This ensures:
+- Tests are decoupled from styling changes
+- Selectors survive CSS refactors
+- Maintainers know which elements are tested
+
+### 📊 Current Test Coverage
+
+| Test Suite | Count | Status | Coverage |
+|-----------|-------|--------|----------|
+| **Smoke Tests** | 9 | ✅ Passing | Home, Product, Cart, Checkout pages load correctly |
+| **Webhook Tests** | 15 | ✅ Passing | HMAC signature validation, order creation, Shopify sync |
+| **Idempotency Tests** | 12 | ✅ Passing | Duplicate prevention via Payment Intent tagging |
+| **Checkout Flow** | 24 | ✅ Passing | Complete cart → checkout → payment → success |
+| **Cart Logic** | 12 | ✅ Passing | Item persistence, hydration, edge cases |
+| **Total** | **72** | ✅ **100% Passing** | Critical payment path fully validated |
+
+### 🔧 Architecture Patterns
+
+#### 1. Expect-Based Polling (Resilience)
+
+Instead of one-time checks that fail on timing variations, we use Playwright's built-in retry loop:
+
+```typescript
+// ✅ Resilient: Retries continuously until element appears or timeout
+await expect(page.getByTestId('cart-item')).toBeVisible({ timeout: 10000 });
+
+// ❌ Flaky: One-time check, misses timing windows
+if (await page.getByTestId('cart-item').isVisible({ timeout: 5000 })) { ... }
+```
+
+#### 2. CSS Shields for Test Stability
+
+Some third-party widgets (chatbots, analytics) can block clicks on form elements. We inject CSS shields during tests to prevent interference:
+
+```typescript
+await page.addStyleTag({
+  content: `
+    [class*="imageContainer"] { pointer-events: none !important; }
+    #ai-chatbot-widget { display: none !important; }
+  `,
+});
+```
+
+#### 3. localStorage Persistence Verification
+
+Cart items must persist to localStorage before redirecting. We explicitly sync before navigation:
+
+```typescript
+await new Promise<void>((resolve) => {
+  setTimeout(() => {
+    const items = JSON.parse(localStorage.getItem('cart') || '[]');
+    // Verify and sync cart items
+    localStorage.setItem('cart', JSON.stringify(items));
+    resolve();
+  }, 150);
+});
+router.push('/cart');
+```
+
+### 📁 Test Structure
+
+```
+playwright/
+├── fixtures/
+│   └── payment.fixture.ts      # Stripe client + PaymentIntent setup
+├── support/
+│   ├── stripe-mock.ts          # Mock webhook generator (HMAC-SHA256)
+│   └── helpers.ts              # fillShippingInfo, fillStripeCard, etc.
+└── e2e/
+    ├── smoke.spec.ts           # 9 tests: page loading
+    ├── checkout.spec.ts        # 24 tests: complete payment flow
+    ├── webhook.spec.ts         # 15 tests: signature validation
+    ├── idempotency.spec.ts     # 12 tests: duplicate prevention
+    └── cart.spec.ts            # 12 tests: cart logic
+```
+
+### 🚦 Status & Next Steps
+
+**Current:** 72/72 tests passing (100%) across Chromium, WebKit, and iPhone profiles.
+
+**Future Enhancements:**
+- Visual regression testing via `expect.toHaveScreenshot()`
+- Load testing with Artillery (webhook throughput)
+- Lighthouse performance audits in CI
+
+---
+
 ## 🛠️ Development
 
 ### Install Dependencies

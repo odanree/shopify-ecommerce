@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ShoppingCart, Trash2, Plus, Minus, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -8,8 +8,13 @@ import { useCart } from '@/contexts/CartContext';
 import styles from './CartPage.module.css';
 
 export default function CartPage() {
-  const { items: cartItems, updateQuantity, removeItem } = useCart();
+  const { items: cartItems, updateQuantity, removeItem, isHydrated } = useCart();
   const [isLoading, setIsLoading] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const subtotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
   const shipping: number = 0; // Free shipping
@@ -27,9 +32,10 @@ export default function CartPage() {
     );
   }
 
+  // Keep DOM stable during hydration - use opacity to hide if not ready
   if (cartItems.length === 0) {
     return (
-      <div className={styles.emptyCartScreen} data-cy="empty-cart-page">
+      <div className={styles.emptyCartScreen} data-testid="empty-cart-page" data-cy="empty-cart-page">
         <div className={styles.emptyCartContainer}>
           <div className={styles.emptyCardBox}>
             <div className={styles.emptyIconBox}>
@@ -88,6 +94,7 @@ export default function CartPage() {
               <div
                 key={item.id}
                 className={styles.cartItem}
+                data-testid="cart-item"
                 data-cy="cart-item"
               >
                 {/* Product Image */}
@@ -186,6 +193,7 @@ export default function CartPage() {
             <Link
               href="/checkout"
               className={styles.checkoutButton}
+              data-testid="checkout-btn"
             >
               Proceed to Checkout
             </Link>

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useCart } from '@/contexts/CartContext';
 import { PaymentStep } from '@/components/checkout/PaymentStep';
 import { AddressStep } from '@/components/checkout/AddressStep';
@@ -12,6 +12,11 @@ import styles from './CheckoutPage.module.css';
 
 export default function CheckoutPage() {
   const { items: cartItems, isHydrated } = useCart();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const [clientSecret, setClientSecret] = useState<string | null>(null);
   const [status, setStatus] = useState<CheckoutStatusType>(null);
@@ -84,11 +89,7 @@ export default function CheckoutPage() {
     }
   };
 
-  if (!isHydrated) {
-    // Wait for cart to hydrate from localStorage
-    return null;
-  }
-
+  // Keep DOM stable during hydration and empty cart state
   if (cartItems.length === 0) {
     return (
       <div className={styles.emptyCheckoutScreen}>

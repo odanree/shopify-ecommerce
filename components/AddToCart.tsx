@@ -28,14 +28,14 @@ export function AddToCart({
   const [message, setMessage] = useState('');
   const { addItem } = useCart();
 
-  const handleAddToCart = async () => {
+const handleAddToCart = async () => {
     if (!availableForSale) return;
 
     setIsLoading(true);
     setMessage('');
 
     try {
-      // Add to cart using CartContext
+      // 1. Trigger the add in React state
       addItem({
         id: variantId,
         variantId: variantId,
@@ -48,10 +48,44 @@ export function AddToCart({
       
       setMessage('Added to cart!');
       
-      // Redirect to cart after 500ms
-      setTimeout(() => {
-        router.push('/cart');
-      }, 500);
+      // 2. Ensure cart persists to localStorage before redirect
+      //    The useEffect will eventually sync, but we force it here to be safe
+      await new Promise<void>((resolve) => {
+        setTimeout(() => {
+          try {
+            // Get existing cart from localStorage (from previous hydration or previous adds)
+            const existingItems = JSON.parse(localStorage.getItem('cart') || '[]');
+            
+            // Check if this item already exists
+            const itemIndex = existingItems.findIndex((item: any) => item.id === variantId);
+            if (itemIndex > -1) {
+              // Update quantity
+              existingItems[itemIndex].quantity += quantity;
+            } else {
+              // Add new item
+              existingItems.push({
+                id: variantId,
+                variantId: variantId,
+                title: productTitle,
+                variant: variant,
+                price: parseFloat(price),
+                quantity: quantity,
+                image: productImage
+              });
+            }
+            
+            // Write back to localStorage
+            localStorage.setItem('cart', JSON.stringify(existingItems));
+            console.log('✅ Cart persisted to localStorage before redirect');
+          } catch (e) {
+            console.warn('Warning: Could not persist cart to localStorage:', e);
+            // Still resolve - let the redirect happen even if localStorage fails
+          }
+          resolve();
+        }, 150);
+      });
+      
+      router.push('/cart');
     } catch (error) {
       setMessage('Error adding to cart');
       console.error(error);
@@ -89,6 +123,7 @@ export function AddToCart({
       </div>
 
       <button
+        data-testid="add-to-cart-button"
         onClick={handleAddToCart}
         disabled={isLoading}
         className={`${styles.button} ${styles.primaryButton}`}
