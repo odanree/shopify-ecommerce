@@ -19,7 +19,8 @@ jobs:
       # ... (setup node and cache steps as before) ...
 
       - name: Run Playwright tests
-        run: npx playwright test --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }}
+        # Using the direct path to the binary ensures it uses your local node_modules
+        run: ./node_modules/.bin/playwright test --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }}
         env:
           # Frontend Keys
           SHOPIFY_STORE_DOMAIN: ${{ secrets.SHOPIFY_STORE_DOMAIN }}
