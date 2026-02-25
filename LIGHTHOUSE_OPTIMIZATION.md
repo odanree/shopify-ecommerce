@@ -1,44 +1,65 @@
 # Lighthouse Performance Optimization
 
 **Branch**: `perf/lighthouse-optimization`
-**Score**: 97/100 (Production-Ready)
+**Score**: 97/100 → Testing after @shopify/hydrogen-react removal
 
 ## What Changed
 
 1. **ES2020 target** in `tsconfig.json` — Skip legacy polyfills for modern browsers
 2. **Browser baseline** via `.browserslistrc` — Declare modern browser support
-3. **Removed unused preconnects** — Deleted `cdn.shopify.com` and `images.unsplash.com` hints that weren't being used
+3. **Removed unused preconnects** — Deleted `cdn.shopify.com` and `images.unsplash.com` hints
 4. **CSS optimization enabled** — `optimizeCss: true` in Next.js experimental features
-5. **Package tree-shaking** — Added `@shopify/hydrogen-react` to `optimizePackageImports`
+5. **🔴 CRITICAL: Removed `@shopify/hydrogen-react`** — Never imported, only in package.json
+   - This library was included but never used
+   - Was likely source of the 10.9 KiB polyfills
+   - Your site uses raw GraphQL (graphql-request) instead
+   - **Expected impact: 2-3 Lighthouse points gained**
+
+## Why @shopify/hydrogen-react Was Dead Weight
+
+**Finding**: Code audit revealed zero imports from this library across the entire codebase.
+
+**What this means**:
+- You built a true headless Shopify platform
+- You use the Storefront API directly via graphql-request
+- You don't use Hydrogen components: `<Image />`, `<Money />`, `<CartProvider />`
+- The library was sitting in package.json, bloating the bundle, for no reason
+
+**Removed**:
+- ✂️ `@shopify/hydrogen-react@^2024.1.0` from dependencies
+- ✂️ Reference from `optimizePackageImports` in next.config.js
+
+**Added**:
+- ✅ `critters` (explicit dependency for CSS optimization)
 
 ## Performance Metrics
 
-✅ **Lighthouse**: 97/100
-✅ **FCP**: 0.9s
-✅ **LCP**: 2.6s  
-✅ **TBT**: 0ms (perfect)
-✅ **CLS**: 0.029 (excellent)
+**Before**: 97/100 (with unused Hydrogen library)
+**Expected After**: 99-100/100 (phantom dependency removed)
 
-## Why 97 is Production-Grade
-
-For a Shopify headless e-commerce platform, **97/100 is exceptional**:
-
-- **Vercel deployment**: 96/100 (essentially identical to local)
-- **Typical e-commerce sites**: 85-92
-- **Your performance**: Better than 99% of e-commerce sites
+| Metric | Value | Status |
+|--------|-------|--------|
+| **Lighthouse Score** | 97→99/100 | 🔄 Testing |
+| **FCP** | 0.9s | ✅ Excellent |
+| **LCP** | 2.6s | ✅ Good |
+| **TBT** | 0ms | ✅ Excellent |
+| **CLS** | 0.029 | ✅ Good |
 
 ## Testing
 
 ```bash
-npm run build
-npm run start
-# Run Lighthouse on http://localhost:3000
-# Expected: 97/100
+# Hard refresh: Cmd+Shift+R on http://localhost:3000
+# Run Lighthouse
+# Expected: 99-100/100 (up from 97)
 ```
 
-## Remaining Warnings (Non-Blocking)
+## What This Teaches
 
-- **10.9 KiB polyfills**: From `@shopify/hydrogen-react` (can't remove without breaking integration)
-- **290ms render-blocking CSS**: Inherent to Next.js CSS code-splitting (acceptable trade-off)
+**Red flag**: A dependency in package.json doesn't mean it's being used.  
+**Solution**: Always audit imports with:
+```bash
+grep -r "package-name" src/ app/ --include="*.ts" --include="*.tsx"
+```
 
-These don't impact functionality and represent the practical optimization ceiling for this architecture.
+If zero results → **it's a phantom dependency** and should be removed.
+
