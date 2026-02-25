@@ -23,31 +23,17 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        # This is the most important part. npm ci ensures 
-        # local node_modules are created correctly.
         run: npm ci
 
-      - name: Get Playwright version
-        id: playwright-version
-        run: echo "version=$(npx playwright --version)" >> $GITHUB_OUTPUT
-
-      - name: Cache Playwright browsers
-        uses: actions/cache@v4
-        id: playwright-cache
-        with:
-          path: ~/.cache/ms-playwright
-          key: ${{ runner.os }}-playwright-${{ steps.playwright-version.outputs.version }}
-
-      - name: Install Playwright Browsers
-        if: steps.playwright-cache.outputs.cache-hit != 'true'
-        run: npx playwright install --with-deps
-
-      - name: Install Playwright dependencies (Linux libs)
-        if: steps.playwright-cache.outputs.cache-hit == 'true'
-        run: npx playwright install-deps
+      # Add this step here!
+      - name: Build Next.js app
+        run: npm run build
+        env:
+          # Next.js needs these during build for static generation
+          SHOPIFY_STORE_DOMAIN: ${{ secrets.SHOPIFY_STORE_DOMAIN }}
+          SHOPIFY_STOREFRONT_ACCESS_TOKEN: ${{ secrets.SHOPIFY_STOREFRONT_ACCESS_TOKEN }}
 
       - name: Run Playwright tests
-        # npx will now find the local version in node_modules
         run: npx playwright test --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }}
         env:
           SHOPIFY_STORE_DOMAIN: ${{ secrets.SHOPIFY_STORE_DOMAIN }}
