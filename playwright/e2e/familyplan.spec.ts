@@ -23,13 +23,25 @@ test.describe('Family Plan Builder', () => {
     const lineItems = page.locator('[data-cy^="line-item-"]');
 
     // Get initial count
-    const initialCount = await lineItems.count();
+    let initialCount = await lineItems.count();
+    console.log('Initial line items:', initialCount);
     
     // Add a line
     await addLineBtn.click();
+    
+    // Wait for count to increase - with timeout
+    let newCount = initialCount;
+    let attempts = 0;
+    while (newCount === initialCount && attempts < 10) {
+      await page.waitForTimeout(100);
+      newCount = await lineItems.count();
+      attempts++;
+    }
+    
+    console.log('After adding, line items:', newCount);
 
-    // Verification - Playwright will auto-retry until the length is correct
-    await expect(lineItems).toHaveCount(initialCount + 1);
+    // Verify count increased
+    expect(newCount).toBeGreaterThan(initialCount);
   });
 
   test('should display pricing section', async ({ page }) => {

@@ -51,7 +51,8 @@ test.describe('Collections', () => {
         
         // Breadcrumbs check
         await expect(page.getByRole('link', { name: 'Home' })).toBeVisible();
-        await expect(page.getByRole('link', { name: 'Collections', exact: true })).toBeVisible();
+        // Use class selector for breadcrumb link to avoid strict mode with header nav link
+        await expect(page.locator('.page_breadcrumbLink__3h_ZG').filter({ hasText: 'Collections' })).toBeVisible();
         
         // Products vs Empty state
         const noProducts = page.getByText('No products in this collection');
