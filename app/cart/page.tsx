@@ -8,13 +8,18 @@ import { useCart } from '@/contexts/CartContext';
 import styles from './CartPage.module.css';
 
 export default function CartPage() {
-  const { items: cartItems, updateQuantity, removeItem } = useCart();
+  const { items: cartItems, updateQuantity, removeItem, isHydrated } = useCart();
   const [isLoading, setIsLoading] = useState(false);
 
   const subtotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
   const shipping: number = 0; // Free shipping
   const tax = subtotal * 0.08; // Example 8% tax
   const total = subtotal + shipping + tax;
+
+  if (!isHydrated) {
+    // Wait for cart to hydrate from localStorage
+    return null;
+  }
 
   if (isLoading) {
     return (

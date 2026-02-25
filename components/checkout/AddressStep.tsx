@@ -36,6 +36,7 @@ export function AddressStep({ address, onAddressChange, isLoading = false }: Add
           <input
             type="text"
             name="firstName"
+            data-testid="shipping-firstName"
             value={address.firstName}
             onChange={handleChange}
             disabled={isLoading}
@@ -48,6 +49,7 @@ export function AddressStep({ address, onAddressChange, isLoading = false }: Add
           <input
             type="text"
             name="lastName"
+            data-testid="shipping-lastName"
             value={address.lastName}
             onChange={handleChange}
             disabled={isLoading}
@@ -63,6 +65,7 @@ export function AddressStep({ address, onAddressChange, isLoading = false }: Add
           <input
             type="text"
             name="address1"
+            data-testid="shipping-address"
             value={address.address1}
             onChange={handleChange}
             disabled={isLoading}
@@ -78,6 +81,7 @@ export function AddressStep({ address, onAddressChange, isLoading = false }: Add
           <input
             type="text"
             name="city"
+            data-testid="shipping-city"
             value={address.city}
             onChange={handleChange}
             disabled={isLoading}
@@ -90,6 +94,7 @@ export function AddressStep({ address, onAddressChange, isLoading = false }: Add
           <input
             type="text"
             name="province"
+            data-testid="shipping-state"
             value={address.province}
             onChange={handleChange}
             disabled={isLoading}
@@ -105,6 +110,7 @@ export function AddressStep({ address, onAddressChange, isLoading = false }: Add
           <input
             type="text"
             name="zip"
+            data-testid="shipping-zip"
             value={address.zip}
             onChange={handleChange}
             disabled={isLoading}
@@ -119,6 +125,7 @@ export function AddressStep({ address, onAddressChange, isLoading = false }: Add
           <label className={styles.formLabel}>Country</label>
           <select
             name="country"
+            data-testid="shipping-country"
             value={address.country}
             onChange={handleChange}
             disabled={isLoading}

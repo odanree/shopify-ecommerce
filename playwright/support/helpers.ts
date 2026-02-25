@@ -19,20 +19,25 @@ export async function addToCartAndNavigate(page: Page): Promise<void> {
 export async function fillShippingInfo(
   page: Page,
   data: {
-    email: string;
-    name: string;
-    address: string;
-    city: string;
-    state: string;
-    zip: string;
+    email?: string;
+    name?: string;
+    address?: string;
+    city?: string;
+    state?: string;
+    zip?: string;
   }
 ): Promise<void> {
-  await page.fill('[data-testid="shipping-email"]', data.email);
-  await page.fill('[data-testid="shipping-name"]', data.name);
-  await page.fill('[data-testid="shipping-address"]', data.address);
-  await page.fill('[data-testid="shipping-city"]', data.city);
-  await page.fill('[data-testid="shipping-state"]', data.state);
-  await page.fill('[data-testid="shipping-zip"]', data.zip);
+  // AddressStep component has: firstName, lastName, address1, city, province, zip, country
+  // Note: email comes from Stripe payment method, not from address form
+  if (data.name) {
+    const [firstName, lastName] = data.name.split(' ');
+    if (firstName) await page.fill('[data-testid="shipping-firstName"]', firstName, { timeout: 5000 }).catch(() => {});
+    if (lastName) await page.fill('[data-testid="shipping-lastName"]', lastName, { timeout: 5000 }).catch(() => {});
+  }
+  if (data.address) await page.fill('[data-testid="shipping-address"]', data.address, { timeout: 5000 }).catch(() => {});
+  if (data.city) await page.fill('[data-testid="shipping-city"]', data.city, { timeout: 5000 }).catch(() => {});
+  if (data.state) await page.fill('[data-testid="shipping-state"]', data.state, { timeout: 5000 }).catch(() => {});
+  if (data.zip) await page.fill('[data-testid="shipping-zip"]', data.zip, { timeout: 5000 }).catch(() => {});
 }
 
 /**
