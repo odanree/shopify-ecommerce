@@ -121,11 +121,12 @@ test.describe('Checkout Flow: Stripe Redirect Loop', () => {
 
     const emptyCart = page.locator('[data-testid="empty-cart-page"]');
     const isEmpty = await emptyCart.isVisible({ timeout: 5000 }).catch(() => false);
-
+    
+    let itemCount = 0;
     if (isEmpty) {
       console.log('✅ Empty cart page displayed (as expected)');
     } else {
-      const itemCount = await page.locator('[data-testid="cart-item"]').count();
+      itemCount = await page.locator('[data-testid="cart-item"]').count();
       if (itemCount === 0) {
         console.log('✅ Cart is empty (no items)');
       }
