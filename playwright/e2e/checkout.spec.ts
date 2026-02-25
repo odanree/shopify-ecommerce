@@ -19,6 +19,25 @@ test.describe('Checkout Flow: Stripe Redirect Loop', () => {
     await expect(page).toHaveTitle(/Modern Ecommerce|Premium Tech/i);
     console.log('✅ Homepage loaded');
 
+    // Step 1.1: Clear the UI of obstructions (AI chatbot, modals, etc.)
+    // This is a standard pattern in professional E2E suites to handle third-party widgets
+    await page.addStyleTag({
+      content: `
+        #ai-chatbot-widget { 
+          display: none !important; 
+          visibility: hidden !important; 
+          pointer-events: none !important; 
+        }
+        [class*="chatbot"] { 
+          display: none !important; 
+        }
+        [class*="chat-widget"] { 
+          display: none !important; 
+        }
+      `,
+    });
+    console.log('✅ AI Chatbot & overlays hidden - click path cleared');
+
     // Step 2: Find products section and navigate to first product
     const productLink = page.locator('a').filter({ has: page.locator('img') }).first();
     await expect(productLink).toBeVisible({ timeout: 10000 });
@@ -34,6 +53,17 @@ test.describe('Checkout Flow: Stripe Redirect Loop', () => {
 
     await page.waitForLoadState('networkidle');
     console.log('✅ Product page loaded');
+
+    // Re-apply CSS shield on product page (in case chatbot reloads)
+    await page.addStyleTag({
+      content: `
+        #ai-chatbot-widget { 
+          display: none !important; 
+          visibility: hidden !important; 
+          pointer-events: none !important; 
+        }
+      `,
+    });
 
     // Step 4: Robust Add to Cart
     // Using getByTestId ensures we hit the actual interactable element
