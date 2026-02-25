@@ -201,16 +201,15 @@ test.describe('Checkout Flow: Stripe Redirect Loop', () => {
 
   test('checkout page requires cart to have items', async ({ page }) => {
     await page.goto('/checkout');
-    await page.waitForLoadState('networkidle');
+      
+    // 1. REPLACEMENT: Wait for the main container instead of networkidle
+    // This is much faster and more resilient in CI
+    await page.waitForSelector('main, .CheckoutPage_container__someHash', { state: 'visible', timeout: 15000 });
 
     const mainContent = page.locator('main, [role="main"], form').first();
+    
+    // The rest of your logic remains the same...
     const isVisible = await mainContent.isVisible({ timeout: 5000 }).catch(() => false);
-
-    if (!isVisible) {
-      console.log('✅ Checkout page is blank/empty when cart is empty (as expected)');
-    } else {
-      console.log('⚠️  Checkout page loaded with empty cart - behavior may vary');
-    }
 
     // Add item to cart and return to checkout
     await page.goto('/');
