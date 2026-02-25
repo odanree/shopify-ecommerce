@@ -48,11 +48,24 @@ test.describe('Checkout Flow: Stripe Redirect Loop', () => {
     if (productUrl) {
       await page.goto(productUrl);
     } else {
-      await page.goto('/products/t-shirt-classic-black');
+      await page.goto('/products/next-js-developer-t-shirt');
     }
 
     await page.waitForLoadState('networkidle');
     console.log('✅ Product page loaded');
+
+    // Step 3.1: Hide overlays that might block clicks (image, modals, etc.)
+    await page.addStyleTag({
+      content: `
+        [class*="imageContainer"] { 
+          pointer-events: none !important; 
+        }
+        [class*="image"] img {
+          pointer-events: none !important;
+        }
+      `,
+    });
+    console.log('✅ Image overlay pointer-events disabled');
 
     // Re-apply CSS shield on product page (in case chatbot reloads)
     await page.addStyleTag({
@@ -81,8 +94,8 @@ test.describe('Checkout Flow: Stripe Redirect Loop', () => {
     // Ensure button is visible
     await expect(addButton).toBeVisible({ timeout: 10000 });
     
-    // Click with force: true to bypass any overlays
-    await addButton.click({ force: true });
+    // Normal click (overlay is now pointer-events: none)
+    await addButton.click();
     console.log('✅ Add to cart clicked');
 
     // Step 5: Wait for the Cart to "Wake Up"
@@ -190,14 +203,26 @@ test.describe('Checkout Flow: Stripe Redirect Loop', () => {
       if (productUrl) {
         await page.goto(productUrl);
 
+        // Disable image overlay pointer-events before clicking
+        await page.addStyleTag({
+          content: `
+            [class*="imageContainer"] { 
+              pointer-events: none !important; 
+            }
+            [class*="image"] img {
+              pointer-events: none !important;
+            }
+          `,
+        });
+
         const addBtn = page
           .locator('[data-testid="add-to-cart-button"], button')
           .filter({ hasText: /add/i })
           .first();
         if (await addBtn.isVisible({ timeout: 5000 }).catch(() => false)) {
-          // Use force: true to bypass image overlay blocking the click
-          await addBtn.click({ force: true });
-          console.log('✅ Add to cart clicked (forced through overlay)');
+          // Normal click (overlay is now pointer-events: none)
+          await addBtn.click();
+          console.log('✅ Add to cart clicked');
           await page.waitForURL('/cart', { timeout: 10000 });
 
           await page.goto('/checkout');
