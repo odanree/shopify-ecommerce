@@ -92,6 +92,7 @@ jobs:
           path: blob-report
           retention-days: 1
 
+  # This job MUST start at the far left margin
   merge-reports:
     if: always()
     needs: [test]
@@ -101,12 +102,13 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - name: Download all reports
+
+      - name: Download all blob reports
         uses: actions/download-artifact@v4
         with:
           path: all-blob-reports
           pattern: blob-report-*
-          merge-multiple: true
+          merge-multiple: true # 👈 This flattens all files into the 'all-blob-reports' folder
 
       - name: Merge into HTML Report
         run: npx playwright merge-reports --reporter html ./all-blob-reports
