@@ -109,12 +109,23 @@ test.describe('Checkout Flow: Stripe Redirect Loop', () => {
     console.log('✅ Navigated to cart');
 
     // Step 5: Wait for the Cart to "Wake Up"
-    // We expect the URL to change to /cart AND at least one item to appear
-    // Playwright will poll this until it passes or hits the timeout
+    // Cart items may take time to load from localStorage and hydrate React state
+    // Use toPass() to retry the assertion with backoff intervals
     await expect(page).toHaveURL(/\/cart/, { timeout: 10000 });
-    const cartItem = page.getByTestId('cart-item').first();
-    await expect(cartItem).toBeVisible({ timeout: 15000 });
-    console.log('✅ Cart successfully hydrated with items');
+    
+    // Retrying assertion: Keep checking until cart items appear
+    // Intervals: 500ms, 1s, 2s backoff
+    await expect(async () => {
+      const count = await page.locator('[data-testid="cart-item"]').count();
+      if (count === 0) {
+        throw new Error('Cart is still empty, retrying...');
+      }
+    }).toPass({
+      intervals: [500, 1000, 2000],
+      timeout: 10000,
+    });
+    
+    console.log('✅ Cart items finally appeared after hydration!');
 
     // Step 6: Checkout Navigation
     // toBeEnabled() ensures JavaScript has attached event listeners before we click
@@ -241,6 +252,17 @@ test.describe('Checkout Flow: Stripe Redirect Loop', () => {
             console.log('⚠️  Auto-redirect timed out, navigating manually');
             await page.goto('/cart');
           }
+
+          // Retrying assertion: Wait for items to hydrate
+          await expect(async () => {
+            const count = await page.locator('[data-testid="cart-item"]').count();
+            if (count === 0) {
+              throw new Error('Cart is still empty, retrying...');
+            }
+          }).toPass({
+            intervals: [500, 1000, 2000],
+            timeout: 10000,
+          });
 
           await page.goto('/checkout');
           await page.waitForLoadState('networkidle');
