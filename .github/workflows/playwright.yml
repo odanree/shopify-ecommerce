@@ -34,7 +34,7 @@ jobs:
       - name: Install Playwright Browsers
         # Only install if the cache was NOT found
         if: steps.playwright-cache.outputs.cache-hit != 'true'
-        run: npx playwright install chromium --with-deps
+        run: npx playwright install --with-deps
       
       - name: Install Playwright system dependencies
         # Always run this (it's fast) to ensure Linux libs are present
