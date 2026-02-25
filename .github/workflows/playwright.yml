@@ -6,32 +6,45 @@ on:
     branches: [ main, master ]
 jobs:
   test:
-    timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-node@v4
-      with:
-        node-version: lts/*
-        
-    - name: Install dependencies
-      run: npm ci
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm' # Caches your node_modules
+
+      - name: Install dependencies
+        run: npm ci # Faster than 'npm install' for CI
+
+      # --- START CACHING LOGIC ---
+      - name: Get Playwright version
+        id: playwright-version
+        run: echo "version=$(npx playwright --version)" >> $GITHUB_OUTPUT
+
+      - name: Cache Playwright Browsers
+        id: playwright-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ steps.playwright-version.outputs.version }}
+          restore-keys: |
+            ${{ runner.os }}-playwright-
+
+      - name: Install Playwright Browsers
+        # Only install if the cache was NOT found
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+        run: npx playwright install chromium --with-deps
       
-    - name: Install Playwright Browsers
-      run: npx playwright install --with-deps
+      - name: Install Playwright system dependencies
+        # Always run this (it's fast) to ensure Linux libs are present
+        if: steps.playwright-cache.outputs.cache-hit == 'true'
+        run: npx playwright install-deps
+      # --- END CACHING LOGIC ---
 
-    - name: Run Playwright tests
-      # We inject secrets here so Stripe/Shopify webhooks can be verified in CI
-      run: npx playwright test
-      env:
-        STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
-        STRIPE_WEBHOOK_SECRET: ${{ secrets.STRIPE_WEBHOOK_SECRET }}
-        NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN: ${{ secrets.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN }}
-        # Add any other .env.local variables your tests need here
-
-    - uses: actions/upload-artifact@v4
-      if: always()
-      with:
-        name: playwright-report
-        path: playwright-report/
-        retention-days: 30
+      - name: Run Playwright tests
+        run: npx playwright test
+        env:
+          SHOPIFY_STORE_DOMAIN: ${{ secrets.SHOPIFY_STORE_DOMAIN }}
+          SHOPIFY_STOREFRONT_ACCESS_TOKEN: ${{ secrets.SHOPIFY_STOREFRONT_ACCESS_TOKEN }}
+          NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY }}
