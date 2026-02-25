@@ -30,7 +30,7 @@ const nextConfig = {
     removeConsole: process.env.NODE_ENV === 'production',
   },
   experimental: {
-    optimizePackageImports: ['lucide-react', 'framer-motion', '@shopify/hydrogen-react'],
+    optimizePackageImports: ['lucide-react', 'framer-motion'],
     optimizeCss: true,
   },
   // Optimize dev server
