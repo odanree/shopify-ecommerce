@@ -3,7 +3,7 @@ import { test, expect } from '@playwright/test';
 test.describe('Smoke Tests: Playwright Setup Verification', () => {
   test('homepage loads successfully', async ({ page }) => {
     await page.goto('/');
-    await expect(page).toHaveTitle(/Shopify/i);
+    await expect(page).toHaveTitle(/Modern Ecommerce|Premium Tech/i);
     const heading = page.locator('h1').first();
     await expect(heading).toBeVisible();
   });
