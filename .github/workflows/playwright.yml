@@ -28,14 +28,13 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: next-build
-          # We include both the build and the public folder to be safe
           path: |
-            .next/
-            public/
-          retention-days: 1
+            .next
+            public
+          if-no-files-found: error
 
   test:
-    needs: build
+    needs: build # 👈 Critical: wait for the build job to finish
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -45,9 +44,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: 'npm'
+        with: { node-version: 20, cache: 'npm' }
       
       - name: Install dependencies
         run: npm ci
@@ -56,7 +53,6 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: next-build
-          # Download it to the root so .next/ is exactly where npm run start expects it
           path: ./
 
       - name: Get Playwright version
