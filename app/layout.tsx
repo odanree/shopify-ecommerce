@@ -80,14 +80,6 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        {/* Preconnect to critical origins - Shopify CDN */}
-        <link rel="preconnect" href="https://cdn.shopify.com" />
-        <link rel="dns-prefetch" href="https://cdn.shopify.com" />
-        
-        {/* Preconnect to Unsplash for hero images */}
-        <link rel="preconnect" href="https://images.unsplash.com" />
-        <link rel="dns-prefetch" href="https://images.unsplash.com" />
-        
         {/* Google Fonts automatically preloaded via next/font/google */}
         
         {/* Inline critical CSS to eliminate render-blocking requests */}

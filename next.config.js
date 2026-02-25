@@ -31,61 +31,20 @@ const nextConfig = {
   },
   experimental: {
     optimizePackageImports: ['lucide-react', 'framer-motion'],
+    optimizeCss: true,
   },
   // Optimize dev server
   webpack: (config, { dev, isServer }) => {
     if (dev && !isServer) {
       // Enable Fast Refresh
       config.watchOptions = {
-        poll: 1000, // Check for changes every second
-        aggregateTimeout: 300, // Delay before reloading
+        poll: 1000,
+        aggregateTimeout: 300,
       }
     }
     
-    // Optimize bundle size - use built-in Next.js chunking
-    if (!dev && !isServer) {
-      config.optimization = {
-        ...config.optimization,
-        moduleIds: 'deterministic',
-        runtimeChunk: 'single',
-        splitChunks: {
-          chunks: 'all',
-          cacheGroups: {
-            default: false,
-            vendors: false,
-            framework: {
-              name: 'framework',
-              chunks: 'all',
-              test: /[\\/]node_modules[\\/](react|react-dom|scheduler)[\\/]/,
-              priority: 40,
-              enforce: true,
-            },
-            lib: {
-              test: /[\\/]node_modules[\\/]/,
-              name(module) {
-                // Generate a simple hash for the chunk name
-                const identifier = module.identifier();
-                const hash = identifier.split('').reduce((a, b) => {
-                  a = ((a << 5) - a) + b.charCodeAt(0);
-                  return a & a;
-                }, 0);
-                return `lib-${Math.abs(hash).toString(36)}`;
-              },
-              priority: 30,
-              minChunks: 1,
-              reuseExistingChunk: true,
-            },
-            commons: {
-              name: 'commons',
-              minChunks: 2,
-              priority: 20,
-            },
-          },
-          maxInitialRequests: 25,
-          minSize: 20000,
-        },
-      };
-    }
+    // Let Next.js 14 handle chunking - it has better Persistent Caching strategy
+    // than manual splitChunks for modern browsers
     
     return config
   },
