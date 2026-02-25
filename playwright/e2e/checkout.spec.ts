@@ -65,19 +65,11 @@ test.describe('Checkout Flow: Stripe Redirect Loop', () => {
       `,
     });
 
-    // Step 4: Find and scroll to Add to Cart
+    // Step 4: Robust Add to Cart
     // Using getByTestId ensures we hit the actual interactable element
+    // expect().toBeVisible() polls the DOM until button appears (handles slow renders)
     const addButton = page.getByTestId('add-to-cart-button');
-    
-    // 1. Explicitly scroll it into the middle of the viewport
-    // This triggers lazy-loading logic and intersection observers
-    await addButton.scrollIntoViewIfNeeded();
-    console.log('✅ Button scrolled into view');
-    
-    // 2. Wait for it to be visible (handles entrance animations/fade-ins)
     await expect(addButton).toBeVisible({ timeout: 10000 });
-    
-    // 3. Click it
     await addButton.click();
     console.log('✅ Add to cart clicked');
 
