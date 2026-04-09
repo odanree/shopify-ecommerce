@@ -108,11 +108,10 @@ export default function FamilyPlanPage() {
           minLines: 2,
           primaryPlanName: 'Unlimited Plan - Primary Line',
           addonPlanName: 'Unlimited Plan - Add-on Line',
-          // Add your actual Shopify variant IDs here
-          primarySimVariantId: '44300835815469',
-          primaryEsimVariantId: '44300835815469', // Update if you have a separate eSIM variant
-          addonSimVariantId: '44300835815469', // Update with add-on line variant ID
-          addonEsimVariantId: '44300835815469', // Update if different
+          primarySimVariantId: process.env.NEXT_PUBLIC_VARIANT_PRIMARY_SIM,
+          primaryEsimVariantId: process.env.NEXT_PUBLIC_VARIANT_PRIMARY_ESIM,
+          addonSimVariantId: process.env.NEXT_PUBLIC_VARIANT_ADDON_SIM,
+          addonEsimVariantId: process.env.NEXT_PUBLIC_VARIANT_ADDON_ESIM,
         }}
         onAddToCart={handleAddToCart}
       />

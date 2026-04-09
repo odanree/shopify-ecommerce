@@ -39,11 +39,10 @@ const defaultConfig: FamilyPlanConfig = {
   minLines: 2,
   primaryPlanName: 'Unlimited Plan - Primary Line',
   addonPlanName: 'Unlimited Plan - Add-on Line',
-  // Default to your variant ID - update these with your actual variant IDs
-  primarySimVariantId: '44300835815469',
-  primaryEsimVariantId: '44300835815469', // Update if different
-  addonSimVariantId: '44300835815469', // Update with add-on line variant ID
-  addonEsimVariantId: '44300835815469', // Update if different
+  primarySimVariantId: process.env.NEXT_PUBLIC_VARIANT_PRIMARY_SIM,
+  primaryEsimVariantId: process.env.NEXT_PUBLIC_VARIANT_PRIMARY_ESIM,
+  addonSimVariantId: process.env.NEXT_PUBLIC_VARIANT_ADDON_SIM,
+  addonEsimVariantId: process.env.NEXT_PUBLIC_VARIANT_ADDON_ESIM,
 };
 
 export default function FamilyPlanBuilder({

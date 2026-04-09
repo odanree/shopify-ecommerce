@@ -4,7 +4,7 @@ This guide will help you set up automatic deployments to Vercel for your Shopify
 
 ## Prerequisites
 
-- GitHub repository: `https://github.com/odanree/shopify-ecommerce`
+- GitHub repository: your forked/cloned repo on GitHub
 - Vercel account (free tier is sufficient)
 - Shopify Store Domain and Storefront Access Token
 
@@ -21,7 +21,7 @@ This guide will help you set up automatic deployments to Vercel for your Shopify
 
 1. Once logged in, click **"Add New..."** → **"Project"**
 2. Select **"Import Git Repository"**
-3. Find and select `odanree/shopify-ecommerce`
+3. Find and select your repository
 4. If you don't see it, click **"Adjust GitHub App Permissions"** to grant access
 
 ### 3. Configure Project Settings
@@ -49,7 +49,7 @@ These should auto-populate from `vercel.json`:
 Add these environment variables in Vercel:
 
 ```
-SHOPIFY_STORE_DOMAIN=odanree.myshopify.com
+SHOPIFY_STORE_DOMAIN=your-store.myshopify.com
 SHOPIFY_STOREFRONT_ACCESS_TOKEN=your_storefront_access_token_here
 ```
 
@@ -57,7 +57,7 @@ SHOPIFY_STOREFRONT_ACCESS_TOKEN=your_storefront_access_token_here
 1. In the import screen, expand **"Environment Variables"**
 2. Add each variable:
    - Name: `SHOPIFY_STORE_DOMAIN`
-   - Value: `odanree.myshopify.com`
+   - Value: `your-store.myshopify.com`
    - Environment: Select all (Production, Preview, Development)
 3. Click "Add" for each variable
 

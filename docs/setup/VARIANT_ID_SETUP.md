@@ -1,8 +1,7 @@
 # Shopify Variant ID Setup Guide
 
-## Your Current Variant ID
-- **Unlimited Plan**: `44300835815469`
-- URL: https://odanree.myshopify.com/products/unlimited-plan?variant=44300835815469
+## Finding Your Variant ID
+- URL pattern: `https://your-store.myshopify.com/products/your-product?variant=VARIANT_ID`
 
 ## How to Find More Variant IDs
 
@@ -17,7 +16,7 @@
 2. Click on a product
 3. Scroll to **Variants** section
 4. Click on a variant to see its ID in the URL
-5. Example: `admin.shopify.com/store/odanree/products/XXXXX/variants/44300835815469`
+5. Example: `admin.shopify.com/store/your-store/products/XXXXX/variants/VARIANT_ID`
 
 ### Method 3: GraphQL API
 ```graphql
@@ -46,10 +45,10 @@ Update in **2 places**:
 File: `shopify-headless/components/FamilyPlanBuilder.tsx` (lines 28-39)
 ```typescript
 const defaultConfig: FamilyPlanConfig = {
-  primarySimVariantId: '44300835815469',      // ← Update this
-  primaryEsimVariantId: '44300835815469',     // ← Update this
-  addonSimVariantId: '44300835815469',        // ← Update this
-  addonEsimVariantId: '44300835815469',       // ← Update this
+  primarySimVariantId: 'YOUR_VARIANT_ID',      // ← Update this
+  primaryEsimVariantId: 'YOUR_VARIANT_ID',     // ← Update this
+  addonSimVariantId: 'YOUR_VARIANT_ID',        // ← Update this
+  addonEsimVariantId: 'YOUR_VARIANT_ID',       // ← Update this
 };
 ```
 
@@ -58,10 +57,10 @@ File: `shopify-headless/app/family-plan/page.tsx` (lines 76-83)
 ```typescript
 <FamilyPlanBuilder
   config={{
-    primarySimVariantId: '44300835815469',    // ← Update this
-    primaryEsimVariantId: '44300835815469',   // ← Update this
-    addonSimVariantId: '44300835815469',      // ← Update this
-    addonEsimVariantId: '44300835815469',     // ← Update this
+    primarySimVariantId: 'YOUR_VARIANT_ID',    // ← Update this
+    primaryEsimVariantId: 'YOUR_VARIANT_ID',   // ← Update this
+    addonSimVariantId: 'YOUR_VARIANT_ID',      // ← Update this
+    addonEsimVariantId: 'YOUR_VARIANT_ID',     // ← Update this
   }}
 />
 ```
@@ -90,7 +89,7 @@ Create one product "Unlimited Plan" with variants:
 
 **Example Variant IDs:**
 ```typescript
-primarySimVariantId: '44300835815469'
+primarySimVariantId: 'YOUR_VARIANT_ID'
 primaryEsimVariantId: '44300835815470'
 addonSimVariantId: '44300835815471'
 addonEsimVariantId: '44300835815472'
@@ -120,7 +119,7 @@ Make sure each line has a `variantId` property:
   id: 1,
   variant: 'sim',
   isPrimary: true,
-  variantId: '44300835815469'  // ← Should be present
+  variantId: 'YOUR_VARIANT_ID'  // ← Should be present
 }
 ```
 
@@ -188,4 +187,4 @@ export async function POST(request: Request) {
 3. Update the config files
 4. Test in the browser console
 
-**Current variant ID:** `44300835815469` is set as default for all 4 variants. Update them once you have the actual IDs!
+**Current variant ID:** `YOUR_VARIANT_ID` is set as default for all 4 variants. Update them once you have the actual IDs!

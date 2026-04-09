@@ -10,12 +10,12 @@
 👉 [vercel.com/new](https://vercel.com/new)
 
 ### 2. Import GitHub Repo
-- Select: `odanree/shopify-ecommerce`
+- Select: your repository
 - Root Directory: `shopify-headless` ⚠️
 
 ### 3. Add Environment Variables
 ```
-SHOPIFY_STORE_DOMAIN=odanree.myshopify.com
+SHOPIFY_STORE_DOMAIN=your-store.myshopify.com
 SHOPIFY_STOREFRONT_ACCESS_TOKEN=your_storefront_access_token_here
 ```
 
