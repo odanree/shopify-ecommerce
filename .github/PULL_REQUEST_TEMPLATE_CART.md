@@ -83,8 +83,8 @@ interface CartItem {
 {
   "items": [
     {
-      "id": "line-1-44300835815469",
-      "variantId": "44300835815469",
+      "id": "line-1-YOUR_VARIANT_ID",
+      "variantId": "YOUR_VARIANT_ID",
       "title": "Unlimited Plan - Primary Line",
       "variant": "Physical SIM Card",
       "price": 49,
