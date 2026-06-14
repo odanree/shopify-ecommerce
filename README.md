@@ -1,6 +1,6 @@
 # 🛍️ Shopify Headless Commerce with Next.js
 
-A high-performance headless ecommerce storefront built with **Next.js 14**, **TypeScript**, and **Shopify Storefront API**. This project features a **custom, production-grade Stripe payment engine** with a webhook-driven architecture for real-time Shopify Admin order synchronization.
+A high-performance headless ecommerce storefront built on the **Next.js 14 App Router**, **TypeScript**, and the **Shopify Storefront API**, with a custom checkout powered by **Stripe Elements** and a webhook-driven bridge to the **Shopify Admin REST API** for real-time order synchronization.
 
 🎯 **[Live Demo](https://shopify-headless-lemon.vercel.app/)** — _Experience the custom checkout flow._
 
@@ -16,8 +16,8 @@ A high-performance headless ecommerce storefront built with **Next.js 14**, **Ty
 
 ### The "Headless" Integration
 
-- **Commerce:** [Shopify Admin API](https://shopify.dev/docs/api/admin-rest) (REST) for robust order management, tagging, and inventory sync
-- **Payments:** [Stripe SDK](https://stripe.com/docs/api) utilizing Stripe Elements for a secure, PCI-compliant checkout experience
+- **Commerce:** [Shopify Admin REST API](https://shopify.dev/docs/api/admin-rest) for robust order management, tagging, and inventory sync (REST, not GraphQL — order creation, lookup, and tagging all hit `admin/api/2024-01/orders.json`)
+- **Payments:** [Stripe Elements](https://stripe.com/docs/payments/elements) (via the Stripe SDK) for a secure, PCI-compliant checkout — `PaymentElement` is the unified UI component rendered inside the Elements provider
 - **Architecture:** Asynchronous Webhook Handshake with frontend polling to ensure data consistency between Stripe and Shopify
 
 ---
@@ -28,7 +28,7 @@ The core of this project is a bespoke checkout system that maintains **100% bran
 
 ### 1. Intent Orchestration & PCI Compliance
 
-- **Elements-First Flow:** Implements Stripe's latest `PaymentElement` standards, supporting Apple Pay, Google Pay, and link-based payments.
+- **Elements-First Flow:** Built on **Stripe Elements** as the underlying SDK architecture, with the `PaymentElement` component rendered inside the `<Elements>` provider — supporting Apple Pay, Google Pay, and link-based payments out of the box.
 - **Metadata Injection:** Upon `/api/payment/create-intent`, the backend injects Shopify `variant_ids` and cart snapshots into the Stripe metadata to preserve state through the payment lifecycle.
 
 ### 2. Resilience & "Ghost Order" Prevention
@@ -172,9 +172,10 @@ KEY FEATURES OF THIS FLOW:
 ## ✨ Key Features
 
 
-- ⚡ **Next.js 14 App Router:** Utilizing Server Components for lightning-fast catalog browsing.
-- 🔄 **Inventory Management:** Real-time stock decrements in Shopify Admin upon verified payment.
-- 🤖 **AI Chatbot:** GPT-4 powered product search & recommendations (see [docs/CHATBOT.md](./docs/CHATBOT.md)).
+- ⚡ **Next.js 14 App Router:** All routing, layouts, and API endpoints use the App Router (`app/` directory) with Server Components for lightning-fast catalog browsing and Route Handlers for the payment bridge.
+- 💳 **Stripe Elements Checkout:** PCI-compliant checkout built on Stripe Elements (`PaymentElement`, Apple Pay, Google Pay, Link) — no card numbers ever touch our server.
+- 🔄 **Inventory Management:** Real-time stock decrements via the Shopify Admin REST API upon verified payment.
+- 🤖 **GPT-4 Powered AI Chatbot:** Product search and personalized recommendations driven by GPT-4 (see [docs/CHATBOT.md](./docs/CHATBOT.md)).
 - 🎨 **CSS Modules:** 100% component-scoped styling for zero CSS bloat.
 - 🔒 **Type Safety:** End-to-end TypeScript definitions for Shopify and Stripe payloads.
 - 🛒 **Cart Persistence:** LocalStorage-backed cart with hydration safety and automatic cleanup on order success.
